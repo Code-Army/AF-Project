@@ -15,9 +15,11 @@ const connection = mongoose.connection;
 connection.on('connected', () =>{
     console.log("MongoDB database connection established successfully");
 });
+// const adminUserRouter = require('./routes/adminUser');
+const managerUserRouter = require('./routes/managerUser');
+// app.use('/createAdminUser',adminUserRouter);
+app.use('/createManagerUser',managerUserRouter);
 
-const adminUserRouter = require('./routes/adminUser');
-app.use('/createAdminUser',adminUserRouter);
 
 
 app.listen(port,() =>{
