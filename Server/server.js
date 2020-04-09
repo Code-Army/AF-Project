@@ -16,6 +16,8 @@ connection.on('connected', () =>{
     console.log("MongoDB database connection established successfully");
 });
 
+const adminUserRouter = require('./routes/adminUser');
+app.use('/createAdminUser',adminUserRouter);
 
 
 app.listen(port,() =>{
