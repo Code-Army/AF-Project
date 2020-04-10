@@ -8,7 +8,7 @@ const customerSchema = new Schema({
     cemail:{ type : String,required: true },
     cpassword:{ type: String , required: true , minlength: 4 },
     cbirthday:{ type: Date,required:true },
-    cContactNo:{ type: Number , required:true }
+    cContactNo: {type: Number, required: true, minlength: 10}
 
 });
 

@@ -39,16 +39,16 @@ router.route('/:id').delete((req, res) => {
 router.route('/:id').put((req,res)=> {
     customer.findByIdAndUpdate(req.params.id)
         .then(customer => {
-            const cFirstName = req.body.cFirstName;
-            const cLastname = req.body.cLastname;
-            const cemail = req.body.cemail;
-            const cpassword = req.body.cpassword;
-            const cbirthday = Date.parse(req.body.cbirthday);
-            const cContactNo = Number(req.body.cContactNo);
+            customer.cFirstName = req.body.cFirstName;
+            customer.cLastname = req.body.cLastname;
+            customer.cemail = req.body.cemail;
+            customer.cpassword = req.body.cpassword;
+            customer.cbirthday = Date.parse(req.body.cbirthday);
+            customer.cContactNo = Number(req.body.cContactNo);
 
             customer.save()
                 .then(() => res.json('customer updated!'))
-                .catch(err => res.status(400).json('Error: ' +err));
+                .catch(err => res.status(400).json('Error: ' + err));
         })
         .catch(err => res.status(400).json('Error '+err));
 });
