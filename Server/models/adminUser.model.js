@@ -14,7 +14,11 @@ const adminUserSchema = new Schema({
         },
         password:{
             type:String,
-            default: " ",
+            required: true,
+        },
+        firstLogin:{
+            type:String,
+           default: "0",
         },
 
         status: {

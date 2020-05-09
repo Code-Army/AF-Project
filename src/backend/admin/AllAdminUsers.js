@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+
 import axios from 'axios';
 import UserItem from "./AdminUserItem";
 
@@ -10,17 +11,31 @@ class AllAdminUsers extends Component {
         }
 
         this.deleteUser = this.deleteUser.bind(this);
-        this.updateUser = this.updateUser.bind(this);
-    }
 
+    }
     componentDidMount() {
         axios.get('http://localhost:5000/createAdminUser/').then(res =>{
             this.setState({users:res.data});
+            console.log(res.data)
         })
             .catch((err) => {
                 console.log(err);
             })
+        console.log('calling')
     }
+
+    componentDidUpdate() {
+        axios.get('http://localhost:5000/createAdminUser/').then(res =>{
+            this.setState({users:res.data});
+            console.log(res.data)
+        })
+            .catch((err) => {
+                console.log(err);
+            })
+        console.log('calling')
+    }
+
+
 
     deleteUser(id){
         axios.delete('http://localhost:5000/createAdminUser/'+id)
@@ -38,7 +53,7 @@ class AllAdminUsers extends Component {
                 <div className="table-responsive">
                     <table className="table table-hover" >
 
-                        <thead class="thead-light">
+                        <thead className="thead-light">
                         <tr>
 
                             <th>ID</th>
@@ -47,6 +62,7 @@ class AllAdminUsers extends Component {
                             <th>Status</th>
                             <th>Entered Date</th>
                             <th>Updated Date</th>
+                            <th></th>
                             <th></th>
 
 
@@ -57,8 +73,9 @@ class AllAdminUsers extends Component {
                         {
                             this.state.users.map(user => {
                                 return(
-                                    <UserItem deleteUser = {() => this.deleteUser(user.id)}
-                                    userItem = {user}
+                                    <UserItem deleteUser = { this.deleteUser}
+                                              userItem = {user}
+                                              key = {user._id}
 
                                     />
                                 )

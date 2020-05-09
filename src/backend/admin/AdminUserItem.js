@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import EditAdminUser from "./EditAdminUser";
 
 const UserItem = props => {
     return(
@@ -11,15 +12,24 @@ const UserItem = props => {
             <td>{props.userItem.createdAt}</td>
             <td>{props.userItem.updatedAt}</td>
             <td>
-                <span  className=" edit mx-2 text-dark"  title={"Edit User"} style={{cursor:"pointer"}}>
-                        <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
-                    </span>
+                <Router>
+                <span className=" edit mx-2 text-primary"  title={"Edit User"} style={{cursor:"pointer"}}>
+
+                        <Link to={"/edit/"+props.userItem._id}><i className="fa fa-pencil-square-o" aria-hidden="true"/></Link>
+
+                </span>
+                    <Route path ="/edit/:id" component={EditAdminUser}></Route>
+                </Router>
+            </td>
+            <td>
                 <span className=" dlt mx-2 text-danger" onClick={()=>{props.deleteUser(props.userItem._id)}} onMouseOver="this.style.color='red'" title={"Delete User"}style={{cursor:"pointer"}}>
-                        <i className="fas fa-trash" onMouseOver="this.style.color='red'"></i>
+                        <i className="fas fa-trash" ></i>
                     </span>
             </td>
 
         </tr>
+
+
     )
 }
 

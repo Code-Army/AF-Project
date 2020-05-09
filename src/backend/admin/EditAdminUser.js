@@ -1,24 +1,34 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-
-import AllAdminUsers from "./AllAdminUsers";
-class CreateAdminUser extends Component {
+class EditAdminUser extends Component {
     constructor(props) {
         super(props);
 
         this.onchangeName = this.onchangeName.bind(this);
         this.onchangeEmail = this.onchangeEmail.bind(this);
-
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             name:'',
             email:'',
-
-
         }
+
     }
 
+    componentDidMount() {
+        axios.get('http://localhost:5000/createAdminUser/'+this.props.match.params.id)
+            .then(res => {
+                this.setState({
+                    name:res.data.name,
+                    email:res.data.email
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
+    }
 
     onchangeName(e){
         this.setState({
@@ -32,35 +42,26 @@ class CreateAdminUser extends Component {
         })
     }
 
-    onSubmit(e){
+    onSubmit(e) {
         e.preventDefault();
 
-        const newUser = {
-            name:this.state.name,
-            email:this.state.email
+        const User = {
+            name: this.state.name,
+            email: this.state.email
         }
         console.log(this.state.name)
         console.log(this.state.email)
 
-        this.setState(
-            {
-                name:'',
-                email:'',
-            }
-        )
+        axios.put('http://localhost:5000/createAdminUser/'+this.props.match.params.id, User)
+            .then(res => console.log(res.data));
 
-
-        axios.post('http://localhost:5000/createAdminUser/add'
-            , newUser).then(res => console.log(res.data));
+        window.location = '/';
     }
-
 
 
     render() {
         return (
-
             <div className="first">
-
                 <br/><br/>
                 <div className="container">
 
@@ -71,7 +72,7 @@ class CreateAdminUser extends Component {
                                 <div className="card  rounded">
                                     <div className="card-header rounded p-0">
                                         <div className="bg-info text-white text-center py-2">
-                                            <h3><i className="fa fa-user-plus"></i> Create Admin User Accounts</h3>
+                                            <h3><i className="fa fa-user-plus"></i> Edit Admin User Accounts</h3>
 
                                         </div>
                                     </div>
@@ -100,7 +101,7 @@ class CreateAdminUser extends Component {
                                         </div>
 
                                         <div className="text-center">
-                                            <input type="submit" value="Submit" className="btn btn-info btn-block rounded py-2"></input>
+                                            <input type="submit" value="Edit" className="btn btn-info btn-block rounded py-2"></input>
                                         </div>
                                     </div>
 
@@ -112,18 +113,9 @@ class CreateAdminUser extends Component {
                         </div>
                     </div>
                 </div>
-
-                <br/>
-                <AllAdminUsers></AllAdminUsers>
-
-
             </div>
-
-
-
-
         );
     }
 }
 
-export default CreateAdminUser;
+export default EditAdminUser;
