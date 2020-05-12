@@ -5,7 +5,7 @@ import EditAdminUser from "./EditAdminUser";
 const UserItem = props => {
     return(
         <tr>
-            <td>{props.userItem._id}</td>
+
             <td>{props.userItem.name}</td>
             <td>{props.userItem.email}</td>
             <td>{props.userItem.status}</td>

@@ -1,5 +1,7 @@
+
 const router = require('express').Router();
 const mailer = require('nodemailer')
+const bcrypt  = require('bcryptjs')
 let AdminUser = require('../models/adminUser.model');
 let generator = require('generate-password');
 
@@ -8,20 +10,36 @@ router.route('/').get((req,res) =>{
     catch(err => res.status(400).json('Error: '+err));
 });
 
-router.route('/add').post((req,res) => {
-    const name = req.body.name;
-    const email = req.body.email;
-    const password =  generator.generate({
-        length: 10,
-        numbers: true
-    });
-    const newAdminUser = new AdminUser({name,email,password});
-    sendMail(name,email,password)
-    newAdminUser.save()
-        .then(() => res.json('User added!'))
-        .catch(err => res.status(400).json('Error: ' + err));
+//router.route('/add').post((req,res) => {
+router.post("/add", async (req,res)=> {
+    try {
+        let name = req.body.name;
+        let email = req.body.email;
+
+        const existingUser = await AdminUser.findOne({email: req.body.email});
+        console.log(existingUser)
+        if (existingUser) {
+            console.log('exist')
+            return res
+                .status(400)
+                .json({msg: "Already exist a user with the given Email"})
+        }
+        const password = generator.generate({
+            length: 10,
+            numbers: true
+        });
+        const salt = await bcrypt.genSalt();
+        const passwordHash = await bcrypt.hash(password, salt);
+        const newAdminUser = new AdminUser({name, email, password:passwordHash});
+        const saved = await newAdminUser.save();
+
+        res.json(saved)
+        sendMail(name,email,password)
 
 
+    }catch (e) {
+        res.status(500).json({error:e.message})
+    }
 });
 
 router.route('/:id').get((req,res) =>{
@@ -49,6 +67,48 @@ router.route('/:id').put((req,res)=> {
 
         .catch(err => res.status(400).json('Error '+err));
 });
+
+router.post("/login", async (req,res) => {
+    try{
+        const email = req.body.email;
+        let password = req.body.password;
+
+        const adminUser = await AdminUser.findOne({email:email});
+
+        if(!adminUser) {
+            console.log(adminUser)
+            console.log("wrong email")
+            return res
+                .status(400)
+                .json({msg: "No valid account for the given email"})
+
+        }
+        const isMatch = await bcrypt.compare(password, adminUser.password);
+        if(!isMatch) {
+            console.log("Incorrect password")
+            return res.status(400).json({msg: "Invalid Password"});
+
+        }
+
+        const token = jwt.sign({ id: adminUser._id }, process.env.JWT_SECRET);
+        res.json({
+            token,
+            user: {
+                id: adminUser._id,
+                name: adminUser.name,
+                email: adminUser.email,
+                firstLogin:adminUser.firstLogin,
+
+            },
+        });
+
+
+    }catch (e) {
+        res.status(500).json({error:e.message});
+    }
+})
+
+// router.route('/')
 
 const sendMail = (name,recipient,password)=>{
     const smtpTransport = mailer.createTransport({

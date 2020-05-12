@@ -21,7 +21,7 @@ class AllAdminUsers extends Component {
             .catch((err) => {
                 console.log(err);
             })
-        console.log('calling')
+
     }
 
     componentDidUpdate() {
@@ -32,7 +32,7 @@ class AllAdminUsers extends Component {
             .catch((err) => {
                 console.log(err);
             })
-        console.log('calling')
+
     }
 
 
@@ -50,13 +50,13 @@ class AllAdminUsers extends Component {
         return (
             <div className="container">
 
-                <div className="table-responsive">
+                <div className="table-responsive-md">
                     <table className="table table-hover" >
 
                         <thead className="thead-light">
                         <tr>
 
-                            <th>ID</th>
+
                             <th>Name</th>
                             <th>Email</th>
                             <th>Status</th>

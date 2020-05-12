@@ -32,8 +32,18 @@ mongoose.connect(
 // set up routes
 
 app.use("/customer", require("../Server/routes/customer"));
-
+const  categoryRouter = require('./routes/category');
+const subCategoryRouter = require('./routes/subCategory');
 // const customer = require('./routes/customer');
 const adminUserRouter = require('./routes/adminUser');
+//const managerUserRouter = require('./routes/managerUser');
+
 // app.use('/customer',customer);
 app.use('/createAdminUser',adminUserRouter);
+//app.use('/createManagerUser',managerUserRouter);
+app.use('/createCategory',categoryRouter);
+app.use('/createSubCategory', subCategoryRouter)
+
+app.listen(port,() =>{
+    console.log(`Server running on port: ${port}`);
+});

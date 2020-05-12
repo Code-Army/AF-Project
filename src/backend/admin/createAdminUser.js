@@ -39,8 +39,7 @@ class CreateAdminUser extends Component {
             name:this.state.name,
             email:this.state.email
         }
-        console.log(this.state.name)
-        console.log(this.state.email)
+
 
         this.setState(
             {
