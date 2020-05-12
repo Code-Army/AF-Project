@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import UserContext from "../../contex/UserContext";
 import Axios from "axios";
 import ErrorNotice from "./misc/ErrorNotice";
+import Header from "../homepage/Header";
 
 export default function Register() {
   const [CFirstName, setCFirstName] = useState();
@@ -39,6 +40,8 @@ export default function Register() {
 
   return (
       <div className="page">
+        <Header/>
+        <div class="container">
         <h2>Register</h2>
         {error && (
             <ErrorNotice message={error} clearError={() => setError(undefined)} />
@@ -82,7 +85,7 @@ export default function Register() {
           />
 
           <input type="submit" value="Register" />
-        </form>
+        </form></div>
       </div>
 
   );

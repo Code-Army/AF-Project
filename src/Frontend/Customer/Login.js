@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import UserContext from "../../contex/UserContext";
 import Axios from "axios";
 import ErrorNotice from "./misc/ErrorNotice";
+import Header from "../homepage/Header";
 
 export default function Login() {
   const [Cemail, setCemail] = useState();
@@ -32,6 +33,8 @@ export default function Login() {
   };
   return (
     <div className="page">
+      <Header/>
+      <div className="container">
       <h2>Log in</h2>
       {error && (
         <ErrorNotice message={error} clearError={() => setError(undefined)} />
@@ -53,6 +56,7 @@ export default function Login() {
 
         <input type="submit" value="Log in" />
       </form>
+      </div>
     </div>
   );
 }

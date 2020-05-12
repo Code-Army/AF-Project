@@ -20,11 +20,13 @@ export default function Auth() {
   return (
       <nav className="auth-options">
         {userData.customer ? (
-            <button onClick={logout}>Log out</button>
+            <><p>{userData.customer.CUserName}</p>
+            <button class="btn btn-outline-primary btn-xs" onClick={logout}>Log out</button>
+            </>
         ) : (
             <>
-              <button onClick={register}>Register</button>
-              <button onClick={login}>Log in</button>
+              <button class="btn btn-outline-primary btn-xs" onClick={register}>Register</button>&nbsp;&nbsp;
+              <button class="btn btn-outline-primary btn-xs" onClick={login}>Log in</button>
             </>
         )}
       </nav>
