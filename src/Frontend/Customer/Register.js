@@ -4,6 +4,7 @@ import UserContext from "../../contex/UserContext";
 import Axios from "axios";
 import ErrorNotice from "./misc/ErrorNotice";
 import Header from "../homepage/Header";
+import "../../web content/css/logregcss.css";
 
 export default function Register() {
   const [CFirstName, setCFirstName] = useState();
