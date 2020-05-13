@@ -8,9 +8,11 @@ router.route('/').get((req,res) =>{
 router.route('/add').post((req,res) => {
     const name = req.body.name;
     const description = req.body.description;
-    const category = req.body.category;
-    const image = req.body.image;
-    const newsubCategory = new SubCategory({name,category,description,image});
+    let category = req.body.category;
+    const url = req.body.url;
+    console.log(category)
+
+    const newsubCategory = new SubCategory({name,category,description,url});
     newsubCategory.save()
         .then(() => res.json('Sub category added!'))
         .catch(err => res.status(400).json('Error: ' + err));
