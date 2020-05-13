@@ -16,19 +16,18 @@ app.listen(PORT, () => console.log(`The server has started on port: ${PORT}`));
 // set up mongoose
 
 mongoose.connect(
-  process.env.ATLAS_URI,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  },
-  (err) => {
-    if (err) throw err;
-    console.log("MongoDB connection established");
-  }
-  
-);
+    process.env.ATLAS_URI,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+    },
+    (err) => {
+        if (err) throw err;
+        console.log("MongoDB connection established");
+    }
 
+);
 // set up routes
 
 app.use("/customer", require("../Server/routes/customer"));
@@ -43,7 +42,3 @@ app.use('/createAdminUser',adminUserRouter);
 //app.use('/createManagerUser',managerUserRouter);
 app.use('/createCategory',categoryRouter);
 app.use('/createSubCategory', subCategoryRouter)
-
-app.listen(port,() =>{
-    console.log(`Server running on port: ${port}`);
-});
