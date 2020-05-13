@@ -1,4 +1,4 @@
-import React, {Component, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import Axios from "axios";
 
 
@@ -10,12 +10,33 @@ import Review from "./Sections/Review";
 
 export default function ProductDetails(props){
 
+    const productId = props.match.params.productId
+
+
+    const [Product, setProduct] = useState([])
+    const [Feedback, setFeedback] = useState([])
     const Id = props.match.params.productId;
 
+    const price = 1000;
     //console.log(Id)
-    useEffect(() =>{
-        Axios.get()
-    })
+    useEffect(() => {
+        Axios.get(`http://localhost:5000/product/products_by_id?id=${productId}&type=single`)
+            .then(response => {
+                setProduct(response.data[0])
+            })
+
+    }, [])
+
+    useEffect(() => {
+        Axios.get(`http://localhost:5000/feedback/feedback_by_id?id=${productId}&type=single`)
+            .then(response => {
+                setFeedback(response.data[0])
+            })
+
+    }, [])
+
+
+
         return(
             <div>
                 <div>
@@ -25,10 +46,15 @@ export default function ProductDetails(props){
                         <div className="container">
                             <div className="row s_product_inner">
                                 <div className="col-lg-6">
+                                    <h1>{Product.title}</h1>
                                     <ImagesSlide/>
                                 </div>
                                 <div className="col-lg-5 offset-lg-1">
-                                    <Details/>
+                                    <Details
+                                    productId={productId}
+                                    productName={Product.title}
+                                    price={price}/>
+
                                 </div>
                             </div>
                         </div>
@@ -81,7 +107,11 @@ export default function ProductDetails(props){
 
                                 <Description/>
                                 <Specification/>
-                                <Review/>
+                                <Review
+
+                                feedback = {Feedback.feedback}
+                                rate = {Feedback.rate}
+                                />
 
 
                             </div>
