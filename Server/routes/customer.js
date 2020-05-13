@@ -70,8 +70,9 @@ router.post("/login", async (req, res) => {
         id: customer._id,
         CUserName: customer.CUserName,
         CFirstName: customer.CFirstName,
-        CLastName:  customer.CLastName,
-        Cemail : customer.Cemail
+        CLastName: customer.CLastName,
+        Cemail:customer.Cemail,
+
       },
     });
   } catch (err) {
@@ -111,6 +112,7 @@ router.get("/", auth, async (req, res) => {
     res.json({
       CUserName: customer.CUserName,
       id: customer._id,
+
     });
 
 });

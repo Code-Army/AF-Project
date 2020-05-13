@@ -1,16 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema;
+const CustomerSchema = new mongoose.Schema({
 
-const customerSchema = new Schema({
-    cFirstName:{ type : String , required : true , minlength: 3 },
-    cLastname:{ type : String , required: true,minlength: 3 },
-    cemail:{ type : String,required: true },
-    cpassword:{ type: String , required: true , minlength: 4 },
-    cbirthday:{ type: Date,required:true },
-    cContactNo: {type: Number, required: true, minlength: 10}
-
+    CFirstName: { type: String, required: true },
+    CLastName: { type: String, required: true},
+    Cemail: { type: String, required: true },
+    Cpassword: { type: String, required: true, minlength: 5 },
+    CUserName: { type: String },
 });
 
-const customer = mongoose.model('customer',customerSchema);
- module.exports = customer;
+module.exports = Customer = mongoose.model("Customer", CustomerSchema);
