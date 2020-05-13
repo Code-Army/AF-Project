@@ -10,13 +10,22 @@ router.route ('/').get((req,res) => {
 
 router.route('/add').post((req,res) => {
     const productname = req.body.productname;
+    const category = req.body.category;
+    const subcategory = req.body.subcategory;
     const price = req.body.price;
+    const oprice = req.body.oprice;
     const description = req.body.description;
+    const url = req.body.url;
 
     const newProduct = new Product({
         productname,
+        category,
+        subcategory,
         price,
+        oprice,
         description,
+        url,
+
     });
 
     newProduct.save()
@@ -39,7 +48,10 @@ router.route('/update/:id').post((req,res) => {
     Product.findById(req.params.id)
         .then(producut => {
             producut.productname = req.body.productname;
+            producut.category = req.body.category;
+            producut.subcategory = req.body.subcategory;
             producut.price = req.body.price;
+            producut.oprice = req.body.oprice;
             producut.description = req.body.description;
 
             producut.save()
