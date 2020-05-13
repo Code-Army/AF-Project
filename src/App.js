@@ -25,7 +25,12 @@ import './web content/css/themify-icons.css';
 // import './web content/vendors/jquery-ui/jquery-ui.css';
 import './web content/css/style.css';
 import './web content/css/responsive.css';
-
+import CreateCategory from "./backend/category/CreateCategory";
+import catergoryView from "./Frontend/homepage/ProductView/catergoryView";
+import CreateSubCategory from "./backend/category/CreateSubCategory";
+import CreateAdminUser from "./backend/admin/createAdminUser";
+import ShowProduct from "./Frontend/homepage/ProductView/ShowProduct";
+import Allproduct from "./Frontend/homepage/ProductView/Allproduct";
 
 export default function App() {
     const [userData, setUserData] = useState({
@@ -68,6 +73,13 @@ export default function App() {
                       <Route path="/login" component={Login} />
                       <Route path="/register" component={Register} />
                       <Route path="/myprofile" component={Profile}/>
+                      <Route path="/CategoryAdd" component={CreateCategory}/>
+                      <Route path="/CategoryView" component={catergoryView}/>
+                      <Route path="/subCategoty" component={CreateSubCategory}/>
+                      <Route path="/createAdminUser" component={CreateAdminUser}/>
+                      <Route path="/ShowProduct" component={ShowProduct}/>
+                      <Route path="/Allproduct" component={Allproduct}/>
+                      <Route path="/CreateSubCategory" component={CreateSubCategory}/>
                   </Switch>
               </div>
               <Footer/>

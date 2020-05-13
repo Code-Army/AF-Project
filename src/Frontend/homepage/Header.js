@@ -67,7 +67,7 @@ export default function Header() {
                                              aria-expanded="false">Shop</a>
                                           <ul className="dropdown-menu">
                                               <li className="nav-item">
-                                                  <a className="nav-link" href="category.html">Shop Category</a>
+                                                  <Link to ="/CategoryView" className="nav-link">Shop Category</Link>
                                               </li>
                                               <li className="nav-item">
                                                   <a className="nav-link" href="single-product.html">Product Details</a>

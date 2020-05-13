@@ -3,11 +3,14 @@ import {Link, useHistory} from "react-router-dom";
 import UserContext from "../../contex/UserContext";
 import Header from "./Header";
 import "../../web content/css/profStyle.css";
+import axios from "axios";
 
 export default function MyProfile() {
+
     const { userData } = useContext(UserContext);
     const history = useHistory();
     // const { userData, setUserData } = useContext(UserContext);
+
 
 
     return (
@@ -43,8 +46,7 @@ export default function MyProfile() {
                                                         <td>e-mail : </td>
                                                         <td>{userData.customer.Cemail}</td>
                                                     </tr>
-
-                                                    <button onClick={() => { this.handleClick(userData.customer._id) }} className="btn btn-outline-danger btn-xs" >Delete
+                                                    <button  className="btn btn-outline-danger btn-xs"  >Delete
                                                     </button>
                                                     </tbody>
                                                 </table>

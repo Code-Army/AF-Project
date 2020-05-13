@@ -17,7 +17,11 @@ router.route('/add').post((req,res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-
+router.route('/:id').get((req,res) =>{
+    Category.findById(req.params.id).
+    then(category => res.json(category)).
+    catch(err => res.status(400).json('Error' + err));
+});
 
 
 

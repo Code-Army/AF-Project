@@ -5,6 +5,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Banner from "./Banner";
 import Feature from "./Feature";
+import Allproduct from "./ProductView/Allproduct";
 
 export default function Home() {
   const { userData } = useContext(UserContext);
@@ -16,7 +17,7 @@ export default function Home() {
           <h1>Welcome {userData.customer.CUserName}</h1>
             <Banner/>
             <Feature/>
-
+            <Allproduct/>
           </>
       ) : (
         <>
@@ -25,7 +26,7 @@ export default function Home() {
           <Feature/>
           {/*<h2>You are not logged in</h2>*/}
           {/*<Link to="/login">Log in</Link>*/}
-
+          <Allproduct/>
         </>
       )}
     </div>
