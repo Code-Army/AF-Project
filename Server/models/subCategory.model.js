@@ -17,7 +17,7 @@ const SubcategorySchema = new Schema({
 
     },
 
-    url: {
+    image: {
         type: String,
 
     } },

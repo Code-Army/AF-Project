@@ -9,13 +9,20 @@ router.route('/').get((req,res) =>{
 router.route('/add').post((req,res) => {
     const name = req.body.name;
     const description = req.body.description;
-    const url = req.body.url;
-    const newCategory = new Category({name,description,url});
+
+    const newCategory = new Category({name,description});
 
     newCategory.save()
         .then(() => res.json('Category added!'))
         .catch(err => res.status(400).json('Error: ' + err));
 });
+
+router.route('/:id').get((req,res) =>{
+    Category.findById(req.params.id).
+    then(category => res.json(category)).
+    catch(err => res.status(400).json('Error' + err));
+});
+
 
 
 module.exports = router;
