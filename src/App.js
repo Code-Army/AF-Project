@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Axios from "axios";
 import Header from "./Frontend/homepage/Header";
 import Footer from "./Frontend/homepage/Footer";
@@ -17,6 +17,10 @@ import CreateSubCategory from "./backend/category/CreateSubCategory";
 import CreateAdminUser from "./backend/admin/createAdminUser";
 import ShowProduct from "./Frontend/homepage/ProductView/ShowProduct";
 import Allproduct from "./Frontend/homepage/ProductView/Allproduct";
+
+import AdminLogin from "./backend/admin/AdminLogin";
+import ChangePassword from "./backend/admin/ChangePassword";
+import BackendHome from "./backend/BackendHome";
 
 export default function App() {
     const [userData, setUserData] = useState({
@@ -50,28 +54,35 @@ export default function App() {
 
         checkLoggedIn();
     }, []);
-  return (
-      <BrowserRouter>
-          <UserContext.Provider value={{ userData, setUserData }}>
-              <div className="container-fluid ">
-                  <Switch>
-                      <Route exact path="/" component={Home} />
-                      <Route path="/login" component={Login} />
-                      <Route path="/register" component={Register} />
-                      <Route path="/myprofile" component={Profile}/>
-                      <Route path="/CategoryAdd" component={CreateCategory}/>
-                      <Route path="/CategoryView" component={catergoryView}/>
-                      <Route path="/subCategoty" component={CreateSubCategory}/>
-                      <Route path="/createAdminUser" component={CreateAdminUser}/>
-                      <Route path="/ShowProduct" component={ShowProduct}/>
-                      <Route path="/Allproduct" component={Allproduct}/>
-                      <Route path="/CreateSubCategory" component={CreateSubCategory}/>
-                  </Switch>
-              </div>
-              <Footer/>
-          </UserContext.Provider>
-      </BrowserRouter>
-  );
+
+    const footer = Footer()
+
+    return (
+        <BrowserRouter>
+            <UserContext.Provider value={{ userData, setUserData }}>
+                <div className="container-fluid ">
+                    <Switch>
+                        <Route exact path="/" component={footer(Home)} />
+                        <Route path="/login" component={footer(Login)} />
+                        <Route path="/register" component={footer(Register)} />
+                        <Route path="/myprofile" component={footer(Profile)} />
+                        <Route path="/CategoryAdd" component={footer(CreateCategory)} />
+                        <Route path="/CategoryView" component={footer(catergoryView)} />
+                        <Route path="/subCategoty" component={footer(CreateSubCategory)} />
+                        <Route path="/createAdminUser" component={footer(CreateAdminUser)} />
+                        <Route path="/ShowProduct" component={footer(ShowProduct)} />
+                        <Route path="/Allproduct" component={footer(Allproduct)} />
+                        <Route path="/CreateSubCategory" component={footer(CreateSubCategory)} />
+
+                        <Route exact path="/admin/" component={BackendHome} />
+                        <Route exact path="/admin/login" component={AdminLogin} />
+                        <Route exact path="/admin/changepassword" component={ChangePassword} />
+                    </Switch>
+                </div>
+                {/* <Footer /> */}
+            </UserContext.Provider>
+        </BrowserRouter>
+    );
 }
 
 

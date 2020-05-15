@@ -18,12 +18,17 @@ const adminUserSchema = new Schema({
         },
         firstLogin:{
             type:String,
-           default: "0",
+            default: "0",
         },
 
         status: {
             type: String,
             default: "pending",
+        },
+
+        role: {
+            type: String,
+            enum : ['storemanager','admin'],
         } },
     {
         timestamps:true

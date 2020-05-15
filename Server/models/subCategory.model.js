@@ -12,10 +12,6 @@ const SubcategorySchema = new Schema({
         type:String,
     },
 
-    description:{
-        type:String,
-
-    },
 
     url: {
         type: String,

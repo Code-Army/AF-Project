@@ -1,6 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+
+import { Modal, Button } from 'react-bootstrap';
+
 class EditAdminUser extends Component {
     constructor(props) {
         super(props);
@@ -8,20 +11,21 @@ class EditAdminUser extends Component {
         this.onchangeName = this.onchangeName.bind(this);
         this.onchangeEmail = this.onchangeEmail.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
 
         this.state = {
-            name:'',
-            email:'',
+            name: '',
+            email: '',
         }
 
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/createAdminUser/'+this.props.match.params.id)
+        axios.get('http://localhost:5000/createAdminUser/' + this.props.user._id)
             .then(res => {
                 this.setState({
-                    name:res.data.name,
-                    email:res.data.email
+                    name: res.data.name,
+                    email: res.data.email
                 })
             })
             .catch(function (error) {
@@ -30,15 +34,15 @@ class EditAdminUser extends Component {
 
     }
 
-    onchangeName(e){
+    onchangeName(e) {
         this.setState({
-            name:e.target.value
+            name: e.target.value
         })
     }
 
-    onchangeEmail(e){
+    onchangeEmail(e) {
         this.setState({
-            email:e.target.value
+            email: e.target.value
         })
     }
 
@@ -52,68 +56,79 @@ class EditAdminUser extends Component {
         console.log(this.state.name)
         console.log(this.state.email)
 
-        axios.put('http://localhost:5000/createAdminUser/'+this.props.match.params.id, User)
+        axios.put('http://localhost:5000/createAdminUser/' + this.props.user._id, User)
             .then(res => console.log(res.data));
 
-        window.location = '/';
+        window.location = '/admin';
+    }
+
+    handleCloseModal() {
+        this.props.onCloseModal();
     }
 
 
     render() {
         return (
-            <div className="first">
-                <br/><br/>
-                <div className="container">
+            <Modal size="lg" show={this.props.showEditModal} onHide={this.handleCloseModal}>
+                <Modal.Header closeButton>
 
-                    <div className="row justify-content-center">
-                        <div className="col-12 col-md-8 col-lg-6 pb-5">
+                </Modal.Header>
+                <Modal.Body><div className="first">
+                    <br /><br />
+                    <div className="container">
 
-                            <form onSubmit={this.onSubmit}>
-                                <div className="card  rounded">
-                                    <div className="card-header rounded p-0">
-                                        <div className="bg-info text-white text-center py-2">
-                                            <h3><i className="fa fa-user-plus"></i> Edit Admin User Accounts</h3>
+                        <div >
+                            <div >
 
-                                        </div>
-                                    </div>
-                                    <div className="card-body rounded p-3">
+                                <form onSubmit={this.onSubmit}>
+                                    <div className="card  rounded">
+                                        <div className="card-header rounded p-0">
+                                            <div className="bg-info text-white text-center py-2">
+                                                <h3><i className="fa fa-user-plus"></i> Edit Admin User Accounts</h3>
 
-
-                                        <div className="form-group">
-                                            <div className="input-group mb-2">
-                                                <div className="input-group-prepend">
-                                                    <div className="input-group-text"><i
-                                                        className="fa fa-user text-info"></i></div>
-                                                </div>
-                                                <input type="text" className="form-control" id="name" name="username" value={this.state.name} onChange={this.onchangeName}
-                                                       placeholder="Enter Name" required></input>
                                             </div>
                                         </div>
-                                        <div className="form-group">
-                                            <div className="input-group mb-2">
-                                                <div className="input-group-prepend">
-                                                    <div className="input-group-text"><i
-                                                        className="fa fa-envelope text-info"></i></div>
+                                        <div className="card-body rounded p-3">
+
+
+                                            <div className="form-group">
+                                                <div className="input-group mb-2">
+                                                    <div className="input-group-prepend">
+                                                        <div className="input-group-text"><i
+                                                            className="fa fa-user text-info"></i></div>
+                                                    </div>
+                                                    <input type="text" className="form-control" id="name" name="username" value={this.state.name} onChange={this.onchangeName}
+                                                           placeholder="Enter Name" required></input>
                                                 </div>
-                                                <input type="email" className="form-control" id="email" name="email" value={this.state.email} onChange={this.onchangeEmail}
-                                                       placeholder="Enter the email" required></input>
+                                            </div>
+                                            <div className="form-group">
+                                                <div className="input-group mb-2">
+                                                    <div className="input-group-prepend">
+                                                        <div className="input-group-text"><i
+                                                            className="fa fa-envelope text-info"></i></div>
+                                                    </div>
+                                                    <input type="email" className="form-control" id="email" name="email" value={this.state.email} onChange={this.onchangeEmail}
+                                                           placeholder="Enter the email" required></input>
+                                                </div>
+                                            </div>
+
+                                            <div className="text-center">
+                                                <input type="submit" value="Edit" className="btn btn-info btn-block rounded py-2"></input>
                                             </div>
                                         </div>
 
-                                        <div className="text-center">
-                                            <input type="submit" value="Edit" className="btn btn-info btn-block rounded py-2"></input>
-                                        </div>
                                     </div>
-
-                                </div>
-                            </form>
+                                </form>
 
 
 
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                </Modal.Body>
+            </Modal>
+
         );
     }
 }
