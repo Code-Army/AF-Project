@@ -1,5 +1,5 @@
 const  router = require('express').Router();
-let Product = require('../models/product.model');
+let Product = require('../../models/manager/product.model');
 
 router.route ('/').get((req,res) => {
     Product.find()
@@ -15,16 +15,26 @@ router.route('/add').post((req,res) => {
     const price = req.body.price;
     const oprice = req.body.oprice;
     const description = req.body.description;
-    const url = req.body.url;
+    const shortdiscription = req.body.shortdiscription;
+    const specification = req.body.specification;
+    const availability = req.body.availability;
+    const url1 = req.body.url1;
+    const url2 = req.body.url2;
+    const url3= req.body.url3;
 
     const newProduct = new Product({
         productname,
         category,
         subcategory,
+        specification,
+        availability,
         price,
         oprice,
         description,
-        url,
+        shortdiscription,
+        url1,
+        url2,
+        url3
 
     });
 
@@ -32,10 +42,11 @@ router.route('/add').post((req,res) => {
         .then(() => res.json('Product added'))
         .catch(err => res.status(400).json('Error : ' + err));
 
+
     });
 router.route('/:id').get((req,res) => {
    Product.findById(req.params.id)
-       .then(producut => res.json(product))
+       .then(producut => res.json(producut))
        .catch(err => res.status(400).json('Error :' + err))
 });
 router.route('/:id').delete((req,res) => {
@@ -43,7 +54,27 @@ router.route('/:id').delete((req,res) => {
         .then(() => res.json('product deleted.'))
         .catch(err => res.status(400).json('Error :' + err))
 });
+router.get("/pruduct_by_name", (req, res) => {
+    let type = req.query.type
+    let name = req.query.name
 
+    if (type === "array") {
+        let names = req.query.name.split(',');
+        name = [];
+        name = names.map(item => {
+            return item
+        })
+    }
+
+    console.log(name)
+    //we need to find the product information that belong to product Id
+    Product.find({ 'productname': { $in: name } })
+        .populate('writer')
+        .exec((err, product) => {
+            if(err) return req.status(400).send(err)
+            return res.status(200).send(product)
+        })
+});
 router.route('/update/:id').post((req,res) => {
     Product.findById(req.params.id)
         .then(producut => {
@@ -53,12 +84,16 @@ router.route('/update/:id').post((req,res) => {
             producut.price = req.body.price;
             producut.oprice = req.body.oprice;
             producut.description = req.body.description;
+            producut.shortdiscription = req.body.shortdiscription;
+            producut.availability = req.body.availability;
+            producut.specification = req.body.specification;
 
             producut.save()
-                .then(() => res.json('Product Upadated.'))
+                .then(() => res.json('Product Updated.'))
                 .catch(err => res.status(400).json('Error :' +err));
         })
         .catch(err => res.status(400).json('Error :' + err))
+
 });
 
 
