@@ -18,6 +18,17 @@ import CreateAdminUser from "./backend/admin/createAdminUser";
 import ShowProduct from "./Frontend/homepage/ProductView/ShowProduct";
 import Allproduct from "./Frontend/homepage/ProductView/Allproduct";
 
+import Navbar from "./backend/manager/navbar.component";
+import ProductList from "./backend/manager/product-list.component"
+import editproduct from "./backend/manager/editproduct"
+import AddProduct from "./backend/manager/addproduct.component"
+import discounts from "./backend/manager/discounts.component"
+import editdiscount from "./backend/manager/editdiscount"
+import coupondiscounts from "./backend/manager/coupondiscounts.component"
+import editcoupon from "./backend/manager/editcoupon"
+import adddiscount from "./backend/manager/adddisscount.component"
+import addcoupon from "./backend/manager/addcoupon.component"
+
 import AdminLogin from "./backend/admin/AdminLogin";
 import ChangePassword from "./backend/admin/ChangePassword";
 import BackendHome from "./backend/BackendHome";
@@ -73,6 +84,16 @@ export default function App() {
                         <Route path="/ShowProduct" component={footer(ShowProduct)} />
                         <Route path="/Allproduct" component={footer(Allproduct)} />
                         <Route path="/CreateSubCategory" component={footer(CreateSubCategory)} />
+						
+						<Route path="/products" exact component={ProductList}></Route>
+					    <Route path="/edit/:id" exact component={editproduct}></Route>
+					    <Route path="/create" exact component={AddProduct}></Route>
+					    <Route path="/discount" exact component={discounts}></Route>
+					    <Route path="/editdiscount" exact component={editdiscount}></Route>
+					    <Route path="/coupon" exact component={coupondiscounts}></Route>
+					    <Route path="/editcoupon" exact component={editcoupon}></Route>
+				        <Route path="/adddiscount" exact component={adddiscount}></Route>
+						<Route path="/addcoupon" exact component={addcoupon}></Route>
 
                         <Route exact path="/admin/" component={BackendHome} />
                         <Route exact path="/admin/login" component={AdminLogin} />
