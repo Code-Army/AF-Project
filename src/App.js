@@ -18,7 +18,6 @@ import CreateAdminUser from "./backend/admin/createAdminUser";
 import Allproduct from "./Frontend/homepage/ProductView/Allproduct";
 import SubcategoryView from "./Frontend/homepage/ProductView/SubcategoryView";
 
-
 import Navbar from "./backend/manager/navbar.component";
 import ProductList from "./backend/manager/product-list.component"
 import editproduct from "./backend/manager/editproduct"
@@ -66,30 +65,28 @@ export default function App() {
 
         checkLoggedIn();
     }, []);
-<<<<<<< HEAD
-  return (
-      <BrowserRouter>
-          <UserContext.Provider value={{ userData, setUserData }}>
-              <div className="container-fluid ">
-                  <Switch>
-                      <Route exact path="/" component={Home} />
-                      <Route path="/login" component={Login} />
-                      <Route path="/register" component={Register} />
-                      <Route path="/myprofile" component={Profile}/>
-                      <Route path="/CategoryAdd" component={CreateCategory}/>
-                      <Route path="/CategoryView" component={catergoryView}/>
-                      <Route path="/subCategoty" component={CreateSubCategory}/>
-                      <Route path="/createAdminUser" component={CreateAdminUser}/>
-                      <Route path="/Allproduct" component={Allproduct}/>
-                      <Route path="/CreateSubCategory" component={CreateSubCategory}/>
-                      <Route path ="/Subcategory/:id" component={SubcategoryView}/>
-                      <Route path="/SubCatProductView/:id" component={SubcategoryView}/>
-                  </Switch>
-              </div>
-          </UserContext.Provider>
-      </BrowserRouter>
-  );
-=======
+  // return (
+  //     <BrowserRouter>
+  //         <UserContext.Provider value={{ userData, setUserData }}>
+  //             <div className="container-fluid ">
+  //                 <Switch>
+  //                     <Route exact path="/" component={Home} />
+  //                     <Route path="/login" component={Login} />
+  //                     <Route path="/register" component={Register} />
+  //                     <Route path="/myprofile" component={Profile}/>
+  //                     <Route path="/CategoryAdd" component={CreateCategory}/>
+  //                     <Route path="/CategoryView" component={catergoryView}/>
+  //                     <Route path="/subCategoty" component={CreateSubCategory}/>
+  //                     <Route path="/createAdminUser" component={CreateAdminUser}/>
+  //                     <Route path="/Allproduct" component={Allproduct}/>
+  //                     <Route path="/CreateSubCategory" component={CreateSubCategory}/>
+  //                     <Route path ="/Subcategory/:id" component={SubcategoryView}/>
+  //                     <Route path="/SubCatProductView/:id" component={SubcategoryView}/>
+  //                 </Switch>
+  //             </div>
+  //         </UserContext.Provider>
+  //     </BrowserRouter>
+  // );
 
     const footer = Footer()
 
@@ -106,10 +103,14 @@ export default function App() {
                         <Route path="/CategoryView" component={footer(catergoryView)} />
                         <Route path="/subCategoty" component={footer(CreateSubCategory)} />
                         <Route path="/createAdminUser" component={footer(CreateAdminUser)} />
-                        <Route path="/ShowProduct" component={footer(ShowProduct)} />
+                        {/*<Route path="/ShowProduct" component={footer(ShowProduct)} />*/}
                         <Route path="/Allproduct" component={footer(Allproduct)} />
                         <Route path="/CreateSubCategory" component={footer(CreateSubCategory)} />
-						
+
+                        <Route path="/Allproduct" component={Allproduct}/>
+                        <Route path="/CreateSubCategory" component={CreateSubCategory}/>
+                        <Route path ="/Subcategory/:id" component={SubcategoryView}/>
+                        <Route path="/SubCatProductView/:id" component={SubcategoryView}/>
 						<Route path="/products" exact component={ProductList}></Route>
 					    <Route path="/edit/:id" exact component={editproduct}></Route>
 					    <Route path="/create" exact component={AddProduct}></Route>
@@ -129,7 +130,6 @@ export default function App() {
             </UserContext.Provider>
         </BrowserRouter>
     );
->>>>>>> 7f7a17974b2fb5d395af0c4137d1ba8c2fe696a0
 }
 
 
