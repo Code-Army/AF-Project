@@ -33,7 +33,7 @@ mongoose.connect(
 app.use("/customer", require("../Server/routes/customer"));
 const  categoryRouter = require('./routes/category');
 const subCategoryRouter = require('./routes/subCategory');
-app.use("/product", require("../Server/routes/products"));
+app.use("/products", require("../Server/routes/products"));
 const adminUserRouter = require('./routes/adminUser');
 //const managerUserRouter = require('./routes/managerUser');
 
@@ -41,4 +41,4 @@ const adminUserRouter = require('./routes/adminUser');
 app.use('/createAdminUser',adminUserRouter);
 //app.use('/createManagerUser',managerUserRouter);
 app.use('/Category',categoryRouter);
-app.use('/createSubCategory', subCategoryRouter)
+app.use('/Subcategory', subCategoryRouter)

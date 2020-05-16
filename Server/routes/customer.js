@@ -63,18 +63,29 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(Cpassword, customer.Cpassword);
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
 
-    const token = jwt.sign({ id: customer._id }, process.env.JWT_SECRET);
-    res.json({
-      token,
-      customer: {
-        id: customer._id,
-        CUserName: customer.CUserName,
-        CFirstName: customer.CFirstName,
-        CLastName: customer.CLastName,
-        Cemail:customer.Cemail,
+    const payload = {
+      id: customer._id,
+      CUserName: customer.CUserName,
+      CFirstName: customer.CFirstName,
+      CLastName: customer.CLastName,
+      Cemail:customer.Cemail,
+    }
 
-      },
-    });
+    const token = jwt.sign(payload, process.env.JWT_SECRET);
+    res.json(token);
+
+    // const token = jwt.sign({ id: customer._id }, process.env.JWT_SECRET);
+    // res.json({
+    //   token,
+    //   customer: {
+    //     id: customer._id,
+    //     CUserName: customer.CUserName,
+    //     CFirstName: customer.CFirstName,
+    //     CLastName: customer.CLastName,
+    //     Cemail:customer.Cemail,
+    //
+    //   },
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

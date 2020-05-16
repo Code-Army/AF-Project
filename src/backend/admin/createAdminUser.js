@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
+import "../CSS/createAdminUser.css"
 
 import AllAdminUsers from "./AllAdminUsers";
 class CreateAdminUser extends Component {
@@ -8,43 +9,50 @@ class CreateAdminUser extends Component {
 
         this.onchangeName = this.onchangeName.bind(this);
         this.onchangeEmail = this.onchangeEmail.bind(this);
+        this.onchangeRole = this.onchangeRole.bind(this);
 
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
-            name:'',
-            email:'',
-
+            name: '',
+            email: '',
+            role: 'admin',
 
         }
     }
 
 
-    onchangeName(e){
+    onchangeName(e) {
         this.setState({
-            name:e.target.value
+            name: e.target.value
         })
     }
 
-    onchangeEmail(e){
+    onchangeEmail(e) {
         this.setState({
-            email:e.target.value
+            email: e.target.value
         })
     }
 
-    onSubmit(e){
+    onchangeRole(e) {
+        this.setState({ role: e.target.value });
+    }
+
+    onSubmit(e) {
         e.preventDefault();
 
         const newUser = {
-            name:this.state.name,
-            email:this.state.email
+            name: this.state.name,
+            email: this.state.email,
+            role: this.state.role,
         }
 
 
         this.setState(
             {
-                name:'',
-                email:'',
+                name: '',
+                email: '',
+                role: 'admin',
             }
         )
 
@@ -60,7 +68,7 @@ class CreateAdminUser extends Component {
 
             <div className="first">
 
-                <br/><br/>
+                <br /><br />
                 <div className="container">
 
                     <div className="row justify-content-center">
@@ -98,6 +106,19 @@ class CreateAdminUser extends Component {
                                             </div>
                                         </div>
 
+                                        <div className="form-group">
+                                            <div className="input-group mb-2">
+                                                <div className="input-group-prepend">
+                                                    <div className="input-group-text"><i
+                                                        className="fa fa-users-cog text-info"></i></div>
+                                                </div>
+                                                <select id="role-selector" value={this.state.role} onChange={this.onchangeRole}>
+                                                    <option value="storemanager">Store Manager</option>
+                                                    <option value="admin">Admin</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                         <div className="text-center">
                                             <input type="submit" value="Submit" className="btn btn-info btn-block rounded py-2"></input>
                                         </div>
@@ -111,15 +132,9 @@ class CreateAdminUser extends Component {
                         </div>
                     </div>
                 </div>
-
-                <br/>
+                <br />
                 <AllAdminUsers></AllAdminUsers>
-
-
             </div>
-
-
-
 
         );
     }

@@ -7,7 +7,7 @@ class CreateSubCategory extends Component {
         super(props);
 
         this.onchangeName = this.onchangeName.bind(this);
-        this.onchangeDescription = this.onchangeDescription.bind(this);
+
         this.onchangeCategory = this.onchangeCategory.bind(this);
         this.onchangeImage = this.onchangeImage.bind(this);
 
@@ -16,8 +16,9 @@ class CreateSubCategory extends Component {
         this.state = {
             name:'',
             category:'',
-            description:'',
-            // image:null
+            error:'',
+            success:'',
+
             url:'',
             categories:[]
 
@@ -26,8 +27,11 @@ class CreateSubCategory extends Component {
 
     componentDidMount() {
 
-        axios.get('http://localhost:5000/createCategory/').then(res =>{
-            this.setState({categories:res.data.map(category => category)});
+        axios.get('http://localhost:5000/Category/').then(res =>{
+            this.setState({
+                categories:res.data.map(category => category),
+                category:res.data[0]
+            });
             console.log(res.data)
         })
             .catch((err) => {
@@ -50,11 +54,7 @@ class CreateSubCategory extends Component {
         })
     }
 
-    onchangeDescription(e){
-        this.setState({
-            description:e.target.value
-        })
-    }
+
 
     onchangeImage(e){
         if(e.target.files[0]){
@@ -81,19 +81,18 @@ class CreateSubCategory extends Component {
                     console.log(url);
                     const newCategory = {
                         name: this.state.name,
-                        description: this.state.description,
+
                         category: this.state.category,
                         url:url
                     }
                     console.log(this.state.name)
-                    console.log(this.state.description)
 
                     this.setState(
                         {
                             name: '',
-                            description: '',
+
                             url: '',
-                            category: ''
+
                         }
                     )
 
@@ -132,11 +131,7 @@ class CreateSubCategory extends Component {
                                     }
                                 </select>
                             </div>
-                            <div className="form-group rounded">
-                                <label  className="bmd-label-floating">Description</label>
 
-                                <textarea className="form-control rounded " id="description" rows="3" value={this.state.description} onChange={this.onchangeDescription} ></textarea>
-                            </div>
                             <div className="form-group rounded">
                                 <label  className="bmd-label-floating">Upload Image</label>
                                 <input type="file" className="form-control-file rounded" id="image" onChange={this.onchangeImage} ></input>

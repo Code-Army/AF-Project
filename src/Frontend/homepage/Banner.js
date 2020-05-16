@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Auth from "../../Authentication/Auth";
+import '../../web content/css/style.css';
 
 export default function Banner() {
     return (

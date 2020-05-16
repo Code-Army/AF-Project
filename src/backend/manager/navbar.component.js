@@ -19,6 +19,12 @@ class Navbar extends Component{
                             <Link className="nav-link text-white" to="/edit/:id">Edit Product</Link>
                         </li>
                         <li className="nav-item">
+                            <a className="nav-link text-white  " href="/discount">Discounts</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link text-white" href="/coupon">coupons</a>
+                        </li>
+                        <li className="nav-item">
                             <a className="nav-link disabled " href="#">Disabled</a>
                         </li>
                     </ul>

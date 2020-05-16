@@ -31,6 +31,7 @@ export default function Home() {
             <Banner/>
             <Feature/>
             <Allproduct/>
+            <Footer/>
           </>
       ) : (
         <>
@@ -40,6 +41,7 @@ export default function Home() {
           {/*<h2>You are not logged in</h2>*/}
           {/*<Link to="/login">Log in</Link>*/}
           <Allproduct/>
+          <Footer/>
         </>
       )}
     </div>

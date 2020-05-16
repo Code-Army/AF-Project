@@ -2,20 +2,20 @@ import React, {Component} from 'react';
 
 import axios from 'axios';
 
-import productItem from "./productItem";
 import Header from "../Header";
+import ProductShow from './ProductShow';
+
 
 class Allproduct extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            product:[]
+            products:[]
         }
     }
-
     componentDidMount() {
-        axios.get('http://localhost:5000/product/').then(res =>{
-            this.setState({product:res.data});
+        axios.get('http://localhost:5000/products/').then(res =>{
+            this.setState({products:res.data});
             console.log(res.data)
         })
             .catch((err) => {
@@ -24,12 +24,13 @@ class Allproduct extends Component {
     }
 
 
-    Selectproduct(id){
-        axios.get('http://localhost:5000/product/'+id)
+    Selectproducts(id){
+        axios.get('http://localhost:5000/products/'+id)
             .then(res => console.log(res.data));
         this.setState({
-            product: this.state.product.filter(el => el._id !== id)
+            products: this.state.products.filter(el => el._id !== id)
         })
+        alert(id);
     }
 
 
@@ -39,10 +40,11 @@ class Allproduct extends Component {
                 <div className="container">
                     <div className="row">
                         {
-                            this.state.product.map(product => {
+                            this.state.products.map(products => {
                                 return(
-                                    <productItem productItem = {product}  key = {product._id}/>
-                                )
+                                    < ProductShow ProductShow = {products}  key = {products._id}/>
+
+                                                                   )
                             })
                         }
                     </div>

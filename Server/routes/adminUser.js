@@ -1,28 +1,68 @@
 
 const router = require('express').Router();
 const mailer = require('nodemailer')
-const bcrypt  = require('bcryptjs')
+const bcrypt = require('bcryptjs')
 let AdminUser = require('../models/adminUser.model');
 let generator = require('generate-password');
+const jwt = require("jsonwebtoken");
+const auth = require('../middleware/auth')
 
-router.route('/').get((req,res) =>{
+router.route('/').get((req, res) => {
     AdminUser.find().then(adminUsers => res.json(adminUsers)).
-    catch(err => res.status(400).json('Error: '+err));
+    catch(err => res.status(400).json('Error: ' + err));
 });
 
-//router.route('/add').post((req,res) => {
-router.post("/add", async (req,res)=> {
+router.put("/changepassword", auth, async (req, res) => {
+    try {
+        let _id = req.body._id;
+        let oldPassword = req.body.oldPassword;
+        let newPassword = req.body.newPassword;
+
+        console.log(req.body)
+
+        const existingUser = await AdminUser.findOne({ _id: _id });
+        console.log(existingUser)
+        if (!existingUser) {
+            console.log('not exist')
+            return res
+                .status(400)
+                .json({ msg: "User does not exist" })
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, existingUser.password);
+        if (!isMatch) {
+            console.log()
+            console.log("Incorrect password")
+            return res.status(400).json({ msg: "Invalid Password" });
+        }
+
+        const salt = await bcrypt.genSalt();
+        const passwordHash = await bcrypt.hash(newPassword, salt);
+        existingUser.password = passwordHash;
+        existingUser.firstLogin = 1;
+        const saved = await existingUser.save();
+
+        // console.log(password);
+        res.json(saved)
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+})
+
+router.post("/add", async (req, res) => {
     try {
         let name = req.body.name;
         let email = req.body.email;
+        let role = req.body.role
 
-        const existingUser = await AdminUser.findOne({email: req.body.email});
+        const existingUser = await AdminUser.findOne({ email: req.body.email });
         console.log(existingUser)
         if (existingUser) {
             console.log('exist')
             return res
                 .status(400)
-                .json({msg: "Already exist a user with the given Email"})
+                .json({ msg: "Already exist a user with the given Email" })
         }
         const password = generator.generate({
             length: 10,
@@ -30,31 +70,33 @@ router.post("/add", async (req,res)=> {
         });
         const salt = await bcrypt.genSalt();
         const passwordHash = await bcrypt.hash(password, salt);
-        const newAdminUser = new AdminUser({name, email, password:passwordHash});
+        const newAdminUser = new AdminUser({ name, email, password: passwordHash, role });
         const saved = await newAdminUser.save();
 
+        console.log(password)
+
         res.json(saved)
-        sendMail(name,email,password)
+        sendMail(name, email, password)
 
 
-    }catch (e) {
-        res.status(500).json({error:e.message})
+    } catch (e) {
+        res.status(500).json({ error: e.message })
     }
 });
 
-router.route('/:id').get((req,res) =>{
+router.route('/:id').get((req, res) => {
     AdminUser.findById(req.params.id).
     then(adminUser => res.json(adminUser)).
     catch(err => res.status(400).json('Error' + err));
 });
 
-router.route('/:id').delete((req,res) => {
+router.route('/:id').delete((req, res) => {
     AdminUser.findByIdAndDelete(req.params.id)
         .then(() => res.json('User is deleted'))
-        .catch(err => res.status(400).json('Error '+err));
+        .catch(err => res.status(400).json('Error ' + err));
 });
 
-router.route('/:id').put((req,res)=> {
+router.route('/:id').put((req, res) => {
     AdminUser.findByIdAndUpdate(req.params.id)
         .then(adminUser => {
             adminUser.name = req.body.name;
@@ -62,77 +104,79 @@ router.route('/:id').put((req,res)=> {
 
             adminUser.save()
                 .then(() => res.json('User updated!'))
-                .catch(err => res.status(400).json('Error: ' +err));
+                .catch(err => res.status(400).json('Error: ' + err));
         })
 
-        .catch(err => res.status(400).json('Error '+err));
+        .catch(err => res.status(400).json('Error ' + err));
 });
 
-router.post("/login", async (req,res) => {
-    try{
+router.post("/login", async (req, res) => {
+    try {
         const email = req.body.email;
         let password = req.body.password;
 
-        const adminUser = await AdminUser.findOne({email:email});
+        const adminUser = await AdminUser.findOne({ email: email });
 
-        if(!adminUser) {
+        if (!adminUser) {
             console.log(adminUser)
             console.log("wrong email")
             return res
                 .status(400)
-                .json({msg: "No valid account for the given email"})
+                .json({ msg: "No valid account for the given email" })
 
         }
         const isMatch = await bcrypt.compare(password, adminUser.password);
-        if(!isMatch) {
+        if (!isMatch) {
+            console.log()
             console.log("Incorrect password")
-            return res.status(400).json({msg: "Invalid Password"});
+            return res.status(400).json({ msg: "Invalid Password" });
 
         }
 
+        if(adminUser.status === "pending"){
+            adminUser.status = "active";
+            await adminUser.save();
+        }
+
         const token = jwt.sign({ id: adminUser._id }, process.env.JWT_SECRET);
-        res.json({
-            token,
-            user: {
-                id: adminUser._id,
-                name: adminUser.name,
-                email: adminUser.email,
-                firstLogin:adminUser.firstLogin,
-
-            },
-        });
+        res
+            .status(200)
+            .json({
+                token,
+                adminUser
+            });
 
 
-    }catch (e) {
-        res.status(500).json({error:e.message});
+    } catch (e) {
+        res.status(500).json({ error: e.message });
     }
 })
 
 // router.route('/')
 
-const sendMail = (name,recipient,password)=>{
+const sendMail = (name, recipient, password) => {
     const smtpTransport = mailer.createTransport({
         service: "Gmail",
         auth: {
-            user:"nisansala.d9710@gmail.com",
-            pass:"dilmigodakanda"
+            user: "nisansala.d9710@gmail.com",
+            pass: "dilmigodakanda"
 
         }
     })
-    var content = "This is an autogenerated mail by the blabla. This is to inform you that an account is created for you in the blabla website with the email "+recipient+ " . Please login to the website using the link and use email address as "+recipient+ " and password as " + password + " for your first login.";
+    var content = "This is an autogenerated mail by the blabla. This is to inform you that an account is created for you in the blabla website with the email " + recipient + " . Please login to the website using the link and use email address as " + recipient + " and password as " + password + " for your first login.";
     //document.getElementById("econtent").innerHTML = content;
     const data = {
-        from:"CodeArmy <nisansala.d9710@gmail.com>",
-        to:recipient,
-        subject:'Registering to the blala website',
-        text:content
+        from: "CodeArmy <nisansala.d9710@gmail.com>",
+        to: recipient,
+        subject: 'Registering to the blala website',
+        text: content
 
     }
-    smtpTransport.sendMail(data, function (err,res) {
-        if(err){
+    smtpTransport.sendMail(data, function (err, res) {
+        if (err) {
             console.log(err)
         }
-        else{
+        else {
             console.log('email send successfully')
         }
         smtpTransport.close();

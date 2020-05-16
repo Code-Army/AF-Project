@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import ProductViewItems from "./ProductViewItems";
 import Header from "../Header";
+import Footer from "../Footer";
 
 class catergoryView extends Component {
     constructor(props) {
@@ -29,6 +30,7 @@ class catergoryView extends Component {
         this.setState({
             category: this.state.category.filter(el => el._id !== id)
         })
+        alert(id);
     }
 
 
@@ -47,6 +49,7 @@ class catergoryView extends Component {
                         }
                 </div>
             </div>
+                <Footer/>
 </>
         );
     }

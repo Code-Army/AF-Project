@@ -5,19 +5,20 @@ import axios from 'axios';
 const Product = props =>(
 
     <tr>
-        <td> </td>
+        <td>{props.id} </td>
         <td>{props.product.productname}</td>
         <td></td>
         <td></td>
         <td>{props.product.description}</td>
+        <td>{props.product.shortdiscription}</td>
+        <td>{props.product.availability}</td>
+        <td>{props.product.specification}</td>
         <td>{props.product.price}</td>
         <td>{props.product.oprice}</td>
         <td>
             <Link to={"/edit/" + props.product._id}>edit</Link> | <a href="#" onClick={() => {props.deleteProduct(props.product._id)}}>delete</a>
         </td>
-        <td>
-            <button type="button" className="btn btn-dark">publish</button>
-        </td>
+
 
     </tr>
 
@@ -28,10 +29,17 @@ export default class ProductList extends Component{
         super(props);
 
         this.deleteProduct = this.deleteProduct.bind(this);
+        this.onChangeSearch = this.onChangeSearch.bind(this);
+        this.searchProduct = this.searchProduct.bind(this);
+
+
 
         this.state  = {
             products: [],
-            search : ''
+            categories: [],
+            searchProduct : '',
+            sproducts:[],
+
         };
     }
 
@@ -45,6 +53,35 @@ export default class ProductList extends Component{
             .catch((error) => {
                 console.log(error);
             })
+
+    }
+    onChangeSearch(e){
+        this.setState({
+                searchProduct: e.target.value
+            }
+        )
+    }
+
+    searchProduct(){
+        console.log(this.state.searchProduct)
+
+        axios.get(`http://localhost:5000/products/products_by_name?name=${this.state.searchProduct}&type=single`)
+            .then(response => {
+                // setProduct(response.data[0])
+                console.log("responce success")
+            })
+
+
+        // axios.get(`http://localhost:5000/products/pruduct_by_name?name=${this.state.searchProduct}&type=single`)
+        //     .then(response => {
+        //         this.setState(
+        //             {sproducts: response.data[0]}
+        //         )
+        //     })
+        //     .catch((error) => {
+        //         console.log(error);
+        //     })
+
     }
 
 
@@ -57,8 +94,10 @@ export default class ProductList extends Component{
         })
     }
     productList(){
-        return this.state.products.map(currentProducts => {
-            return <Product  product = {currentProducts} deleteProduct = {this.deleteProduct} key = {currentProducts._id}></Product>;
+
+        return this.state.products.map((currentProducts,j )=> {
+            const id =j;
+            return <Product id={id+1}  product = {currentProducts} deleteProduct = {this.deleteProduct} key = {currentProducts._id}></Product>;
 
           })
     }
@@ -66,13 +105,25 @@ export default class ProductList extends Component{
         return (
             <div>
 
-                <form class="form-inline">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                    <input class="form-control form-control-sm ml-3 w-25" type="text" placeholder="Search"
-                           aria-label="Search" onChange={this.onchangesearch}/>
+                <form className="form-inline">
+                    <i className="fas fa-search" aria-hidden="true"></i>
+                    <input className="form-control form-control-sm ml-3 w-25" type="text" placeholder="Search"
+                           aria-label="Search" onChange={this.onChangeSearch}/>
 
-
-
+                    {/*<select ref="userInput"*/}
+                    {/*        required*/}
+                    {/*        className="form-control"*/}
+                    {/*        value={this.state.name}*/}
+                    {/*        onChange={this.onChangeCategory}>*/}
+                    {/*    {*/}
+                    {/*        this.state.categories.map(function(category) {*/}
+                    {/*            return <option*/}
+                    {/*                key={category}*/}
+                    {/*                value={category}>{category}*/}
+                    {/*            </option>;*/}
+                    {/*        })*/}
+                    {/*    }*/}
+                    {/*</select>*/}
                     <div className="dropdown show">
                        <a className="btn btn-secondary dropdown-toggle ml-3" href="#" role="button" id="dropdownMenuLink"
                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -107,27 +158,13 @@ export default class ProductList extends Component{
                             </label>
                     </div>
                 </form>
-                <button type="button" className="btn btn-dark float-right mr-4">search</button>
+                <button type="button" className="btn btn-dark float-right mr-4" onClick={this.searchProduct}>search</button>
 
-                {/*<select ref = "userInput"*/}
-                {/*        required*/}
-                {/*        className="form-control"*/}
-                {/*        value={this.state.productname}*/}
-                {/*        onChange={this.onChangeSearchByProductname}>*/}
-                {/*    {*/}
-                {/*    this.state.products.map(function (product) {*/}
-                {/*        return <option*/}
-                {/*            key={product}*/}
-                {/*            value={product}>{product}*/}
-                {/*        </option>;*/}
 
-                {/*    })*/}
-                {/*    }*/}
-                {/*</select>*/}
                 <br/><br/>
 
-                <h3>Inserted Products</h3>
-                <table className="table">
+                <h3 className="table_header ml-3"> Products</h3>
+                <table className="table ml-3">
                     <thead className="thead-light">
                         <tr>
                             <th>No</th>
@@ -135,10 +172,13 @@ export default class ProductList extends Component{
                             <th>Category</th>
                             <th>Sub Category</th>
                             <th>Description</th>
+                            <th>Short Description</th>
+                            <th>Availability</th>
+                            <th>Specification</th>
                             <th>Unit Price</th>
                             <th>original price</th>
                             <th>Action</th>
-                            <th>publish</th>
+
                         </tr>
                     </thead>
                     <tbody>
