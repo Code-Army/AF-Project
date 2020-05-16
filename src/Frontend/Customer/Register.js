@@ -43,7 +43,7 @@ export default function Register() {
       <div className="page">
         <Header/>
         <div class="container">
-        <h2>Register</h2>
+        <h2 className="text-dark">Register</h2>
         {error && (
             <ErrorNotice message={error} clearError={() => setError(undefined)} />
         )}

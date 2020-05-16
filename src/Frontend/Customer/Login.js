@@ -35,8 +35,8 @@ export default function Login() {
   return (
     <div className="page">
       <Header/>
-      <div className="container">
-      <h2>Log in</h2>
+      <div className="container ">
+      <h2 className="text-dark">Log in</h2>
       {error && (
         <ErrorNotice message={error} clearError={() => setError(undefined)} />
       )}

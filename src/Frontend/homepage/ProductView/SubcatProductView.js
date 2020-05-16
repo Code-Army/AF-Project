@@ -6,6 +6,7 @@ import Header from "../Header";
 import Footer from "../Footer";
 
 
+
 class SubcatProductView extends Component {
     constructor(props) {
         super(props);
@@ -43,9 +44,6 @@ class SubcatProductView extends Component {
     render() {
         return (
             <>
-
-
-
                 <Header/>
                 <div className="container">
                     <div className="row">

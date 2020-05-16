@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Auth from "../../Authentication/Auth";
+import logo from '../../web content/images/Logo.png'
 
 export default function Header() {
   return (
@@ -43,7 +44,7 @@ export default function Header() {
                   <nav className="navbar navbar-expand-lg navbar-light w-100">
                       {/*Brand and toggle get grouped for better mobile display */}
                       <a className="navbar-brand logo_h" href="index.html">
-                          <img src="img/logo.png" alt="" height="100px" width="200px"/>
+                          <img src={logo} alt="" height="100px" width="200px"/>
                       </a>
                       <button className="navbar-toggler" type="button" data-toggle="collapse"
                               data-target="#navbarSupportedContent"
@@ -128,7 +129,7 @@ export default function Header() {
 
                                       <li className="nav-item">
                                           <Link to ="/myprofile" className="icons">
-                                              <i className="ti-user" aria-hidden="true"></i>
+                                              <i className="ti-user " aria-hidden="true"></i>
                                           </Link>
                                       </li>
 

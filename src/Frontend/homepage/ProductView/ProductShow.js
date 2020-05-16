@@ -7,14 +7,13 @@ const ProductShow = props => {
         <>
             {/*<td>{props.ProductViewItems.name}</td>*/}
             {/*<td>{props.ProductViewItems.description}</td>*/}
-            <div className="col-lg-4 col-md-6 border-primary">
+
+
+
+            <div className="col-lg-3 col-md-6">
                 <div className="single-product">
                     <div className="product-img">
-                        <img
-                             className="card-img"
-                             src={props.ProductShow.url1}
-                             alt=""
-                        />
+                        <img className="img-fluid w-100" src={props.ProductShow.url1} alt=""/>
                         <div className="p_icon">
                             <a href="#">
                                 <i className="ti-eye"></i>
@@ -32,11 +31,10 @@ const ProductShow = props => {
                             <h4>{props.ProductShow.productname}</h4>
                         </a>
                         <div className="mt-3">
-                            <span className="mr-4">{props.ProductShow.description}</span>
+                            <span className="mr-4">Rs.{props.ProductShow.price}</span>
+                            <del>Rs.{props.ProductShow.oprice}</del>
                         </div>
-
                     </div>
-                    <button >View</button>
                 </div>
             </div>
         </>
