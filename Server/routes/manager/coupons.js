@@ -27,13 +27,13 @@ router.route('/add').post((req,res) => {
 
 });
 router.route('/:id').get((req,res) => {
-    Product.findById(req.params.id)
-        .then(producut => res.json(producut))
+    Coupon.findById(req.params.id)
+        .then(coupon => res.json(coupon))
         .catch(err => res.status(400).json('Error :' + err))
 });
 router.route('/:id').delete((req,res) => {
-    Product.findByIdAndDelete(req.params.id)
-        .then(() => res.json('product deleted.'))
+    Coupon.findByIdAndDelete(req.params.id)
+        .then(() => res.json('coupon deleted.'))
         .catch(err => res.status(400).json('Error :' + err))
 });
 router.get("/pruduct_by_name", (req, res) => {
