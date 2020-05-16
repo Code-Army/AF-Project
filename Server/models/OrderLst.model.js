@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const orderedSchema = new Schema({
 
-    userId:{type: Number},
+    userId:{type: String},
     productId:{ type: String, required: true}
 
 

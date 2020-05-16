@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const feedbackSchema = new Schema({
 
-    userId:{type: Number},
+    userName:{type: String},
     productId:{ type: String, required: true},
     feedback:{ type: String, required: true},
     rate:{type: String},

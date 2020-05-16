@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const purchasesSchema = new Schema({
 
-    userId:{type: Number},
+    userId:{type: String},
     purchasesId:{ type: String, required: true},
     total:{type: String, required: true}
 
