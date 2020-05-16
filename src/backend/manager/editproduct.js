@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
+import {Row,Col} from "react-bootstrap";
+import Form from 'react-bootstrap/Form'
 
 
 export default class editproduct extends Component{
@@ -12,8 +14,6 @@ export default class editproduct extends Component{
         this.onChangePrice = this.onChangePrice.bind(this);
         this.onChangeoPrice = this.onChangeoPrice.bind(this);
         this.onChangeShortDescription = this.onChangeShortDescription.bind(this);
-        this.onChangeCategory = this.onChangeCategory.bind(this);
-        this.onChangeSubCategory = this.onChangeSubCategory.bind(this);
         this.onChangeSpecifications = this.onChangeSpecifications.bind(this);
         this.onChangeaAvailability= this.onChangeaAvailability.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -25,9 +25,7 @@ export default class editproduct extends Component{
         this.state = {
             productname : '',
             description : '',
-            category : '',
-            subcategory:'',
-            shortdescription : '',
+            shortdiscription : '',
             specification:'',
             availability:'',
             price : 0,
@@ -46,14 +44,13 @@ export default class editproduct extends Component{
                 this.setState({
                     productname: response.data.productname,
                     description: response.data.description,
-                    shortdiscription: response.data.shortdescription,
+                    shortdiscription: response.data.shortdiscription,
                     specification: response.data.specification,
                     availability: response.data.availability,
                     price: response.data.price,
                     oprice: response.data.oprice,
 
                 })
-
 
             })
             .catch(function (error) {
@@ -89,19 +86,7 @@ export default class editproduct extends Component{
     }
     onChangeShortDescription(e){
         this.setState({
-                shortdescription: e.target.value
-            }
-        )
-    }
-    onChangeCategory(e){
-        this.setState({
-                category: e.target.value
-            }
-        )
-    }
-    onChangeSubCategory(e){
-        this.setState({
-                subcategory: e.target.value
+            shortdiscription: e.target.value
             }
         )
     }
@@ -122,28 +107,20 @@ export default class editproduct extends Component{
 
         const item = {
             productname: this.state.productname,
-            category: this.state.category,
-            subcategory: this.state.subcategory,
             description: this.state.description,
-            shortdescription: this.state.shortdescription,
+            shortdiscription: this.state.shortdiscription,
             specification: this.state.specification,
             availability: this.state.availability,
             price: this.state.price,
             oprice: this.state.oprice,
         }
 
-        console.log(this.state.productname);
-        console.log(this.state.description);
-
-
         axios.post('http://localhost:5000/products/update/' + this.props.match.params.id , item )
             .then(res => console.log(res.data));
         this.setState({
             productname : "",
-            category : "",
-            subcategory:"",
             description :"",
-            shortdescription : "",
+            shortdiscription : "",
             price : 0,
             oprice : 0,
             specification:"",
@@ -166,104 +143,57 @@ export default class editproduct extends Component{
     render() {
         return (
             <div className="container" >
-                <h3 className="header ml-3 ">Edit  Product Log</h3>
-                <div className="ml-3 mr-3">
-                    <div className="form-group">
-                        <label>Product Name</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.productname}
-                               onChange={this.onChangeProductName}>
+                <div >
+                    <h3 className="header ml-3 ">Edit  Product Log</h3>
+                    <Row className="mb-3 mt-3">
 
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Label>Product Name</Form.Label>
+                            <Form.Control value={this.state.productname}  onChange={this.onChangeProductName}/>
+                        </Form.Group>
 
-                        </input>
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control  value={this.state.description} onChange={this.onChangeDescription}/>
+                        </Form.Group>
+                    </Row>
+                    <Row className="mb-3 mt-3">
 
-                    </div>
-                    <div className="form-inline">
-                        <div className="dropdown">
-                            <button className="btn  dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Select Category
-                            </button>
-                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a className="dropdown-item" href="#">Action</a>
-                                <a className="dropdown-item" href="#">Another action</a>
-                                <a className="dropdown-item" href="#">Something else here</a>
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Label>Short Description</Form.Label>
+                            <Form.Control  value={this.state.shortdiscription} onChange={this.onChangeShortDescription} />
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Label>Availability</Form.Label>
+                            <Form.Control  value={this.state.availability} onChange={this.onChangeaAvailability}/>
+                        </Form.Group>
+
+                    </Row>
+                    <Row className="mb-3 mt-3">
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Label>Specification</Form.Label>
+                            <Form.Control value={this.state.specification} onChange={this.onChangeSpecifications} />
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Label>Unit Price</Form.Label>
+                            <Form.Control value={this.state.price} onChange={this.onChangePrice}/>
+                        </Form.Group>
+                    </Row>
+                    <Row className="mb-3 mt-3">
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Label>Original Price</Form.Label>
+                            <Form.Control value={this.state.oprice} onChange={this.onChangeoPrice}/>
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <div className="form-group float-right mt-5">
+                                <button className="btn btn-primary" onClick={this.handleShow}>Edit Product Log</button>
+
                             </div>
-                        </div>
-                        <div className="dropdown">
-                            <button className="btn  dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Select Sub Category
-                            </button>
-                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a className="dropdown-item" href="#">Action</a>
-                                <a className="dropdown-item" href="#">Another action</a>
-                                <a className="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label>Description :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.description}
-                               onChange={this.onChangeDescription}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Short Description :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.shortdescription}
-                               onChange={this.onChangeShortDescription}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Availability :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.availability}
-                               onChange={this.onChangeaAvailability}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Specification :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.specification}
-                               onChange={this.onChangeSpecifications}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Unit Price :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.price}
-                               onChange={this.onChangePrice}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Original price :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.oprice}
-                               onChange={this.onChangeoPrice}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <button className="btn btn-primary" onClick={this.handleShow}>Edit Product Log</button>
-
-                    </div>
-
-
+                        </Form.Group>
+                    </Row>
 
                 </div>
                 <Modal show={this.state.show}>
@@ -275,11 +205,98 @@ export default class editproduct extends Component{
                         <button variant="secondary" className="btn btn-success " onClick={this.handleClose}>
                             Close
                         </button>
-                        <button variant="primary" onClick={this.onSubmit}>
+                        <button variant="primary"className="btn btn-danger" onClick={this.onSubmit}>
                             Save Changes
                         </button>
                     </Modal.Footer>
                 </Modal>
+
+
+                {/*<h3 className="header ml-3 ">Edit  Product Log</h3>*/}
+                {/*<div className="ml-3 mr-3">*/}
+                {/*    <div className="form-group">*/}
+                {/*        <label>Product Name</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control"*/}
+                {/*               value={this.state.productname}  onChange={this.onChangeProductName}>*/}
+
+
+                {/*        </input>*/}
+
+                {/*    </div>*/}
+
+                {/*    <div className="form-group">*/}
+                {/*        <label>Description :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control"*/}
+                {/*               value={this.state.description} onChange={this.onChangeDescription}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*    <div className="form-group">*/}
+                {/*        <label>Short Description :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               readOnly={false}*/}
+                {/*               className="form-control"*/}
+                {/*               value={this.state.shortdiscription} onChange={this.onChangeShortDescription}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*    <div className="form-group">*/}
+                {/*        <label>Availability :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control"*/}
+                {/*               value={this.state.availability} onChange={this.onChangeaAvailability}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*    <div className="form-group">*/}
+                {/*        <label>Specification :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control"*/}
+                {/*               value={this.state.specification} onChange={this.onChangeSpecifications}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*    <div className="form-group">*/}
+                {/*        <label>Unit Price :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control"*/}
+                {/*               value={this.state.price} onChange={this.onChangePrice}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*    <div className="form-group">*/}
+                {/*        <label>Original price :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control"*/}
+                {/*               value={this.state.oprice} onChange={this.onChangeoPrice}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*    <div className="form-group">*/}
+                {/*        <button className="btn btn-primary" onClick={this.handleShow}>Edit Product Log</button>*/}
+
+                {/*    </div>*/}
+
+
+
+                {/*</div>*/}
+                {/*<Modal show={this.state.show}>*/}
+                {/*    <Modal.Header closeButton>*/}
+                {/*        <Modal.Title>notofication</Modal.Title>*/}
+                {/*    </Modal.Header>*/}
+                {/*    <Modal.Body>data update successfull.</Modal.Body>*/}
+                {/*    <Modal.Footer>*/}
+                {/*        <button variant="secondary" className="btn btn-success " onClick={this.handleClose}>*/}
+                {/*            Close*/}
+                {/*        </button>*/}
+                {/*        <button variant="primary"className="btn btn-danger" onClick={this.onSubmit}>*/}
+                {/*            Save Changes*/}
+                {/*        </button>*/}
+                {/*    </Modal.Footer>*/}
+                {/*</Modal>*/}
             </div>
         );
     }

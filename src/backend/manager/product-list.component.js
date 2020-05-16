@@ -7,8 +7,8 @@ const Product = props =>(
     <tr>
         <td>{props.id} </td>
         <td>{props.product.productname}</td>
-        <td></td>
-        <td></td>
+        <td>{props.product.category}</td>
+        <td>{props.product.subcategory}</td>
         <td>{props.product.description}</td>
         <td>{props.product.shortdiscription}</td>
         <td>{props.product.availability}</td>
@@ -16,6 +16,7 @@ const Product = props =>(
         <td>{props.product.price}</td>
         <td>{props.product.oprice}</td>
         <td>
+
             <Link to={"/edit/" + props.product._id}>edit</Link> | <a href="#" onClick={() => {props.deleteProduct(props.product._id)}}>delete</a>
         </td>
 
@@ -36,7 +37,10 @@ export default class ProductList extends Component{
 
         this.state  = {
             products: [],
+            subCategories:[],
             categories: [],
+            name:'',
+            subcategory:'',
             searchProduct : '',
             sproducts:[],
 
@@ -44,11 +48,31 @@ export default class ProductList extends Component{
     }
 
     componentDidMount() {
+        axios.get('http://localhost:5000/Category/')
+            .then(response => {
+                if(response.data.length > 0 ) {
+                    this.setState({
+                        categories : response.data.map(category => category.name),
+                        name : response.data[0].name
+
+                    })
+                }
+            })
+        axios.get('http://localhost:5000/createSubCategory/')
+            .then(response => {
+                if(response.data.length > 0 ) {
+                    this.setState({
+                        subCategories : response.data.map(subcategory => subcategory.name),
+                        subcategory : response.data[0].name
+
+                    })
+                }
+            })
         axios.get('http://localhost:5000/products/')
             .then(response => {
                 this.setState(
                     {products: response.data}
-                    )
+                )
             })
             .catch((error) => {
                 console.log(error);
@@ -124,25 +148,39 @@ export default class ProductList extends Component{
                     {/*        })*/}
                     {/*    }*/}
                     {/*</select>*/}
-                    <div className="dropdown show">
-                       <a className="btn btn-secondary dropdown-toggle ml-3" href="#" role="button" id="dropdownMenuLink"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                           select category
-                       </a>
 
-                       <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-
-                       </div>
+                    <div className="dropdown ml-3">
+                        <select ref="userInput"
+                                required
+                                className="form-control"
+                                value={this.state.name}
+                                onChange={this.onChangeCategory}>
+                            {
+                                this.state.categories.map(function(category) {
+                                    return <option
+                                        key={category}
+                                        value={category}>{category}
+                                    </option>;
+                                })
+                            }
+                        </select>
                     </div>
-                    <div className="dropdown show">
-                        <a className="btn btn-secondary dropdown-toggle ml-3" href="#" role="button" id="dropdownMenuLink"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            select sub category
-                        </a>
 
-                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-
-                        </div>
+                    <div className="dropdown ml-3 ">
+                        <select ref="userInput"
+                                required
+                                className="form-control"
+                                value={this.state.subcategory}
+                                onChange={this.onChangeSubCategory}>
+                            {
+                                this.state.subCategories.map(function(scategory) {
+                                    return <option
+                                        key={scategory}
+                                        value={scategory}>{scategory}
+                                    </option>;
+                                })
+                            }
+                        </select>
                     </div>
 
                     <div className="form-check">

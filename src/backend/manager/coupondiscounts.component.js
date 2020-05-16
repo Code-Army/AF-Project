@@ -5,11 +5,12 @@ import axios from 'axios';
 const Coupon = props =>(
 
     <tr>
-        <td> {props.id}</td>
+        <td>{props.id}</td>
         <td>{props.coupon.couponname}</td>
         <td>{props.coupon.couponcode}</td>
         <td>{props.coupon.couponamount}</td>
         <td>
+
             <Link to={"/editcoupon/" + props.coupon._id}>edit</Link> | <a href="#" onClick={() => {props.deleteCoupon(props.coupon._id)}}>delete</a>
         </td>
 
@@ -85,14 +86,10 @@ export default class coupondiscounts extends Component{
         })
     }
     couponList(){
-        return this.state.coupons.map((currentcoupons,j ) => {
+
+        return this.state.coupons.map((currentCoupons,j ) => {
             const id =j;
-            return <Coupon
-                      id={id+1}
-                      coupon = {currentcoupons}
-                      deleteCoupon = {this.deleteCoupon}
-                      key = {currentcoupons._id}>
-                   </Coupon>;
+            return <Coupon id={id+1}  coupon = {currentCoupons} deleteCoupon = {this.deleteCoupon} key = {currentCoupons._id}> </Coupon>;
 
         })
     }

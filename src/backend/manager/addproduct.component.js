@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import axios from "axios";
 import {storage} from './../../firebase'
 import Modal from "react-bootstrap/Modal";
+import Form from 'react-bootstrap/Form'
+import {Row,Col} from "react-bootstrap";
 
 export default class AddProduct extends Component{
     constructor(props) {
@@ -25,14 +27,15 @@ export default class AddProduct extends Component{
 
         this.state = {
             productname : '',
-            category : '',
             subcategory:'',
             description : '',
             shortdiscription : '',
             price : 0,
             oprice : 0,
-            products : [],
+            subCategories : [],
             categories : [],
+            name:'',
+            sid:'',
             url1: '',
             specification:'',
             availability:'',
@@ -54,30 +57,30 @@ export default class AddProduct extends Component{
         })
     }
     componentDidMount() {
-        // axios.get('http://localhost:5000/products/')
-        //     .then(response => {
-        //         if(response.data.length > 0 ) {
-        //             this.setState({
-        //                 products : response.data.map(product => product.productname),
-        //                 productname : response.data[0].productname
-        //
-        //             })
-        //         }
-        //     })
-        fetch("http://localhost:5000/category/")
-            .then((response) => {
-                return response.json();
+        axios.get('http://localhost:5000/Category/')
+            .then(response => {
+                if(response.data.length > 0 ) {
+                    this.setState({
+                        categories : response.data.map(category => category.name),
+                        name : response.data[0].name,
+
+
+                    })
+                }
             })
-            .then(data => {
-                let categories = data.map(category => {
-                    return {value: category, display: category}
-                });
-                this.setState({
-                    categories: [{value: '', display: '(Select your favourite team)'}].concat(categories)
-                });
-            }).catch(error => {
-            console.log(error);
-        });
+        axios.get('http://localhost:5000/createSubCategory/')
+            .then(response => {
+                if(response.data.length > 0 ) {
+                    this.setState({
+                        subCategories : response.data.map(subcategory => subcategory.name),
+                        subcategory : response.data[0].name
+
+
+                    })
+
+                }
+            })
+
     }
 
     onChangeImgUpload(e){
@@ -111,13 +114,13 @@ export default class AddProduct extends Component{
     }
     onChangeCategory(e){
         this.setState({
-                category: e.target.value
+                name: e.target.value
             }
         )
     }
     onChangeSubCategory(e){
         this.setState({
-                subcategory: e.target.value
+            subcategory: e.target.value
             }
         )
     }
@@ -129,7 +132,7 @@ export default class AddProduct extends Component{
     }
     onChangeShortDescription(e){
         this.setState({
-                shortdiscription: e.target.value
+            shortdiscription: e.target.value
             }
         )
     }
@@ -166,7 +169,7 @@ export default class AddProduct extends Component{
                     console.log(url1);
                     const item = {
                         productname: this.state.productname,
-                        category: this.state.category,
+                        category: this.state.name,
                         subcategory: this.state.subcategory,
                         description: this.state.description,
                         shortdiscription: this.state.shortdiscription,
@@ -176,9 +179,6 @@ export default class AddProduct extends Component{
                         oprice: this.state.oprice,
                         url1: url1,
                     }
-
-                    console.log(this.state.shortdescription);
-
 
                     axios.post('http://localhost:5000/products/add' , item )
                         .then(res => console.log(res.data));
@@ -208,107 +208,92 @@ export default class AddProduct extends Component{
             <div className="container">
                 <h3>Create New Product Log</h3>
 
-                <form onSubmit={this.onSubmit} className="ml-5 mr-5">
-                    <div className="form-group">
-                        <label>Product Name</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.productname}
-                               onChange={this.onChangeProductName}>
+                <Form onSubmit={this.onSubmit} className="ml-5 mr-5">
+
+                        <Row className="mb-3" >
+                            <Col>
+                                <Form.Control placeholder="Product name" value={this.state.productname} onChange={this.onChangeProductName}/>
+                            </Col>
+                            <Col>
+                                <div className="form-inline">
+                                <select ref="userInput"
+                                        required
+                                        className="form-control mr-5"
+                                        value={this.state.name}
+                                        onChange={this.onChangeCategory}>
+                                    {
+                                        this.state.categories.map(function(category) {
+                                            return <option
+                                                key={category}
+                                                value={category}>{category}
+                                            </option>;
+                                        })
+                                    }
+                                </select>
+                                <select ref="userInput"
+                                        required
+                                        className="form-control  mr-3"
+                                        value={this.state.subcategory}
+                                        onChange={this.onChangeSubCategory}>
+                                    {
+                                        this.state.subCategories.map(function(scategory) {
+                                            return <option
+                                                key={scategory}
+                                                value={scategory}>{scategory}
+                                            </option>;
+                                        })
+                                    }
+                                </select>
+                                </div>
+                            </Col>
+                        </Row>
+                    <Row>
+
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Control placeholder="Description" value={this.state.description} onChange={this.onChangeDescription} />
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Control placeholder="Short Discription " value={this.state.shortdiscription} onChange={this.onChangeShortDescription} />
+                        </Form.Group>
+
+                    </Row>
+
+                    <Row>
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Control placeholder="Availability" value={this.state.availability} onChange={this.onChangeaAvailability} />
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Control placeholder="Specification" value={this.state.specification} onChange={this.onChangeSpecifications}/>
+                        </Form.Group>
+                </Row>
+                    <Row>
+
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Label>Unit Price</Form.Label>
+                            <Form.Control value={this.state.price} onChange={this.onChangePrice}/>
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="formGridPassword">
+                            <Form.Label>Original Price</Form.Label>
+                            <Form.Control value={this.state.oprice} onChange={this.onChangeoPrice}/>
+                        </Form.Group>
+                </Row>
 
 
-                        </input>
-
-                    </div>
-                    <form className="form-inline">
-                        <div className="dropdown">
-                            <select>
-                                {this.state.categories.map((category) => <option key={category.value} value={category.value}>{category.display}</option>)}
-                            </select>
-                        </div>
-                        <div className="dropdown">
-                            <button className="btn  dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Select Sub Category
-                            </button>
-                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a className="dropdown-item" href="#">Action</a>
-                                <a className="dropdown-item" href="#">Another action</a>
-                                <a className="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </form>
-                    <div className="form-group">
-                        <label>Description :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.description}
-                               onChange={this.onChangeDescription}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Short Discription :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.shortdiscription}
-                               onChange={this.onChangeShortDescription}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Availability :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.availability}
-                               onChange={this.onChangeaAvailability}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Specification :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.specification}
-                               onChange={this.onChangeSpecifications}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Unit Price :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.price}
-                               onChange={this.onChangePrice}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Original price :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.oprice}
-                               onChange={this.onChangeoPrice}
-                        />
-                    </div>
                     <div>
                         <input type = "file"
-                               className="mb-3"
+                               className="mb-3 mt-3 "
                                onChange={this.onChangeImgUpload}
                         />
 
                     </div>
-
-                    <div className="form-group">
+                    <div className="form-group float-right">
                         <input type="submit" value="Create Product Log" className="btn btn-primary" onClick={this.handleShow}/>
 
                     </div>
-
-
-
-                </form>
+                </Form>
+                <br/>
                 <Modal show={this.state.show}>
                     <Modal.Header closeButton>
                         <Modal.Title>notofication</Modal.Title>
@@ -320,6 +305,112 @@ export default class AddProduct extends Component{
                         </button>
                     </Modal.Footer>
                 </Modal>
+
+
+
+                {/*<div className="form-inline">*/}
+                {/*    <div className="form-group ">*/}
+                {/*        <label>Product Name : </label><br/>*/}
+                {/*       <br/> <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control ml-3 mr-3"*/}
+                {/*               value={this.state.productname}*/}
+                {/*               onChange={this.onChangeProductName}>*/}
+
+
+                {/*        </input>*/}
+                {/*        <form className="form-inline ml-5">*/}
+                {/*            <div className="dropdown">*/}
+                {/*                <select ref="userInput"*/}
+                {/*                        required*/}
+                {/*                        className="form-control ml-3 mr-3"*/}
+                {/*                        value={this.state.name}*/}
+                {/*                        onChange={this.onChangeCategory}>*/}
+                {/*                    {*/}
+                {/*                        this.state.categories.map(function(category) {*/}
+                {/*                            return <option*/}
+                {/*                                key={category}*/}
+                {/*                                value={category}>{category}*/}
+                {/*                            </option>;*/}
+                {/*                        })*/}
+                {/*                    }*/}
+                {/*                </select>*/}
+                {/*            </div>*/}
+
+
+                {/*            <div className="dropdown ml-3 ">*/}
+
+                {/*                <select ref="userInput"*/}
+                {/*                        required*/}
+                {/*                        className="form-control ml-3 mr-3"*/}
+                {/*                        value={this.state.subcategory}*/}
+                {/*                        onChange={this.onChangeSubCategory}>*/}
+                {/*                    {*/}
+                {/*                        this.state.subCategories.map(function(scategory) {*/}
+                {/*                            return <option*/}
+                {/*                                key={scategory}*/}
+                {/*                                value={scategory}>{scategory}*/}
+                {/*                            </option>;*/}
+                {/*                        })*/}
+                {/*                    }*/}
+                {/*                </select>*/}
+                {/*            </div>*/}
+                {/*        </form>*/}
+
+                {/*        <label>Description :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control ml-3 mr-3"*/}
+                {/*               value={this.state.description} onChange={this.onChangeDescription}*/}
+                {/*        />*/}
+
+                {/*            <label>Short Discription :</label>*/}
+                {/*            <input type="text"*/}
+                {/*                   required*/}
+                {/*                   className="form-control ml-3 mr-3"*/}
+                {/*                   value={this.state.shortdiscription} onChange={this.onChangeShortDescription}*/}
+                {/*            />*/}
+
+
+                {/*    </div>*/}
+                {/*    <div className="form-group  d-inline">*/}
+                {/*        <label>Availability :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control ml-3 mr-3"*/}
+                {/*               value={this.state.availability} onChange={this.onChangeaAvailability}*/}
+                {/*        />*/}
+                {/*        <label>Specification :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control ml-3 mr-3"*/}
+                {/*               value={this.state.specification} onChange={this.onChangeSpecifications}*/}
+                {/*        />*/}
+
+                {/*        <label>Unit Price :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control ml-3 mr-3"*/}
+                {/*               value={this.state.price} onChange={this.onChangePrice}*/}
+                {/*        />*/}
+                {/*        <label>Original price :</label>*/}
+                {/*        <input type="text"*/}
+                {/*               required*/}
+                {/*               className="form-control ml-3 mr-3"*/}
+                {/*               value={this.state.oprice} onChange={this.onChangeoPrice}*/}
+                {/*        />*/}
+
+                {/*    </div>*/}
+
+                {/*</div>*/}
+
+
+
+
+
+
+
+
             </div>
         );
     }
