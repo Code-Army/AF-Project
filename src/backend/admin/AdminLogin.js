@@ -156,10 +156,7 @@ class AdminLogin extends Component {
                         <div className="form-group">
                             <button type="submit" className="btn btn-primary btn-block">Log in</button>
                         </div>
-                        <div className="clearfix">
 
-                            <a href="#" className="pull-right">Forgot Password?</a>
-                        </div>
                     </form>
 
                 </div>

@@ -32,6 +32,7 @@ class UserItem extends Component {
             <tr>
                 <EditAdminUser showEditModal={this.state.showEditModal} onCloseModal={this.hideModal} user={this.props.userItem}/>
                 <td>{this.props.userItem.name}</td>
+                <td>{this.props.userItem.role}</td>
                 <td>{this.props.userItem.email}</td>
                 <td>{this.props.userItem.status}</td>
                 <td>{this.props.userItem.createdAt}</td>

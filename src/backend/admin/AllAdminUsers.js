@@ -58,6 +58,7 @@ class AllAdminUsers extends Component {
 
 
                             <th>Name</th>
+                            <th>Role</th>
                             <th>Email</th>
                             <th>Status</th>
                             <th>Entered Date</th>
