@@ -89,7 +89,9 @@ export default class coupondiscounts extends Component{
 
         return this.state.coupons.map((currentCoupons,j ) => {
             const id =j;
+
             return <Coupon id={id+1}  coupon = {currentCoupons} deleteCoupon = {this.deleteCoupon} key = {currentCoupons._id}> </Coupon>;
+
 
         })
     }

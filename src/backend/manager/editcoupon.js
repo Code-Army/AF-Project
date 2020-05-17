@@ -5,7 +5,6 @@ import Modal from "react-bootstrap/Modal";
 
 export default class editcoupon extends Component {
     constructor(props) {
-
         super(props);
         this.onChangeCouponName = this.onChangeCouponName.bind(this)
         this.onChangeCouponCode = this.onChangeCouponCode.bind(this)
@@ -13,6 +12,7 @@ export default class editcoupon extends Component {
         this.onChangeSubmit=this.onChangeSubmit.bind(this)
         this.handleClose=this.handleClose.bind(this)
         this.handleShow=this.handleShow.bind(this)
+        this.showcoupon=this.showcoupon.bind(this)
 
         this.state = {
             couponname: '',
@@ -90,7 +90,9 @@ export default class editcoupon extends Component {
             show:true
         })
     }
-
+    showcoupon (){
+        window.location='/coupon'
+    }
     render() {
         return (
             <div className="container">
@@ -132,7 +134,7 @@ export default class editcoupon extends Component {
                     </div>
                     <div className="form-group">
                         <input type="submit" value="Create coupon Log" className="btn btn-primary"/>
-                        <input type="submit" value="Back to Coupon" className="btn btn-dark ml-3"/>
+                        <input onClick={this.showcoupon} value="Back to Coupon" className="btn btn-dark ml-3"/>
 
                     </div>
 
