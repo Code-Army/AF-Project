@@ -78,6 +78,7 @@ export default class ProductList extends Component{
                 console.log(error);
             })
 
+
     }
     onChangeSearch(e){
         this.setState({
@@ -88,13 +89,23 @@ export default class ProductList extends Component{
 
     searchProduct(){
         console.log(this.state.searchProduct)
+        // axios.get('http://localhost:5000/products/')
 
-        axios.get(`http://localhost:5000/products/products_by_name?name=${this.state.searchProduct}&type=single`)
+        // axios.get(`http://localhost:5000/products/search_by_name?name=${this.state.searchProduct}&type=single`)
+        //     .then(response => {
+        //         // setProduct(response.data[0])
+        //         console.log("responce success")
+        //     })
+
+        axios.get(`http://localhost:5000/products/search/search_by_name?id=${this.state.searchProduct}&type=single`)
             .then(response => {
-                // setProduct(response.data[0])
-                console.log("responce success")
-            })
+                this.setState(
+                    {products: response.data}
+                )
+                // console.log(response.data)
+                // console.log("didmount - " + response.data)
 
+            })
 
         // axios.get(`http://localhost:5000/products/pruduct_by_name?name=${this.state.searchProduct}&type=single`)
         //     .then(response => {
@@ -130,24 +141,10 @@ export default class ProductList extends Component{
             <div>
 
                 <form className="form-inline">
-                    <i className="fas fa-search" aria-hidden="true"></i>
+                    <i className="fas fa-search ml-3" aria-hidden="true"></i>
                     <input className="form-control form-control-sm ml-3 w-25" type="text" placeholder="Search"
                            aria-label="Search" onChange={this.onChangeSearch}/>
 
-                    {/*<select ref="userInput"*/}
-                    {/*        required*/}
-                    {/*        className="form-control"*/}
-                    {/*        value={this.state.name}*/}
-                    {/*        onChange={this.onChangeCategory}>*/}
-                    {/*    {*/}
-                    {/*        this.state.categories.map(function(category) {*/}
-                    {/*            return <option*/}
-                    {/*                key={category}*/}
-                    {/*                value={category}>{category}*/}
-                    {/*            </option>;*/}
-                    {/*        })*/}
-                    {/*    }*/}
-                    {/*</select>*/}
 
                     <div className="dropdown ml-3">
                         <select ref="userInput"
@@ -201,8 +198,8 @@ export default class ProductList extends Component{
 
                 <br/><br/>
 
-                <h3 className="table_header ml-3"> Products</h3>
-                <table className="table ml-3">
+                <h3 className="table_header ml-3 "> Products</h3>
+                <table className="table ml-3 ">
                     <thead className="thead-light">
                         <tr>
                             <th>No</th>
