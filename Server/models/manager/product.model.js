@@ -11,6 +11,7 @@ const productSchema = new Schema({
         shortdiscription:{type:String,default:" "},
         price: {type:String,default: ""},
         category: {type:String,default:""},
+        cid: {type:String,default:""},
         subcategory: {type:String,default:""},
         oprice: {type:String,default:""},
         url1 : {type:String, default:""},
