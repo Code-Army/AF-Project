@@ -35,7 +35,7 @@ export default class AddProduct extends Component{
             subCategories : [],
             categories : [],
             name:'',
-            sid:'',
+            cid:'',
             url1: '',
             specification:'',
             availability:'',
@@ -61,9 +61,10 @@ export default class AddProduct extends Component{
             .then(response => {
                 if(response.data.length > 0 ) {
                     this.setState({
-                        categories : response.data.map(category => category.name),
+                        // categories : response.data.map(category => category.name),
+                        categories:response.data,
                         name : response.data[0].name,
-
+                        cid:response.data[0]._id
 
                     })
                 }
@@ -113,10 +114,16 @@ export default class AddProduct extends Component{
         )
     }
     onChangeCategory(e){
+        console.log(e.target.name)
+        console.log("um")
+        var selectedIndex = e.target.options.selectedIndex;
+        console.log("id - "+e.target.options[selectedIndex].getAttribute('id'))
         this.setState({
-                name: e.target.value
+                name: e.target.value,
+                cid:e.target.options[selectedIndex].getAttribute('id')
             }
         )
+        // console.log(e.target.cid)
     }
     onChangeSubCategory(e){
         this.setState({
@@ -170,6 +177,7 @@ export default class AddProduct extends Component{
                     const item = {
                         productname: this.state.productname,
                         category: this.state.name,
+                        cid: this.state.cid,
                         subcategory: this.state.subcategory,
                         description: this.state.description,
                         shortdiscription: this.state.shortdiscription,
@@ -179,7 +187,7 @@ export default class AddProduct extends Component{
                         oprice: this.state.oprice,
                         url1: url1,
                     }
-
+                    console.log(this.state.subcategory)
                     axios.post('http://localhost:5000/products/add' , item )
                         .then(res => console.log(res.data));
 
@@ -225,7 +233,10 @@ export default class AddProduct extends Component{
                                         this.state.categories.map(function(category) {
                                             return <option
                                                 key={category}
-                                                value={category}>{category}
+                                                value={category.name}
+                                                id={category._id}
+                                            >{category.name}
+
                                             </option>;
                                         })
                                     }
