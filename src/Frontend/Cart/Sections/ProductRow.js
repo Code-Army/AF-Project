@@ -21,18 +21,19 @@ export default function ProductRow(props) {
                             <span>	</span>
                             <span className="badge badge-danger" onClick={() => { props.deleteCart(props.item._id,props.item.price) }}> <i className="fas fa-trash"></i></span>
                             </div>
+
                         </div>
                         <div>
                             <div className="product_image">
                                 <img
-                                    src={img1}
+                                    src={props.item.url}
 
                                 />
                             </div>
                         </div>
                         <div className="product_name_container">
                             <div className="product_name"><a href="product.html">{props.item.productName}</a></div>
-                            <div className="product_text">Second line for additional info</div>
+                            <div className="product_text">Added Date - {props.item.createdAt}</div>
                         </div>
                     </div>
                     <div className="product_color product_text"><span>Color: </span>beige</div>
