@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import Axios from "axios";
 
-
+import Header from "./../homepage/Header"
 import ImagesSlide from "./Sections/Image-slide";
 import Details from "./Sections/Details";
 import Description from "./Sections/Description";
@@ -11,12 +11,15 @@ import Review from "./Sections/Review";
 export default function ProductDetails(props){
 
     const productId = props.match.params.productId
+    const userId = props.match.params.userId
 
-
-    const [Product, setProduct] = useState([])
     const [Feedback, setFeedback] = useState([])
+    const [Product, setProduct] = useState([])
+    // const [Feedback, setFeedback] = useState([])
     const Id = props.match.params.productId;
-
+    var countrate =0;
+    var avarage = 0;
+    var totalFeedback =0;
     const price = 1000;
     //console.log(Id)
     useEffect(() => {
@@ -30,7 +33,9 @@ export default function ProductDetails(props){
     useEffect(() => {
         Axios.get(`http://localhost:5000/feedback/feedback_by_id?id=${productId}&type=single`)
             .then(response => {
-                setFeedback(response.data[0])
+                setFeedback(response.data)
+
+
             })
 
     }, [])
@@ -39,6 +44,8 @@ export default function ProductDetails(props){
 
         return(
             <div>
+                <Header
+                    userdata="1"/>
                 <div>
 
                     {/*product image area*/}
@@ -46,14 +53,19 @@ export default function ProductDetails(props){
                         <div className="container">
                             <div className="row s_product_inner">
                                 <div className="col-lg-6">
-                                    <h1>{Product.title}</h1>
-                                    <ImagesSlide/>
+                                    <h1>{Product.productname}</h1>
+                                    <ImagesSlide
+                                    url1={Product.url1}
+                                    url2={Product.url2}
+                                    url3={Product.url3}
+                                    />
                                 </div>
                                 <div className="col-lg-5 offset-lg-1">
                                     <Details
+
                                     productId={productId}
-                                    productName={Product.title}
-                                    price={price}/>
+
+                                    product={Product}/>
 
                                 </div>
                             </div>
@@ -104,13 +116,27 @@ export default function ProductDetails(props){
                                 </li>
                             </ul>
                             <div className="tab-content" id="myTabContent">
+                                {Feedback.map((feedback,j)=> {
+                                    const fTotal = j+1;
+                                    console.log("Feedback count - " +fTotal)
+                                    countrate = countrate + parseInt(feedback.rate);
+                                    console.log(countrate)
+                                    avarage = parseInt(countrate) / parseInt(fTotal);
+                                    console.log(avarage)
+                                    totalFeedback = fTotal;
 
-                                <Description/>
-                                <Specification/>
+
+
+                                })}
+                                <Description
+                                description={Product.description}/>
+                                <Specification
+                                    specification = {Product.specification}/>
                                 <Review
-
-                                feedback = {Feedback.feedback}
-                                rate = {Feedback.rate}
+                                    feedback = {Feedback}
+                                    rate = {Feedback.rate}
+                                    avarage={avarage}
+                                    fTotal={totalFeedback}
                                 />
 
 
