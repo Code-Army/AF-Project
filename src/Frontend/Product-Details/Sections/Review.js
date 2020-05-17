@@ -45,66 +45,12 @@ export default class Review extends Component{
                             <div className="col-6">
                                 <div className="box_total">
                                     <h5>Overall</h5>
-                                    <h4>4.0</h4>
-                                    <h6>(03 Reviews)</h6>
+                                    <h4>{this.props.avarage}</h4>
+                                    <h6>({this.props.fTotal} Reviews)</h6>
                                 </div>
                             </div>
                             <div className="col-6">
-                                <div className="rating_list">
-                                    <h3>Based on 3 Reviews</h3>
-                                    <ul className="list">
-                                        <li>
-                                            <a href="#"
-                                            >5 Star
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i> 01</a
-                                            >
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                            >4 Star
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i> 01</a
-                                            >
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                            >3 Star
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i> 01</a
-                                            >
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                            >2 Star
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i> 01</a
-                                            >
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                            >1 Star
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i>
-                                                <i className="fa fa-star"></i> 01</a
-                                            >
-                                        </li>
-                                    </ul>
-                                </div>
+
                             </div>
                         </div>
                         <div className="review_list">
@@ -117,20 +63,36 @@ export default class Review extends Component{
                                         />
                                     </div>
                                     <div className="media-body">
-                                        <h4>Blake Ruiz</h4>
 
-                                        {/*<table>*/}
-                                        {/*    { Array(this.state.rate).fill(<i className="fa fa-star"></i>) }*/}
-                                        {/*</table>*/}
 
-                                        {/*{Array.apply(null, Array(this.props.rate)).map((i)=>*/}
-                                        {/*    <p>adad</p>*/}
-                                        {/*)}*/}
+
+                                        {this.props.feedback.map((feedback,i)=> {
+
+                                            var cards = [];
+
+                                            for (var i = 0; i < feedback.rate; i++) {
+
+                                                cards[i] = (<span className="busterCards"><i className="fa fa-star"></i></span>);
+                                            }
+
+                                            return(
+                                                <div>
+                                                    <p><h4>{feedback.userName}</h4>{cards}<br/>{feedback.feedback}<br/></p>
+                                                    <hr/>
+
+
+
+                                                </div>
+
+                                            );
+                                        })}
+
+
                                         {cards}
 
 
 
-                                        <p>{this.props.feedback}dfghsdjkfhskjhfksdhfkjhsdkfhskdjfhksdjfhkjshfdkjh{this.props.rate}</p>
+                                        <p></p>
                                     </div>
 
                                 </div>

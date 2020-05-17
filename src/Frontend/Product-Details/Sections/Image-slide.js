@@ -22,7 +22,7 @@ export default function ImagesSlide(props) {
                         className="active"
                     >
                         <img
-                            src={img2}
+                            src={props.url1}
                             alt=""
                         />
                     </li>
@@ -31,7 +31,7 @@ export default function ImagesSlide(props) {
                         data-slide-to="1"
                     >
                         <img
-                            src={img3}
+                            src={props.url2}
                             alt=""
                         />
                     </li>
@@ -40,7 +40,7 @@ export default function ImagesSlide(props) {
                         data-slide-to="2"
                     >
                         <img
-                            src={img4}
+                            src={props.url3}
                             alt=""
                         />
                     </li>
@@ -49,21 +49,21 @@ export default function ImagesSlide(props) {
                     <div className="carousel-item active">
                         <img
                             className="d-block w-100"
-                            src={img1}
+                            src={props.url1}
                             alt="First slide"
                         />
                     </div>
                     <div className="carousel-item">
                         <img
                             className="d-block w-100"
-                            src={img1}
+                            src={props.url2}
                             alt="Second slide"
                         />
                     </div>
                     <div className="carousel-item">
                         <img
                             className="d-block w-100"
-                            src={img1}
+                            src={props.url3}
                             alt="Third slide"
                         />
                     </div>

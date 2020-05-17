@@ -1,9 +1,28 @@
-import React from "react";
+import React, {Component} from "react";
+import jwt_decode from "jwt-decode";
 
 
-export default function Specification(props) {
+export default class Specification extends Component{
+    constructor(props) {
+        super(props);
 
+        this.state = {
+            name:"pasan"
+        }
+    }
 
+    componentDidMount() {
+        const token = localStorage.auth2;
+       // const decoded = jwt_decode(token);
+
+        this.setState({
+            name:token.CUserName
+        })
+
+        console.log(this.state.name)
+    }
+
+    render() {
     return (
         <div
             className="tab-pane fade"
@@ -11,76 +30,13 @@ export default function Specification(props) {
             role="tabpanel"
             aria-labelledby="profile-tab">
             <div className="table-responsive">
-                <table className="table">
-                    <tbody>
-                    <tr>
-                        <td>
-                            <h5>Width</h5>
-                        </td>
-                        <td>
-                            <h5>128mm</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h5>Height</h5>
-                        </td>
-                        <td>
-                            <h5>508mm</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h5>Depth</h5>
-                        </td>
-                        <td>
-                            <h5>85mm</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h5>Weight</h5>
-                        </td>
-                        <td>
-                            <h5>52gm</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h5>Quality checking</h5>
-                        </td>
-                        <td>
-                            <h5>yes</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h5>Freshness Duration</h5>
-                        </td>
-                        <td>
-                            <h5>03days</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h5>When packeting</h5>
-                        </td>
-                        <td>
-                            <h5>Without touch of hand</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h5>Each Box contains</h5>
-                        </td>
-                        <td>
-                            <h5>60pcs</h5>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                {this.props.specification}<br/>
+                {this.state.name}
             </div>
         </div>
     )
+}
+
+
 
 }
