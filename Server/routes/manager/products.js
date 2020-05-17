@@ -13,6 +13,7 @@ router.route('/add').post((req,res) => {
     const category = req.body.category;
     const subcategory = req.body.subcategory;
     const price = req.body.price;
+    const cid = req.body.cid;
     const oprice = req.body.oprice;
     const description = req.body.description;
     const shortdiscription = req.body.shortdiscription;
@@ -29,6 +30,7 @@ router.route('/add').post((req,res) => {
         specification,
         availability,
         price,
+        cid,
         oprice,
         description,
         shortdiscription,
@@ -54,27 +56,7 @@ router.route('/:id').delete((req,res) => {
         .then(() => res.json('product deleted.'))
         .catch(err => res.status(400).json('Error :' + err))
 });
-router.get("/pruduct_by_name", (req, res) => {
-    let type = req.query.type
-    let name = req.query.name
 
-    if (type === "array") {
-        let names = req.query.name.split(',');
-        name = [];
-        name = names.map(item => {
-            return item
-        })
-    }
-
-    console.log(name)
-    //we need to find the product information that belong to product Id
-    Product.find({ 'productname': { $in: name } })
-        .populate('writer')
-        .exec((err, product) => {
-            if(err) return req.status(400).send(err)
-            return res.status(200).send(product)
-        })
-});
 router.route('/update/:id').post((req,res) => {
     Product.findById(req.params.id)
         .then(producut => {
@@ -94,6 +76,29 @@ router.route('/update/:id').post((req,res) => {
         })
         .catch(err => res.status(400).json('Error :' + err))
 
+});
+
+
+router.get("/search/search_by_name", (req, res) => {
+    let type = req.query.type
+    let productIds = req.query.id
+    console.log(productIds)
+    if (type === "array") {
+        let ids = req.query.id.split(',');
+        productIds = [];
+        productIds = ids.map(item => {
+            return item
+        })
+    }
+
+    //we need to find the product information that belong to product Id
+    Product.find({ 'productname': { $in: productIds } })
+        .populate('writer')
+        .exec((err, product) => {
+
+            if(err) return req.status(400).send(err)
+            return res.status(200).send(product)
+        })
 });
 
 
