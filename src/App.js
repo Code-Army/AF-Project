@@ -116,9 +116,9 @@ export default function App() {
 					    <Route path="/edit/:id" exact component={editproduct}></Route>
 					    <Route path="/create" exact component={AddProduct}></Route>
 					    <Route path="/discount" exact component={discounts}></Route>
-					    <Route path="/editdiscount" exact component={editdiscount}></Route>
+					    <Route path="/editdiscount/:id" exact component={editdiscount}></Route>
 					    <Route path="/coupon" exact component={coupondiscounts}></Route>
-					    <Route path="/editcoupon" exact component={editcoupon}></Route>
+					     <Route path="/editcoupon/:id" exact component={editcoupon}></Route>
 				        <Route path="/adddiscount" exact component={adddiscount}></Route>
 						<Route path="/addcoupon" exact component={addcoupon}></Route>
 
