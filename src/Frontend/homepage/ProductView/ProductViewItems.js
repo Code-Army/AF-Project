@@ -31,7 +31,7 @@ const ProductViewItems = props => {
                 </div>
             </div>
             <div className="product-btm">
-                <a href="{`/Subcatergory/${props.ProductViewItems._id}`}" className="d-block">
+                <a href={`/Subcatergory/${props.ProductViewItems._id}`} className="d-block">
                     <h4>{props.ProductViewItems.name}</h4>
                 </a>
                 <div className="mt-3">

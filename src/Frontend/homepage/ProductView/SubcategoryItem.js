@@ -11,7 +11,7 @@ const SubcategoryItem = props => {
             <div className="col-lg-4 col-md-6 border-primary">
                 <div className="single-product">
                     <div className="product-img">
-                        <a href={`/SubCatProductView/${props.SubcategoryItem._id}`}>
+                        <a href={`/products/${props.SubcategoryItem._id}`}>
                         <img
                             className="card-img"
                             src={props.SubcategoryItem.url}
@@ -31,7 +31,7 @@ const SubcategoryItem = props => {
                         </div>
                     </div>
                     <div className="product-btm">
-                        <a href={`/SubCatProductView/${props.SubcategoryItem._id}`} className="d-block">
+                        <a href={`/products/${props.SubcategoryItem._id}`} className="d-block">
                             <h4>{props.SubcategoryItem.name}</h4>
                         </a>
                     </div>

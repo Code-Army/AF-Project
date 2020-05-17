@@ -32,6 +32,7 @@ import addcoupon from "./backend/manager/addcoupon.component"
 import AdminLogin from "./backend/admin/AdminLogin";
 import ChangePassword from "./backend/admin/ChangePassword";
 import BackendHome from "./backend/BackendHome";
+import SubcatProductView from "./Frontend/homepage/ProductView/SubcatProductView";
 
 export default function App() {
     const [userData, setUserData] = useState({
@@ -110,7 +111,7 @@ export default function App() {
                         <Route path="/Allproduct" component={Allproduct}/>
                         <Route path="/CreateSubCategory" component={CreateSubCategory}/>
                         <Route path ="/Subcategory/:id" component={SubcategoryView}/>
-                        <Route path="/SubCatProductView/:id" component={SubcategoryView}/>
+                        <Route path="/products/:id" component={SubcatProductView}/>
 						<Route path="/products" exact component={ProductList}></Route>
 					    <Route path="/edit/:id" exact component={editproduct}></Route>
 					    <Route path="/create" exact component={AddProduct}></Route>

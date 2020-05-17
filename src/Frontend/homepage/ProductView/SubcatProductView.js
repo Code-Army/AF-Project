@@ -3,8 +3,8 @@ import React, {Component} from 'react';
 import axios from 'axios';
 
 import Header from "../Header";
+import SubcatProductViewItem from "./SubcatProductViewItem";
 import Footer from "../Footer";
-
 
 
 class SubcatProductView extends Component {
@@ -12,7 +12,7 @@ class SubcatProductView extends Component {
         super(props);
         const productId = props.match.params.id
         this.state = {
-            product:[],
+            products:[],
             Subid:productId
         }
     }
@@ -20,9 +20,9 @@ class SubcatProductView extends Component {
 // +this.props.match.params.category
     componentDidMount() {
         console.log(this.state.Subid);
-        const Id = this.props.match.params.id
-        axios.get(`http://localhost:5000/products/Product_by_Subcat?id=${this.state.Subid}&type=single`).then(res =>{
-            this.setState({product:res.data});
+        const Id = this.props.match.params.id;
+        axios.get(`http://localhost:5000/products/Product_by_Subid?id=${this.state.Subid}&type=single`).then(res =>{
+            this.setState({products:res.data});
             console.log(res.data)
         })
             .catch((err) => {
@@ -32,10 +32,10 @@ class SubcatProductView extends Component {
 
 
     SelectSubcategory(id){
-        axios.get('http://localhost:5000/Subcategory/'+id)
+        axios.get('http://localhost:5000/products/'+id)
             .then(res => console.log(res.data));
         this.setState({
-            Subcategory: this.state.Subcategory.filter(el => el._id !== id)
+            Subcategory: this.state.products.filter(el => el._id !== id)
         })
         alert(id);
     }
@@ -44,13 +44,16 @@ class SubcatProductView extends Component {
     render() {
         return (
             <>
+
+
+
                 <Header/>
                 <div className="container">
                     <div className="row">
                         {
-                            this.state.Subcategory.map(Subcategory => {
+                            this.state.products.map(products => {
                                 return(
-                                    < SubcategoryItem SubcategoryItem = {Subcategory}  key = {Subcategory._id}/>
+                                    < SubcatProductViewItem SubcatProductViewItem   = {products}  key = {products._id}/>
 
                                 )
                             })

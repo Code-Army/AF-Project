@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import "../../../web content/css/productstyle.css";
 
 const SubcatProductViewItem = props => {
+
+    console.log(props.SubcatProductViewItem._id)
     return(
         <>
             {/*<td>{props.ProductViewItems.name}</td>*/}
@@ -11,13 +13,11 @@ const SubcatProductViewItem = props => {
             <div className="col-lg-4 col-md-6 border-primary">
                 <div className="single-product">
                     <div className="product-img">
-                        {/*<a href={"/SubCategory/"${props.SubcategoryItem.category}}>  */}
-                        <img
+                        <a href={`/Subcategory/${props.SubcatProductViewItem._id}`}>  <img
                             className="card-img"
-                            src={props.SubcatProductViewItem.url}
+                            src={props.SubcatProductViewItem.url1}
 
-                        />
-                        {/*</a>*/}
+                        /></a>
                         <div className="p_icon">
                             <a href="#">
                                 <i className="ti-eye"></i>
@@ -31,9 +31,12 @@ const SubcatProductViewItem = props => {
                         </div>
                     </div>
                     <div className="product-btm">
-                        {/*<a href={"/SubCategory/"+{props.SubcategoryItem._id}} className="d-block">*/}
-                        <h4>{props.SubcatProductViewItem.productname}</h4>
-                        {/*</a>*/}
+                        <a href={`/Subcatergory/${props.SubcatProductViewItem._id}`} className="d-block">
+                            <h4>{props.SubcatProductViewItem.productname}</h4>
+                        </a>
+                        <div className="mt-3">
+                            <span className="mr-4">{props.SubcatProductViewItem.price}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -41,4 +44,4 @@ const SubcatProductViewItem = props => {
     )
 }
 
-export default SubcategoryItem
+export default SubcatProductViewItem;
