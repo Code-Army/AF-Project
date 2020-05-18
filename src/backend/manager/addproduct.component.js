@@ -36,6 +36,7 @@ export default class AddProduct extends Component{
             categories : [],
             name:'',
             cid:'',
+            sid:'',
             url1: '',
             specification:'',
             availability:'',
@@ -73,8 +74,9 @@ export default class AddProduct extends Component{
             .then(response => {
                 if(response.data.length > 0 ) {
                     this.setState({
-                        subCategories : response.data.map(subcategory => subcategory.name),
-                        subcategory : response.data[0].name
+                        subCategories:response.data,
+                        subcategory : response.data[0].name,
+                        sid:response.data[0]._id
 
 
                     })
@@ -126,8 +128,13 @@ export default class AddProduct extends Component{
         // console.log(e.target.cid)
     }
     onChangeSubCategory(e){
+        console.log(e.target.name)
+        console.log("um")
+        var selectedIndex = e.target.options.selectedIndex;
+        console.log("id - "+e.target.options[selectedIndex].getAttribute('id'))
         this.setState({
-            subcategory: e.target.value
+            subcategory: e.target.value,
+                sid:e.target.options[selectedIndex].getAttribute('id')
             }
         )
     }
@@ -178,6 +185,7 @@ export default class AddProduct extends Component{
                         productname: this.state.productname,
                         category: this.state.name,
                         cid: this.state.cid,
+                        sid: this.state.sid,
                         subcategory: this.state.subcategory,
                         description: this.state.description,
                         shortdiscription: this.state.shortdiscription,
@@ -250,7 +258,9 @@ export default class AddProduct extends Component{
                                         this.state.subCategories.map(function(scategory) {
                                             return <option
                                                 key={scategory}
-                                                value={scategory}>{scategory}
+                                                value={scategory.name}
+                                                id={scategory._id}
+                                            >{scategory.name}
                                             </option>;
                                         })
                                     }
