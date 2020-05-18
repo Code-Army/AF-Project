@@ -6,13 +6,12 @@ const Discount = props =>(
 
     <tr>
         <td> {props.id}</td>
+        <td> {props.discount.productname}</td>
         <td>{props.discount.discountname}</td>
         <td>{props.discount.discountprecentage}</td>
         <td>
             <Link to={"/editdiscount/" + props.discount._id}>edit</Link> | <a href="#" onClick={() => {props.deleteDiscount(props.discount._id)}}>delete</a>
         </td>
-
-
     </tr>
 
 )
@@ -28,8 +27,7 @@ export default class discounts extends Component{
 
         this.state  = {
             discounts: [],
-            searchProduct : '',
-            sproducts:[]
+            searchDiscount : '',
         };
     }
 
@@ -50,29 +48,18 @@ export default class discounts extends Component{
     }
     onChangeSearch(e){
         this.setState({
-                searchProduct: e.target.value
+            searchDiscount : e.target.value
             }
         )
     }
     searchDiscount(){
-        console.log(this.state.searchDiscount)
-
-        axios.get(`http://localhost:5000/products/products_by_name?name=${this.state.searchProduct}&type=single`)
+        axios.get(`http://localhost:5000/discounts/search/search_by_dname?name=${this.state.searchDiscount}&type=single`)
             .then(response => {
-                // setProduct(response.data[0])
-                console.log("responce success")
+                this.setState(
+                    {discounts: response.data}
+                )
             })
 
-
-        // axios.get(`http://localhost:5000/products/pruduct_by_name?name=${this.state.searchProduct}&type=single`)
-        //     .then(response => {
-        //         this.setState(
-        //             {sproducts: response.data[0]}
-        //         )
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     })
 
     }
 
@@ -111,27 +98,12 @@ export default class discounts extends Component{
                     <input class="form-control form-control-sm ml-3 w-25" type="text" placeholder="Search"
                            aria-label="Search" onChange={this.onChangeSearch}/>
 
-                    <button type="button" className="btn btn-dark float-right ml-4" onClick={this.searchProduct}>search</button>
+                    <button type="button" className="btn btn-dark float-right ml-4" onClick={this.searchDiscount}>search</button>
 
 
                 </form>
                 <button onClick={"/edit/"} className="btn btn-dark float-right mr-4" onClick={this.showAddDiscount}>add discount</button>
 
-                {/*<select ref = "userInput"*/}
-                {/*        required*/}
-                {/*        className="form-control"*/}
-                {/*        value={this.state.productname}*/}
-                {/*        onChange={this.onChangeSearchByProductname}>*/}
-                {/*    {*/}
-                {/*    this.state.products.map(function (product) {*/}
-                {/*        return <option*/}
-                {/*            key={product}*/}
-                {/*            value={product}>{product}*/}
-                {/*        </option>;*/}
-
-                {/*    })*/}
-                {/*    }*/}
-                {/*</select>*/}
                 <br/><br/>
 
                 <h3>Inserted Discounts </h3>
@@ -139,6 +111,7 @@ export default class discounts extends Component{
                     <thead className="thead-light">
                     <tr>
                         <th>No</th>
+                        <th>Product Name</th>
                         <th>Discount Name</th>
                         <th>Discount precentage</th>
                         <th>Action</th>

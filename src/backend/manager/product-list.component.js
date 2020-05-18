@@ -9,6 +9,7 @@ const Product = props =>(
         <td>{props.product.productname}</td>
         <td>{props.product.category}</td>
         <td>{props.product.subcategory}</td>
+        <td>{props.product.size}</td>
         <td>{props.product.description}</td>
         <td>{props.product.shortdiscription}</td>
         <td>{props.product.availability}</td>
@@ -32,7 +33,8 @@ export default class ProductList extends Component{
         this.deleteProduct = this.deleteProduct.bind(this);
         this.onChangeSearch = this.onChangeSearch.bind(this);
         this.searchProduct = this.searchProduct.bind(this);
-
+        this.searchByCategory = this.searchByCategory.bind(this);
+        this.onChangeCategory = this.onChangeCategory.bind(this);
 
 
         this.state  = {
@@ -43,6 +45,7 @@ export default class ProductList extends Component{
             subcategory:'',
             searchProduct : '',
             sproducts:[],
+            sCategory:""
 
         };
     }
@@ -80,6 +83,7 @@ export default class ProductList extends Component{
 
 
     }
+
     onChangeSearch(e){
         this.setState({
                 searchProduct: e.target.value
@@ -88,37 +92,36 @@ export default class ProductList extends Component{
     }
 
     searchProduct(){
-        console.log(this.state.searchProduct)
-        // axios.get('http://localhost:5000/products/')
 
-        // axios.get(`http://localhost:5000/products/search_by_name?name=${this.state.searchProduct}&type=single`)
-        //     .then(response => {
-        //         // setProduct(response.data[0])
-        //         console.log("responce success")
-        //     })
-
-        axios.get(`http://localhost:5000/products/search/search_by_name?id=${this.state.searchProduct}&type=single`)
+        axios.get(`http://localhost:5000/products/search/search_by_name?name=${this.state.searchProduct}&type=single`)
             .then(response => {
                 this.setState(
                     {products: response.data}
                 )
-                // console.log(response.data)
-                // console.log("didmount - " + response.data)
-
             })
-
-        // axios.get(`http://localhost:5000/products/pruduct_by_name?name=${this.state.searchProduct}&type=single`)
-        //     .then(response => {
-        //         this.setState(
-        //             {sproducts: response.data[0]}
-        //         )
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     })
 
     }
 
+    onChangeCategory(e){
+        this.setState({
+            sCategory:e.target.value
+        })
+
+        axios.get(`http://localhost:5000/products/searchcat/search_by_category?name=${e.target.value}&type=single`)
+            .then(response => {
+                console.log(response.data)
+                this.setState(
+                    {
+
+                    }
+                )
+            })
+    }
+    searchByCategory(e){
+
+
+
+    }
 
     deleteProduct (id){
         axios.delete('http://localhost:5000/products/' + id)
@@ -149,8 +152,8 @@ export default class ProductList extends Component{
                     <div className="dropdown ml-3">
                         <select ref="userInput"
                                 required
-                                className="form-control"
-                                value={this.state.name}
+                                className="form-control btn-light"
+                                value={this.state.sCategory}
                                 onChange={this.onChangeCategory}>
                             {
                                 this.state.categories.map(function(category) {
@@ -166,9 +169,10 @@ export default class ProductList extends Component{
                     <div className="dropdown ml-3 ">
                         <select ref="userInput"
                                 required
-                                className="form-control"
+                                className="form-control btn-light"
                                 value={this.state.subcategory}
-                                onChange={this.onChangeSubCategory}>
+                                // onChange={this.onChangeSubCategory}
+                        >
                             {
                                 this.state.subCategories.map(function(scategory) {
                                     return <option
@@ -206,6 +210,7 @@ export default class ProductList extends Component{
                             <th>ProductName</th>
                             <th>Category</th>
                             <th>Sub Category</th>
+                            <th>Size</th>
                             <th>Description</th>
                             <th>Short Description</th>
                             <th>Availability</th>

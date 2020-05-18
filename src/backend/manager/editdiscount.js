@@ -57,7 +57,7 @@ export default class editdiscount extends Component {
     }
     onChangeProductName(e){
         this.setState({
-                productname: e.target.productname,
+                productname: e.target.value,
             }
         )
     }
@@ -93,10 +93,6 @@ export default class editdiscount extends Component {
 
         }
 
-        // console.log(this.state.discountname);
-        // console.log(this.state.discountprecentage);
-
-
         axios.post('http://localhost:5000/discounts/update/' + this.props.match.params.id , item )
             .then(res => console.log(res.data));
         this.setState({
@@ -104,6 +100,8 @@ export default class editdiscount extends Component {
             discountprecentage : "",
             show:false
         })
+        window.location='/discount'
+
 
 
     }

@@ -7,14 +7,15 @@ export default class adddiscount extends Component {
         super(props);
 
         this.onChangeDisName = this.onChangeDisName.bind(this);
+        this.onChangeProductName = this.onChangeProductName.bind(this);
         this.onChangeDisPercent = this.onChangeDisPercent.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleShow = this.handleShow.bind(this);
 
-
-
         this.state = {
+            products : [],
+            productname:'',
             discountname : '',
             discountprecentage : '',
             show:false
@@ -22,20 +23,10 @@ export default class adddiscount extends Component {
         }
 
     }
-    handleClose(){
-        this.setState({
-            show:false
 
-        })
-        // window.location='/discount'
-    }
-    handleShow(){
-        this.setState({
-            show:true
-        })
-    }
     componentDidMount()
-    {axios.get('http://localhost:5000/discounts/')
+    {
+        axios.get('http://localhost:5000/discounts/')
         .then(response => {
             if(response.data.length > 0 ) {
                 this.setState({
@@ -45,9 +36,26 @@ export default class adddiscount extends Component {
                 })
             }
         })
+
+        axios.get('http://localhost:5000/products/')
+            .then(response => {
+                if(response.data.length > 0 ) {
+                    this.setState({
+                        products:response.data,
+                        productname : response.data[0].productname,
+
+                    })
+
+                }
+            })
+
     }
-
-
+    onChangeProductName(e){
+        this.setState({
+            productname: e.target.value,
+            }
+        )
+    }
     onChangeDisName(e){
         this.setState({
             discountname: e.target.value
@@ -65,16 +73,31 @@ export default class adddiscount extends Component {
         const discount =  {
             discountname : this.state.discountname,
             discountprecentage : this.state.discountprecentage,
+            productname: this.state.productname,
 
         }
         axios.post('http://localhost:5000/discounts/add' , discount )
             .then(res => console.log(res.data));
 
-        console.log(discount)
+
         this.handleShow();
         this.setState({
             discountname : "",
-            discountprecentage : 0
+            discountprecentage : 0,
+
+        })
+
+    }
+    handleClose(){
+        this.setState({
+            show:false
+
+        })
+
+    }
+    handleShow(){
+        this.setState({
+            show:true
         })
     }
     backtoDiscount(){
@@ -87,6 +110,24 @@ export default class adddiscount extends Component {
                 <h3 className="ml-3">Create New discount Log</h3>
 
                 <form onSubmit={this.onSubmit} className="ml-5 mr-5">
+                    <div>
+                        <select ref="userInput"
+                                required
+                                className="form-control mr-5"
+                                value={this.state.productname}
+                                onChange={this.onChangeProductName}>
+                            {
+                                this.state.products.map(function(product) {
+                                    return <option
+                                        key={product}
+                                        value={product.productname}
+                                    >{product.productname}
+
+                                    </option>;
+                                })
+                            }
+                        </select>
+                    </div>
                     <div className="form-group">
                         <label>discount Name</label>
                         <input type="text"
@@ -98,7 +139,9 @@ export default class adddiscount extends Component {
 
                         </input>
 
+
                     </div>
+
 
                     <div className="form-group">
                         <label>discount percentage :</label>
@@ -112,7 +155,7 @@ export default class adddiscount extends Component {
 
 
                     <div className="form-group">
-                        <input type="submit" value="Create discount Log" className="btn btn-primary"/>
+                        <input type="submit" value="Create discount Log" className="btn btn-primary" onClick={this.onSubmit}/>
                         <input type="submit" value="Back to discounts" className="btn btn-dark ml-3" onClick={this.backtoDiscount}/>
 
                     </div>

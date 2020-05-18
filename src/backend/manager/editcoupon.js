@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import axios from "axios";
-import {storage} from './../../firebase'
 import Modal from "react-bootstrap/Modal";
 
 export default class editcoupon extends Component {
     constructor(props) {
         super(props);
+
         this.onChangeCouponName = this.onChangeCouponName.bind(this)
         this.onChangeCouponCode = this.onChangeCouponCode.bind(this)
         this.onChangeCouponAmount = this.onChangeCouponAmount.bind(this)
@@ -27,6 +27,7 @@ export default class editcoupon extends Component {
 
     }
     componentDidMount() {
+
         console.log(this.props.match.params.id)
         axios.get('http://localhost:5000/coupons/' + this.props.match.params.id)
             .then(responce => {
@@ -41,6 +42,7 @@ export default class editcoupon extends Component {
                 console.log(error)
 
             })
+
 
 
     }
@@ -68,7 +70,7 @@ export default class editcoupon extends Component {
             couponcode:this.state.couponcode,
             couponamount:this.state.couponamount,
         }
-        axios.post('http://localhost:5000/coupons/update/' + this.props.match.params.id , coupon )
+        axios.post('http://localhost:5000/coupons/update/' + this.props.match.params.id , coupon)
             .then(res => console.log(res.data));
 
         this.setState({
@@ -77,6 +79,8 @@ export default class editcoupon extends Component {
             couponamount:"",
             show:false
         })
+
+        window.location = '/coupon'
 
 
     }
@@ -99,7 +103,7 @@ export default class editcoupon extends Component {
                 <h3 className="ml-3">Edit coupon Log</h3>
 
 
-                <form onSubmit={this.onSubmit} className="ml-5 mr-5">
+                <div className="ml-5 mr-5">
                     <div className="form-group">
                         <label>coupon Name</label>
                         <input type="text"
@@ -133,12 +137,27 @@ export default class editcoupon extends Component {
                         </input>
                     </div>
                     <div className="form-group">
-                        <input type="submit" value="Create coupon Log" className="btn btn-primary"/>
-                        <input onClick={this.showcoupon} value="Back to Coupon" className="btn btn-dark ml-3"/>
+
+                        <button className="btn btn-primary mr-5" onClick={this.handleShow}>Edit Coupon Log</button>
+                        <button className="btn btn-dark mr-3" onClick={this.showcoupon}>back</button>
 
                     </div>
 
-                </form>
+                </div>
+                <Modal show={this.state.show}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>notofication</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>data update successfull.</Modal.Body>
+                    <Modal.Footer>
+                        <button variant="secondary" className="btn btn-success " onClick={this.handleClose}>
+                            Close
+                        </button>
+                        <button variant="primary"className="btn btn-danger" onClick={this.onChangeSubmit}>
+                            Save Changes
+                        </button>
+                    </Modal.Footer>
+                </Modal>
 
             </div>
         );

@@ -25,7 +25,7 @@ class Navbar extends Component{
                             <a className="nav-link text-white" href="/coupon">coupons</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link disabled " href="#">Disabled</a>
+                            <a className="nav-link text-white  " href="/productfeedback">Feedbacks</a>
                         </li>
                     </ul>
                 </div>

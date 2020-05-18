@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from "axios";
-import {storage} from './../../firebase'
 import Modal from "react-bootstrap/Modal";
 
 export default class addcoupon extends Component {
@@ -15,7 +14,6 @@ export default class addcoupon extends Component {
         this.handleShow = this.handleShow.bind(this);
 
 
-
         this.state = {
             couponname : '',
             couponcode : '',
@@ -24,22 +22,6 @@ export default class addcoupon extends Component {
 
         }
 
-    }
-    handleClose(){
-        this.setState({
-            show:false
-
-        })
-
-    }
-    handleShow(){
-        this.setState({
-            show:true
-        })
-    }
-
-    backtoCoupon(){
-       window.location = '/coupon';
     }
     componentDidMount() {
         axios.get('http://localhost:5000/coupons/')
@@ -72,6 +54,7 @@ export default class addcoupon extends Component {
             }
         )
     }
+
     onSubmit(e){
         e.preventDefault();
            const coupon =  {
@@ -87,9 +70,24 @@ export default class addcoupon extends Component {
                couponcode :"",
                couponamount : "",
            })
-        console.log(coupon)
-        this.handleShow();
+    }
 
+    handleClose(){
+        this.setState({
+            show:false
+
+        })
+        window.location = '/coupon'
+
+    }
+    handleShow(){
+        this.setState({
+            show:true
+        })
+
+    }
+    backtoCoupon(){
+        window.location = '/coupon';
     }
     render() {
         return (
@@ -131,7 +129,7 @@ export default class addcoupon extends Component {
                     </div>
 
                     <div className="form-group">
-                        <input type="submit" value="Create coupon Log" className="btn btn-primary"/>
+                        <input type="submit" value="Create coupon Log" className="btn btn-primary" onClick={this.handleShow}/>
                         <input type="submit" value="Back to Coupon" className="btn btn-dark ml-3" onClick={this.backtoCoupon}/>
 
                     </div>

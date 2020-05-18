@@ -4,10 +4,13 @@ import {storage} from './../../firebase'
 import Modal from "react-bootstrap/Modal";
 import Form from 'react-bootstrap/Form'
 import {Row,Col} from "react-bootstrap";
+import Dropdown from 'react-bootstrap/Dropdown'
 
 export default class AddProduct extends Component{
+
     constructor(props) {
         super(props);
+
 
         this.onChangeProductName = this.onChangeProductName.bind(this);
         this.onChangeDescription = this.onChangeDescription.bind(this);
@@ -28,6 +31,7 @@ export default class AddProduct extends Component{
         this.state = {
             productname : '',
             subcategory:'',
+            size:"",
             description : '',
             shortdiscription : '',
             price : 0,
@@ -41,28 +45,18 @@ export default class AddProduct extends Component{
             specification:'',
             availability:'',
             image: null,
-            show:false
+            show:false,
 
         }
 
 
     }
-    handleClose(){
-        this.setState({
-            show:false
-        })
-    }
-    handleShow(){
-        this.setState({
-            show:true
-        })
-    }
+
     componentDidMount() {
         axios.get('http://localhost:5000/Category/')
             .then(response => {
                 if(response.data.length > 0 ) {
                     this.setState({
-                        // categories : response.data.map(category => category.name),
                         categories:response.data,
                         name : response.data[0].name,
                         cid:response.data[0]._id
@@ -78,7 +72,6 @@ export default class AddProduct extends Component{
                         subcategory : response.data[0].name,
                         sid:response.data[0]._id
 
-
                     })
 
                 }
@@ -86,16 +79,40 @@ export default class AddProduct extends Component{
 
     }
 
-    onChangeImgUpload(e){
-        if(e.target.files[0]){
-            const image = e.target.files[0];
-            console.log(image)
-            this.setState(() => ({image}))
-        }
-
+    onChangeProductName(e){
+        this.setState({
+                productname: e.target.value
+            }
+        )
     }
-
-
+    onChangeCategory(e){
+        var selectedIndex = e.target.options.selectedIndex;
+        this.setState({
+                name: e.target.value,
+                cid:e.target.options[selectedIndex].getAttribute('id')
+            }
+        )
+    }
+    onChangeSubCategory(e){
+        var selectedIndex = e.target.options.selectedIndex;
+        this.setState({
+                subcategory: e.target.value,
+                sid:e.target.options[selectedIndex].getAttribute('id')
+            }
+        )
+    }
+    onChangeDescription(e){
+        this.setState({
+                description: e.target.value
+            }
+        )
+    }
+    onChangeShortDescription(e){
+        this.setState({
+                shortdiscription: e.target.value
+            }
+        )
+    }
     onChangeSpecifications(e){
         this.setState({
             specification: e.target.value
@@ -109,47 +126,7 @@ export default class AddProduct extends Component{
         )
     }
 
-    onChangeProductName(e){
-        this.setState({
-                productname: e.target.value
-            }
-        )
-    }
-    onChangeCategory(e){
-        console.log(e.target.name)
-        console.log("um")
-        var selectedIndex = e.target.options.selectedIndex;
-        console.log("id - "+e.target.options[selectedIndex].getAttribute('id'))
-        this.setState({
-                name: e.target.value,
-                cid:e.target.options[selectedIndex].getAttribute('id')
-            }
-        )
-        // console.log(e.target.cid)
-    }
-    onChangeSubCategory(e){
-        console.log(e.target.name)
-        console.log("um")
-        var selectedIndex = e.target.options.selectedIndex;
-        console.log("id - "+e.target.options[selectedIndex].getAttribute('id'))
-        this.setState({
-            subcategory: e.target.value,
-                sid:e.target.options[selectedIndex].getAttribute('id')
-            }
-        )
-    }
-    onChangeDescription(e){
-        this.setState({
-                description: e.target.value
-            }
-        )
-    }
-    onChangeShortDescription(e){
-        this.setState({
-            shortdiscription: e.target.value
-            }
-        )
-    }
+
     onChangePrice(e){
         this.setState({
                 price: e.target.value
@@ -180,12 +157,12 @@ export default class AddProduct extends Component{
             },
             () =>{
                 storage.ref('images').child(image.name).getDownloadURL().then(url1 =>{
-                    console.log(url1);
                     const item = {
                         productname: this.state.productname,
                         category: this.state.name,
                         cid: this.state.cid,
                         sid: this.state.sid,
+                        size: this.state.size,
                         subcategory: this.state.subcategory,
                         description: this.state.description,
                         shortdiscription: this.state.shortdiscription,
@@ -195,14 +172,12 @@ export default class AddProduct extends Component{
                         oprice: this.state.oprice,
                         url1: url1,
                     }
-                    console.log(this.state.subcategory)
+
                     axios.post('http://localhost:5000/products/add' , item )
                         .then(res => console.log(res.data));
 
                     this.setState({
                         productname : "",
-                        category : "",
-                        subcategory:"",
                         description :"",
                         shortdiscription : "",
                         price : 0,
@@ -213,12 +188,34 @@ export default class AddProduct extends Component{
                     })
 
 
+
                 })
             });
 
 
     }
+
+    onChangeImgUpload(e){
+        if(e.target.files[0]){
+            const image = e.target.files[0];
+            this.setState(() => ({image}))
+        }
+
+    }
+    handleClose(){
+        this.setState({
+            show:false
+        })
+        window.location = '/products'
+    }
+    handleShow(){
+        this.setState({
+            show:true
+        })
+    }
+
     render() {
+
         return (
 
             <div className="container">
@@ -234,7 +231,7 @@ export default class AddProduct extends Component{
                                 <div className="form-inline">
                                 <select ref="userInput"
                                         required
-                                        className="form-control mr-5"
+                                        className="form-control mr-4 btn-light"
                                         value={this.state.name}
                                         onChange={this.onChangeCategory}>
                                     {
@@ -251,7 +248,7 @@ export default class AddProduct extends Component{
                                 </select>
                                 <select ref="userInput"
                                         required
-                                        className="form-control  mr-3"
+                                        className="form-control mr-4 btn-light"
                                         value={this.state.subcategory}
                                         onChange={this.onChangeSubCategory}>
                                     {
@@ -265,6 +262,15 @@ export default class AddProduct extends Component{
                                         })
                                     }
                                 </select>
+                                    <select id="dropdown" onChange={(e) => this.setState({size: e.target.value})} className="btn-light p-2 ">
+                                        <option>Select Size</option>
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
+                                    </select>
                                 </div>
                             </Col>
                         </Row>
@@ -326,112 +332,6 @@ export default class AddProduct extends Component{
                         </button>
                     </Modal.Footer>
                 </Modal>
-
-
-
-                {/*<div className="form-inline">*/}
-                {/*    <div className="form-group ">*/}
-                {/*        <label>Product Name : </label><br/>*/}
-                {/*       <br/> <input type="text"*/}
-                {/*               required*/}
-                {/*               className="form-control ml-3 mr-3"*/}
-                {/*               value={this.state.productname}*/}
-                {/*               onChange={this.onChangeProductName}>*/}
-
-
-                {/*        </input>*/}
-                {/*        <form className="form-inline ml-5">*/}
-                {/*            <div className="dropdown">*/}
-                {/*                <select ref="userInput"*/}
-                {/*                        required*/}
-                {/*                        className="form-control ml-3 mr-3"*/}
-                {/*                        value={this.state.name}*/}
-                {/*                        onChange={this.onChangeCategory}>*/}
-                {/*                    {*/}
-                {/*                        this.state.categories.map(function(category) {*/}
-                {/*                            return <option*/}
-                {/*                                key={category}*/}
-                {/*                                value={category}>{category}*/}
-                {/*                            </option>;*/}
-                {/*                        })*/}
-                {/*                    }*/}
-                {/*                </select>*/}
-                {/*            </div>*/}
-
-
-                {/*            <div className="dropdown ml-3 ">*/}
-
-                {/*                <select ref="userInput"*/}
-                {/*                        required*/}
-                {/*                        className="form-control ml-3 mr-3"*/}
-                {/*                        value={this.state.subcategory}*/}
-                {/*                        onChange={this.onChangeSubCategory}>*/}
-                {/*                    {*/}
-                {/*                        this.state.subCategories.map(function(scategory) {*/}
-                {/*                            return <option*/}
-                {/*                                key={scategory}*/}
-                {/*                                value={scategory}>{scategory}*/}
-                {/*                            </option>;*/}
-                {/*                        })*/}
-                {/*                    }*/}
-                {/*                </select>*/}
-                {/*            </div>*/}
-                {/*        </form>*/}
-
-                {/*        <label>Description :</label>*/}
-                {/*        <input type="text"*/}
-                {/*               required*/}
-                {/*               className="form-control ml-3 mr-3"*/}
-                {/*               value={this.state.description} onChange={this.onChangeDescription}*/}
-                {/*        />*/}
-
-                {/*            <label>Short Discription :</label>*/}
-                {/*            <input type="text"*/}
-                {/*                   required*/}
-                {/*                   className="form-control ml-3 mr-3"*/}
-                {/*                   value={this.state.shortdiscription} onChange={this.onChangeShortDescription}*/}
-                {/*            />*/}
-
-
-                {/*    </div>*/}
-                {/*    <div className="form-group  d-inline">*/}
-                {/*        <label>Availability :</label>*/}
-                {/*        <input type="text"*/}
-                {/*               required*/}
-                {/*               className="form-control ml-3 mr-3"*/}
-                {/*               value={this.state.availability} onChange={this.onChangeaAvailability}*/}
-                {/*        />*/}
-                {/*        <label>Specification :</label>*/}
-                {/*        <input type="text"*/}
-                {/*               required*/}
-                {/*               className="form-control ml-3 mr-3"*/}
-                {/*               value={this.state.specification} onChange={this.onChangeSpecifications}*/}
-                {/*        />*/}
-
-                {/*        <label>Unit Price :</label>*/}
-                {/*        <input type="text"*/}
-                {/*               required*/}
-                {/*               className="form-control ml-3 mr-3"*/}
-                {/*               value={this.state.price} onChange={this.onChangePrice}*/}
-                {/*        />*/}
-                {/*        <label>Original price :</label>*/}
-                {/*        <input type="text"*/}
-                {/*               required*/}
-                {/*               className="form-control ml-3 mr-3"*/}
-                {/*               value={this.state.oprice} onChange={this.onChangeoPrice}*/}
-                {/*        />*/}
-
-                {/*    </div>*/}
-
-                {/*</div>*/}
-
-
-
-
-
-
-
-
             </div>
         );
     }
