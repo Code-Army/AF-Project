@@ -9,12 +9,14 @@ router.route ('/').get((req,res) => {
 });
 
 router.route('/add').post((req,res) => {
-    const discountname = req.body.discountprecentage;
+    const discountname = req.body.discountname;
     const discountprecentage = req.body.discountprecentage;
+    const productname = req.body.productname;
 
     const newDiscount= new Discount({
         discountname,
         discountprecentage,
+        productname,
 
     });
 
@@ -59,6 +61,7 @@ router.route('/update/:id').post((req,res) => {
         .then(discount => {
             discount.discountname = req.body.discountname;
             discount.discountprecentage = req.body.discountprecentage;
+            discount.productname = req.body.productname;
 
 
             discount.save()

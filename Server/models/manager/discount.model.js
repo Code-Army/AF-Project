@@ -6,6 +6,7 @@ const discountSchema = new Schema({
 
     discountname: {type: String,required: true},
     discountprecentage: {type: String,required: true},
+    productname: {type: String,required: true},
 
 
 }, {
