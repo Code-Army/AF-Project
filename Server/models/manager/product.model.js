@@ -10,6 +10,7 @@ const productSchema = new Schema({
         description: {type:String,default: " "},
         shortdiscription:{type:String,default:" "},
         price: {type:String,default: ""},
+        size: {type:String,default: ""},
         category: {type:String,default:""},
         cid: {type:String,default:""},
         sid: {type:String,default:""},
