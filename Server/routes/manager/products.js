@@ -14,6 +14,7 @@ router.route('/add').post((req,res) => {
     const subcategory = req.body.subcategory;
     const price = req.body.price;
     const cid = req.body.cid;
+    const size = req.body.size;
     const sid = req.body.sid;
     const oprice = req.body.oprice;
     const description = req.body.description;
@@ -31,6 +32,7 @@ router.route('/add').post((req,res) => {
         specification,
         availability,
         price,
+        size,
         cid,
         sid,
         oprice,
@@ -66,6 +68,7 @@ router.route('/update/:id').post((req,res) => {
             producut.category = req.body.category;
             producut.subcategory = req.body.subcategory;
             producut.price = req.body.price;
+            producut.size = req.body.size;
             producut.oprice = req.body.oprice;
             producut.description = req.body.description;
             producut.shortdiscription = req.body.shortdiscription;
@@ -83,10 +86,10 @@ router.route('/update/:id').post((req,res) => {
 
 router.get("/search/search_by_name", (req, res) => {
     let type = req.query.type
-    let productIds = req.query.id
-    console.log(productIds)
+    let productIds = req.query.name
+
     if (type === "array") {
-        let ids = req.query.id.split(',');
+        let ids = req.query.name.split(',');
         productIds = [];
         productIds = ids.map(item => {
             return item
@@ -102,6 +105,7 @@ router.get("/search/search_by_name", (req, res) => {
             return res.status(200).send(product)
         })
 });
+
 
 
 module.exports = router;
