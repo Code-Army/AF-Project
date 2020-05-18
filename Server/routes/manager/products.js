@@ -14,6 +14,7 @@ router.route('/add').post((req,res) => {
     const subcategory = req.body.subcategory;
     const price = req.body.price;
     const cid = req.body.cid;
+    const sid = req.body.sid;
     const oprice = req.body.oprice;
     const description = req.body.description;
     const shortdiscription = req.body.shortdiscription;
@@ -31,6 +32,7 @@ router.route('/add').post((req,res) => {
         availability,
         price,
         cid,
+        sid,
         oprice,
         description,
         shortdiscription,
