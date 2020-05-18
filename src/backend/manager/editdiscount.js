@@ -9,12 +9,14 @@ export default class editdiscount extends Component {
 
         this.onChangeDiscountName = this.onChangeDiscountName.bind(this);
         this.onChangeDiscountPrecentage = this.onChangeDiscountPrecentage.bind(this);
+        this.onChangeProductName = this.onChangeProductName.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleShow = this.handleShow.bind(this);
 
         this.state = {
             discountname : '',
+            products : [],
             discountprecentage : '',
             discounts : [],
             show:false
@@ -40,7 +42,24 @@ export default class editdiscount extends Component {
                 console.log(error)
 
             })
+        axios.get('http://localhost:5000/products/')
+            .then(response => {
+                if(response.data.length > 0 ) {
+                    this.setState({
+                        products:response.data,
+                        productname : response.data[0].productname,
 
+                    })
+
+                }
+            })
+
+    }
+    onChangeProductName(e){
+        this.setState({
+                productname: e.target.productname,
+            }
+        )
     }
     onChangeDiscountName(e){
         this.setState({
@@ -70,10 +89,12 @@ export default class editdiscount extends Component {
         const item = {
             discountname: this.state.discountname,
             discountprecentage: this.state.discountprecentage,
+            productname: this.state.productname,
+
         }
 
-        console.log(this.state.discountname);
-        console.log(this.state.discountprecentage);
+        // console.log(this.state.discountname);
+        // console.log(this.state.discountprecentage);
 
 
         axios.post('http://localhost:5000/discounts/update/' + this.props.match.params.id , item )
@@ -86,11 +107,32 @@ export default class editdiscount extends Component {
 
 
     }
+    backtoDiscount(){
+        window.location = '/discount';
+    }
     render() {
         return (
             <div className="container" >
                 <h3 className="header ml-3 ">Edit  Discount Log</h3>
                 <div className="ml-3 mr-3">
+                    <div>
+                        <select ref="userInput"
+                                required
+                                className="form-control mr-5"
+                                value={this.state.productname}
+                                onChange={this.onChangeProductName}>
+                            {
+                                this.state.products.map(function(product) {
+                                    return <option
+                                        key={product}
+                                        value={product.productname}
+                                    >{product.productname}
+
+                                    </option>;
+                                })
+                            }
+                        </select>
+                    </div>
                     <div className="form-group">
                         <label>Discount Name</label>
                         <input type="text"
@@ -116,6 +158,7 @@ export default class editdiscount extends Component {
 
                     <div className="form-group">
                         <button className="btn btn-primary" onClick={this.handleShow}>Edit Discount Log</button>
+                        <input type="submit" value="Back to discounts" className="btn btn-dark ml-3" onClick={this.backtoDiscount}/>
 
                     </div>
 
@@ -131,7 +174,7 @@ export default class editdiscount extends Component {
                         <button variant="secondary" className="btn btn-success " onClick={this.handleClose}>
                             Close
                         </button>
-                        <button variant="primary" onClick={this.onSubmit}>
+                        <button variant="primary" className="btn btn-danger" onClick={this.onSubmit}>
                             Save Changes
                         </button>
                     </Modal.Footer>
