@@ -1,10 +1,13 @@
 import React, {Component, useEffect} from "react";
 import axios from "axios";
 import uuidv4 from 'uuid'
+import jwt_decode from "jwt-decode";
+import Footer from "../../homepage/Footer";
 
 export default function ProductsDetails(props){
 
-
+    const token = localStorage.auth
+    const user = jwt_decode(token)
 
     function handleClick(e) {
         e.preventDefault();
@@ -34,9 +37,9 @@ export default function ProductsDetails(props){
 
     
     function addPurchases(total) {
-
+        console.log("user id"+user.id)
         const purchases = {
-
+            userId:user.id,
             purchasesId:"1232435543",
             total:total
 
@@ -45,13 +48,14 @@ export default function ProductsDetails(props){
         axios.post('http://localhost:5000/purchases/add', purchases)
             .then(res => console.log(res.data));
         console.log("sucessfully")
-
+        localStorage.setItem('amount',"");
+        localStorage.setItem('products',"");
     }
 
     function addOrder(e) {
         console.log(e)
         const myOrder = {
-
+            userId:user.id,
             productId:e
 
         }
@@ -99,13 +103,7 @@ export default function ProductsDetails(props){
                                         <span className="radio_text">Paypal</span>
                                 </label>
                             </li>
-                            <li className="shipping_option d-flex flex-row align-items-center justify-content-start">
-                                <label className="radio_container">
-                                    <input type="radio" id="radio_2" name="payment_radio" className="payment_radio"/>
-                                        <span className="radio_mark"></span>
-                                        <span className="radio_text">Cash on Delivery</span>
-                                </label>
-                            </li>
+
                             <li className="shipping_option d-flex flex-row align-items-center justify-content-start">
                                 <label className="radio_container">
                                     <input type="radio" id="radio_3" name="payment_radio" className="payment_radio"
@@ -117,13 +115,13 @@ export default function ProductsDetails(props){
                         </ul>
                     </div>
                     <div className="cart_text">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra tempor so dales.
-                            Phasellus sagittis auctor gravida. Integ er bibendum sodales arcu id te mpus. Ut consectetur
-                            lacus.</p>
+
                     </div>
                     <div className="checkout_button trans_200"><a href="checkout.html" onClick={handleClick}>place order</a></div>
                 </div>
             </div>
+
+
         </div>
     )
 
