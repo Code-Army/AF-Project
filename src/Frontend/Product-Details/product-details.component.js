@@ -7,6 +7,7 @@ import Details from "./Sections/Details";
 import Description from "./Sections/Description";
 import Specification from "./Sections/Specification";
 import Review from "./Sections/Review";
+import Footer from "../homepage/Footer";
 
 export default function ProductDetails(props){
 
@@ -40,14 +41,30 @@ export default function ProductDetails(props){
 
     }, [])
 
+    const mystyle = {
+        color: "white",
+        backgroundColor: "#5a646b",
 
+        fontFamily: "Arial",
+        padding:"10px",
+        paddingBottom:"10px"
+    };
+
+    const header = {
+        textAlign: "center",
+
+    }
 
         return(
             <div>
                 <Header
                     userdata="1"/>
                 <div>
-
+<div style={mystyle}>
+    <div style={header}>
+        <h2>DETAILS</h2>
+    </div>
+</div>
                     {/*product image area*/}
                     <div className="product_image_area">
                         <div className="container">
@@ -56,8 +73,8 @@ export default function ProductDetails(props){
                                     <h1>{Product.productname}</h1>
                                     <ImagesSlide
                                     url1={Product.url1}
-                                    url2={Product.url2}
-                                    url3={Product.url3}
+                                    url2={Product.url1}
+                                    url3={Product.url1}
                                     />
                                 </div>
                                 <div className="col-lg-5 offset-lg-1">
@@ -146,6 +163,8 @@ export default function ProductDetails(props){
 
 
                 </div>
+
+                <Footer/>
             </div>
         )
 
