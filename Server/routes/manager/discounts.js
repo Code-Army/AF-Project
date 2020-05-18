@@ -35,27 +35,27 @@ router.route('/:id').delete((req,res) => {
         .then(() => res.json('Discount deleted.'))
         .catch(err => res.status(400).json('Error :' + err))
 });
-// router.get("/pruduct_by_name", (req, res) => {
-//     let type = req.query.type
-//     let name = req.query.name
-//
-//     if (type === "array") {
-//         let names = req.query.name.split(',');
-//         name = [];
-//         name = names.map(item => {
-//             return item
-//         })
-//     }
-//
-//     console.log(name)
-//     //we need to find the product information that belong to product Id
-//     Product.find({ 'productname': { $in: name } })
-//         .populate('writer')
-//         .exec((err, product) => {
-//             if(err) return req.status(400).send(err)
-//             return res.status(200).send(product)
-//         })
-// });
+router.get("/search/search_by_dname", (req, res) => {
+    let type = req.query.type
+    let dnames = req.query.name
+
+    if (type === "array") {
+        let names = req.query.name.split(',');
+        dnames = [];
+        dnames = names.map(item => {
+            return item
+        })
+    }
+
+    //we need to find the product information that belong to product Id
+    Discount.find({ 'discountname': { $in: dnames } })
+        .populate('writer')
+        .exec((err, discount) => {
+
+            if(err) return req.status(400).send(err)
+            return res.status(200).send(discount)
+        })
+});
 router.route('/update/:id').post((req,res) => {
     Discount.findById(req.params.id)
         .then(discount => {
