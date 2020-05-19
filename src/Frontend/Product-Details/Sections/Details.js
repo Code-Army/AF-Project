@@ -19,9 +19,12 @@ export default class Details extends Component{
             userId: user.id,
             productId:this.props.productId,
             price:0,
-            quantity:0,
+            quantity:1,
             total:0,
-            img:this.props.product.url1
+            img:this.props.product.url1,
+            errorMsg:"",
+            error:false,
+            success:false
         }
 
 
@@ -35,27 +38,38 @@ export default class Details extends Component{
 
 
     handleClick(e) {
+        //Validate click add to cart
+        if(this.state.quantity == 0){
+            this.setState({
+                error:true,
+                errorMsg:"Please Select The Quantity"
+            })
+        }else{
+            const amount = this.props.product.oprice * this.state.quantity;
+        //Create cart Object
+            const cart = {
+                userId: this.state.userId,
+                productId:this.state.productId,
+                productName:this.props.product.productname,
+                price:this.props.product.oprice,
+                quantity: this.state.quantity,
+                total: amount,
+                url:this.props.product.url1
+            }
 
-        const amount = this.props.product.oprice * this.state.quantity;
+            console.log(cart);
+            //post method
+            axios.post('http://localhost:5000/cart/add', cart)
+                .then(res => console.log(res.data));
 
-        const cart = {
-            userId: this.state.userId,
-            productId:this.state.productId,
-            productName:this.props.product.productname,
-            price:this.props.product.oprice,
-            quantity: this.state.quantity,
-            total: amount,
-            url:this.props.product.url1
+            this.setState({
+                error:false,
+                product: '',
+                success:true
+            })
         }
 
-        console.log(cart);
 
-        axios.post('http://localhost:5000/cart/add', cart)
-            .then(res => console.log(res.data));
-
-        this.setState({
-            product: ''
-        })
     }
 
     render() {
@@ -105,7 +119,9 @@ export default class Details extends Component{
                             <i className="lnr lnr-chevron-down"></i>
                         </button>
                     </div>
+
                     <div className="card_area">
+
                         <a className="main_btn" href="#" onClick={this.handleClick}>Add to Cart</a>
                         <a className="icon_btn" href="#">
                             <i className="lnr lnr lnr-diamond"></i>
@@ -113,7 +129,10 @@ export default class Details extends Component{
                         <a className="icon_btn" href="#">
                             <i className="lnr lnr lnr-heart"></i>
                         </a>
+
                     </div>
+                    {(this.state.error ? this.state.errorMsg :"")}
+                    {(this.state.success) ? "Product Added To Cart":""}
                 </div>
             </div>
         )
