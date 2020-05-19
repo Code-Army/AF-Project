@@ -5,6 +5,8 @@ import axios from 'axios';
 import "./../../css/cart.css"
 import jwt_decode from "jwt-decode";
 import Coupon from "./Sections/Coupon";
+import Header from "../homepage/Header";
+import Footer from "../homepage/Footer";
 
 
 export default class Cart extends Component{
@@ -28,7 +30,9 @@ export default class Cart extends Component{
             coupon:"",
             couponAmount:0,
             couponActive:false,
-            shipping:0
+            shipping:0,
+            errorMsg:'',
+            error:false
 
 
         };
@@ -115,13 +119,26 @@ export default class Cart extends Component{
         console.log(this.state.coupon)
         axios.get(`http://localhost:5000/cart/coupon_by_id?id=${this.state.coupon}&type=single`)
             .then(response => {
-                this.setState({
-                    couponActive:true,
-                    couponAmount:response.data[0].couponamount
+                if(response.data.length > 0){
+                    this.setState({
+                        couponActive:true,
+                        couponAmount:response.data[0].couponamount
 
-                })
-                localStorage.setItem("amount", String(this.state.total - response.data[0].couponamount));
-                console.log("copun responce - " + response.data[0].couponamount)
+                    })
+                    localStorage.setItem("amount", String(this.state.total - response.data[0].couponamount));
+
+                }else{
+                    this.setState({
+
+                        errorMsg:"Please Valid Coupon",
+                        couponActive:false,
+                        error:true,
+                        couponAmount:0
+
+                    })
+                    localStorage.setItem("amount", String(this.state.total));
+                }
+
             })
     }
 
@@ -129,11 +146,31 @@ export default class Cart extends Component{
 
     render()
     {
+        const mystyle = {
+            color: "white",
+            backgroundColor: "#5a646b",
+
+            fontFamily: "Arial",
+            padding:"10px",
+            paddingBottom:"10px"
+        };
+
+        const header = {
+            textAlign: "center",
+
+        }
         return (
 
             <div>
 
+                <Header
+                    userdata="1"/>
+                <div style={mystyle}>
+                    <div style={header}>
+                        <h2>CART</h2>
+                    </div>
 
+                </div>
 
 
                 <div className="cart_section">
@@ -173,6 +210,8 @@ export default class Cart extends Component{
                         </div>
                         <div className="row cart_extra_row">
                          <Coupon
+                             error={this.state.error}
+                             errorMsg={this.state.errorMsg}
                          onchangeCoupon={this.onchangeCoupon}
                          onclickApply={this.onclickApply}/>
                             <div className="col-lg-6 cart_extra_col">
@@ -206,7 +245,7 @@ export default class Cart extends Component{
                         </div>
                     </div>
                 </div>
-
+<Footer/>
 
             </div>
 

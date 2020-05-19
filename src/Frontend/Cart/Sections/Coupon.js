@@ -12,12 +12,12 @@ export default class Coupon extends Component{
                         <div className="cart_extra_title">Coupon code</div>
                         <div className="coupon_form_container">
                             <div action="#" id="coupon_form" className="coupon_form">
+
                                 <input type="text" className="coupon_input" onChange={this.props.onchangeCoupon} />
                                 <button className="coupon_button" onClick={this.props.onclickApply} >apply</button>
                             </div>
                         </div>
-                        <div className="coupon_text">Phasellus sit amet nunc eros. Sed nec congue tellus. Aenean
-                            nulla nisl, volutpat blandit lorem ut.
+                        <div className="coupon_text">   {(this.props.error ? this.props.errorMsg : "")}
                         </div>
                         <div className="shipping">
                             <div className="cart_extra_title">Shipping Method</div>
