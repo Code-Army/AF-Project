@@ -7,8 +7,8 @@ import axios from "axios";
 
 export default class ProductRow extends Component{
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             show:false,
@@ -21,6 +21,11 @@ export default class ProductRow extends Component{
         this.setState({
             show:true
         })
+        console.log("pop")
+    }
+
+    handle = (e)=>{
+
         console.log("pop")
     }
 
@@ -49,7 +54,8 @@ export default class ProductRow extends Component{
 
             productId:this.props.item.productId,
             feedback:this.state.feedbackTxt,
-            rate:this.state.rating
+            rate:this.state.rating,
+            userName:this.props.userName
 
         }
 
