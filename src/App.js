@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Axios from "axios";
 import Header from "./Frontend/homepage/Header";
 import Footer from "./Frontend/homepage/Footer";
@@ -6,33 +6,37 @@ import Home from "./Frontend/homepage/Home";
 import Login from "../src/Frontend/Customer/Login";
 import Register from "../src/Frontend/Customer/Register";
 import Profile from "../src/Frontend/homepage/MyProfile";
+//pasan
+
+
+import ProductDetails from "./Frontend/Product-Details/product-details.component";
+import Payment from "./Frontend/Payment/payment.component";
+
+import Orders from "./Frontend/My-Orders/myorders.component";
+
 import UserContext from "../src/contex/UserContext";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import Auth from "./Authentication/Auth";
 import Routes from "./Routes/Routes";
-import CreateCategory from "./backend/category/CreateCategory";
-import catergoryView from "./Frontend/homepage/ProductView/catergoryView";
-import CreateSubCategory from "./backend/category/CreateSubCategory";
-import CreateAdminUser from "./backend/admin/createAdminUser";
-import Allproduct from "./Frontend/homepage/ProductView/Allproduct";
-import SubcategoryView from "./Frontend/homepage/ProductView/SubcategoryView";
-
-import Navbar from "./backend/manager/navbar.component";
-import ProductList from "./backend/manager/product-list.component"
-import editproduct from "./backend/manager/editproduct"
-import AddProduct from "./backend/manager/addproduct.component"
-import discounts from "./backend/manager/discounts.component"
-import editdiscount from "./backend/manager/editdiscount"
-import coupondiscounts from "./backend/manager/coupondiscounts.component"
-import editcoupon from "./backend/manager/editcoupon"
-import adddiscount from "./backend/manager/adddisscount.component"
-import addcoupon from "./backend/manager/addcoupon.component"
 
 import AdminLogin from "./backend/admin/AdminLogin";
 import ChangePassword from "./backend/admin/ChangePassword";
 import BackendHome from "./backend/BackendHome";
-import SubcatProductView from "./Frontend/homepage/ProductView/SubcatProductView";
+
+// import './web content/vendors/owl-carousel/owl.carousel.min.css';
+// import './web content/vendors/lightbox/simpleLightbox.css';
+// import './web content/vendors/nice-select/css/nice-select.css';
+// import './web content/vendors/animate-css/animate.css';
+// import './web content/vendors/jquery-ui/jquery-ui.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import CreateCategory from "./backend/category/CreateCategory";
+import catergoryView from "./Frontend/homepage/ProductView/catergoryView";
+import CreateSubCategory from "./backend/category/CreateSubCategory";
+import CreateAdminUser from "./backend/admin/createAdminUser";
+import ShowProduct from "./Frontend/homepage/ProductView/ShowProduct";
+import Allproduct from "./Frontend/homepage/ProductView/Allproduct";
+import My from "./Frontend/Cart/my";
 
 export default function App() {
     const [userData, setUserData] = useState({
@@ -66,71 +70,42 @@ export default function App() {
 
         checkLoggedIn();
     }, []);
-  // return (
-  //     <BrowserRouter>
-  //         <UserContext.Provider value={{ userData, setUserData }}>
-  //             <div className="container-fluid ">
-  //                 <Switch>
-  //                     <Route exact path="/" component={Home} />
-  //                     <Route path="/login" component={Login} />
-  //                     <Route path="/register" component={Register} />
-  //                     <Route path="/myprofile" component={Profile}/>
-  //                     <Route path="/CategoryAdd" component={CreateCategory}/>
-  //                     <Route path="/CategoryView" component={catergoryView}/>
-  //                     <Route path="/subCategoty" component={CreateSubCategory}/>
-  //                     <Route path="/createAdminUser" component={CreateAdminUser}/>
-  //                     <Route path="/Allproduct" component={Allproduct}/>
-  //                     <Route path="/CreateSubCategory" component={CreateSubCategory}/>
-  //                     <Route path ="/Subcategory/:id" component={SubcategoryView}/>
-  //                     <Route path="/SubCatProductView/:id" component={SubcategoryView}/>
-  //                 </Switch>
-  //             </div>
-  //         </UserContext.Provider>
-  //     </BrowserRouter>
-  // );
+  return (
+      <div>
+      <BrowserRouter>
+          <UserContext.Provider value={{ userData, setUserData }}>
+              <div className="container-fluid ">
+                  <Switch>
+                      <Route exact path="/" component={Home} />
+                      <Route path="/login" component={Login} />
+                      <Route path="/register" component={Register} />
+                      <Route path="/myprofile" component={Profile}/>
+                      <Route path="/CategoryAdd" component={CreateCategory}/>
+                      <Route path="/CategoryView" component={catergoryView}/>
+                      <Route path="/subCategoty" component={CreateSubCategory}/>
+                      <Route path="/createAdminUser" component={CreateAdminUser}/>
+                      <Route path="/ShowProduct" component={ShowProduct}/>
+                      <Route path="/Allproduct" component={Allproduct}/>
+                      <Route path="/CreateSubCategory" component={CreateSubCategory}/>
 
-    const footer = Footer()
+                      <Route exact path="/admin/" component={BackendHome} />
+                      <Route exact path="/admin/login" component={AdminLogin} />
+                      <Route exact path="/admin/changepassword" component={ChangePassword} />
 
-    return (
-        <BrowserRouter>
-            <UserContext.Provider value={{ userData, setUserData }}>
-                <div className="container-fluid ">
-                    <Switch>
-                        <Route exact path="/" component={footer(Home)} />
-                        <Route path="/login" component={footer(Login)} />
-                        <Route path="/register" component={footer(Register)} />
-                        <Route path="/myprofile" component={footer(Profile)} />
-                        <Route path="/CategoryAdd" component={footer(CreateCategory)} />
-                        <Route path="/CategoryView" component={footer(catergoryView)} />
-                        <Route path="/subCategoty" component={footer(CreateSubCategory)} />
-                        <Route path="/createAdminUser" component={footer(CreateAdminUser)} />
-                        {/*<Route path="/ShowProduct" component={footer(ShowProduct)} />*/}
-                        <Route path="/Allproduct" component={footer(Allproduct)} />
-                        <Route path="/CreateSubCategory" component={footer(CreateSubCategory)} />
+                      <Route path="/cart/" component={My}/>
+                      <Route path="/products/:productId/" component={ProductDetails}/>
+                      <Route path="/payment/" component={Payment}/>
+                      <Route path="/orders/" component={Orders}/>
 
-                        <Route path="/Allproduct" component={Allproduct}/>
-                        <Route path="/CreateSubCategory" component={CreateSubCategory}/>
-                        <Route path ="/Subcategory/:id" component={SubcategoryView}/>
-                        <Route path="/products/:id" component={SubcatProductView}/>
-						<Route path="/products" exact component={ProductList}></Route>
-					    <Route path="/edit/:id" exact component={editproduct}></Route>
-					    <Route path="/create" exact component={AddProduct}></Route>
-					    <Route path="/discount" exact component={discounts}></Route>
-					    <Route path="/editdiscount/:id" exact component={editdiscount}></Route>
-					    <Route path="/coupon" exact component={coupondiscounts}></Route>
-					     <Route path="/editcoupon/:id" exact component={editcoupon}></Route>
-				        <Route path="/adddiscount" exact component={adddiscount}></Route>
-						<Route path="/addcoupon" exact component={addcoupon}></Route>
+                  </Switch>
+              </div>
 
-                        <Route exact path="/admin/" component={BackendHome} />
-                        <Route exact path="/admin/login" component={AdminLogin} />
-                        <Route exact path="/admin/changepassword" component={ChangePassword} />
-                    </Switch>
-                </div>
-                {/* <Footer /> */}
-            </UserContext.Provider>
-        </BrowserRouter>
-    );
+          </UserContext.Provider>
+      </BrowserRouter>
+
+
+      </div>
+  );
 }
 
 
