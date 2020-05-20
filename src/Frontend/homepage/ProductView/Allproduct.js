@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
-
+import React, {Component,useContext,useState,useEffect} from 'react';
+import { Icon, Col, Card, Row } from 'antd';
 import axios from 'axios';
 import 'react-bootstrap';
 import Header from "../Header";
 import ProductShow from './ProductShow';
+
 
 
 class Allproduct extends Component {
@@ -13,6 +14,9 @@ class Allproduct extends Component {
             products:[]
         }
     }
+
+
+
     componentDidMount() {
         axios.get('http://localhost:5000/products/').then(res =>{
             this.setState({products:res.data});

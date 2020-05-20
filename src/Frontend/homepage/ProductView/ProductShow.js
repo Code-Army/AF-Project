@@ -10,7 +10,7 @@ const ProductShow = props => {
 
 
 
-            <div className="col-lg-3 col-md-6">
+            <div className="col-lg-2 col-md-3">
                 <div className="single-product">
                     <div className="product-img">
                         <img className="img-fluid w-100" src={props.ProductShow.url1} alt=""/>
@@ -31,8 +31,8 @@ const ProductShow = props => {
                             <h4>{props.ProductShow.productname}</h4>
                         </a>
                         <div className="mt-3">
-                            <span className="mr-4">Rs.{props.ProductShow.price}</span>
-                            <del>Rs.{props.ProductShow.oprice}</del>
+                            <span className="mr-4">Rs.{props.ProductShow.oprice}</span>
+                            <del>Rs.{props.ProductShow.price}</del>
                         </div>
                     </div>
                 </div>

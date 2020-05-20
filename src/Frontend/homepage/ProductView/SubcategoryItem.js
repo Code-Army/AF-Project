@@ -15,7 +15,6 @@ const SubcategoryItem = props => {
                         <img
                             className="card-img"
                             src={props.SubcategoryItem.url}
-
                         />
                     </a>
                         <div className="p_icon">

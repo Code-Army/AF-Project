@@ -46,15 +46,18 @@ export default function MyProfile() {
                                                         <td>e-mail : </td>
                                                         <td>{userData.customer.Cemail}</td>
                                                     </tr>
-                                                    <button  className="btn btn-outline-danger btn-xs"  >Delete
-                                                    </button>
+                                                    <a href={`/customer/delete/${userData.customer._id}`}><button  className="btn btn-outline-danger btn-xs"  >Delete
+                                                    </button></a>
+                                                    <a href={'/customer/editMyProfile/'}>
+                                                        <button  className="btn btn-outline-primary btn-xs" >Update User
+                                                        </button>
+                                                    </a>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="panel-footer">
-
                                     </div>
                                 </div>
                             </div>

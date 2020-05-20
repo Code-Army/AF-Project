@@ -10,7 +10,7 @@ import Footer from "../Footer";
 class SubcatProductView extends Component {
     constructor(props) {
         super(props);
-        const productId = props.match.params.id
+        const productId = props.match.params.id;
         this.state = {
             products:[],
             Subid:productId
@@ -20,7 +20,7 @@ class SubcatProductView extends Component {
 // +this.props.match.params.category
     componentDidMount() {
         console.log(this.state.Subid);
-        const Id = this.props.match.params.id;
+        const id = this.props.match.params.id;
         axios.get(`http://localhost:5000/products/Product_by_Subid?id=${this.state.Subid}&type=single`).then(res =>{
             this.setState({products:res.data});
             console.log(res.data)
@@ -44,17 +44,13 @@ class SubcatProductView extends Component {
     render() {
         return (
             <>
-
-
-
                 <Header/>
                 <div className="container">
                     <div className="row">
                         {
                             this.state.products.map(products => {
                                 return(
-                                    < SubcatProductViewItem SubcatProductViewItem   = {products}  key = {products._id}/>
-
+                                   <SubcatProductViewItem SubcatProductViewItem   = {products}  key = {products._id}/>
                                 )
                             })
                         }

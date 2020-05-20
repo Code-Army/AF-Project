@@ -4,7 +4,10 @@ import Auth from "../../Authentication/Auth";
 import logo from '../../web content/images/Logo.png'
 
 export default function Header() {
-  return (
+
+
+
+    return (
       <header className="header_area">
           <div className="top_menu">
               <div className="container">
@@ -43,9 +46,9 @@ export default function Header() {
               <div className="container">
                   <nav className="navbar navbar-expand-lg navbar-light w-100">
                       {/*Brand and toggle get grouped for better mobile display */}
-                      <a className="navbar-brand logo_h" href="index.html">
+                      <Link className="navbar-brand logo_h" to="/">
                           <img src={logo} alt="" height="100px" width="200px"/>
-                      </a>
+                      </Link>
                       <button className="navbar-toggler" type="button" data-toggle="collapse"
                               data-target="#navbarSupportedContent"
                               aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -116,9 +119,9 @@ export default function Header() {
                               <div className="col-lg-5 pr-0">
                                   <ul className="nav navbar-nav navbar-right right_nav pull-right">
                                       <li className="nav-item">
-                                          <a href="#" className="icons">
-                                              <i className="ti-search" aria-hidden="true"></i>
-                                          </a>
+                                          {/*<a href="#" className="icons">*/}
+                                          {/*    <i className="ti-search" aria-hidden="true"></i>*/}
+                                          {/*</a>*/}
                                       </li>
 
                                       <li className="nav-item">
