@@ -16,6 +16,8 @@ class EditAdminUser extends Component {
         this.state = {
             name: '',
             email: '',
+
+
         }
 
     }
@@ -25,7 +27,8 @@ class EditAdminUser extends Component {
             .then(res => {
                 this.setState({
                     name: res.data.name,
-                    email: res.data.email
+                    email: res.data.email,
+
                 })
             })
             .catch(function (error) {
@@ -69,54 +72,41 @@ class EditAdminUser extends Component {
 
     render() {
         return (
-            <Modal size="lg" show={this.props.showEditModal} onHide={this.handleCloseModal}>
+            <Modal size="md" show={this.props.showEditModal} onHide={this.handleCloseModal}>
                 <Modal.Header closeButton>
-
+                    <h3>Edit User {this.state.name}</h3>
                 </Modal.Header>
                 <Modal.Body><div className="first">
-                    <br /><br />
+
                     <div className="container">
 
                         <div >
                             <div >
 
                                 <form onSubmit={this.onSubmit}>
-                                    <div className="card  rounded">
-                                        <div className="card-header rounded p-0">
-                                            <div className="bg-info text-white text-center py-2">
-                                                <h3><i className="fa fa-user-plus"></i> Edit Admin User Accounts</h3>
-
+                                    <div className="form-group">
+                                        <div className="input-group mb-2">
+                                            <div className="input-group-prepend">
+                                                <div className="input-group-text"><i
+                                                    className="fa fa-user text-info"></i></div>
                                             </div>
+                                            <input type="text" className="form-control" id="name" name="username" value={this.state.name} onChange={this.onchangeName}
+                                                   placeholder="Enter Name" required></input>
                                         </div>
-                                        <div className="card-body rounded p-3">
-
-
-                                            <div className="form-group">
-                                                <div className="input-group mb-2">
-                                                    <div className="input-group-prepend">
-                                                        <div className="input-group-text"><i
-                                                            className="fa fa-user text-info"></i></div>
-                                                    </div>
-                                                    <input type="text" className="form-control" id="name" name="username" value={this.state.name} onChange={this.onchangeName}
-                                                           placeholder="Enter Name" required></input>
-                                                </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="input-group mb-2">
+                                            <div className="input-group-prepend">
+                                                <div className="input-group-text"><i
+                                                    className="fa fa-envelope text-info"></i></div>
                                             </div>
-                                            <div className="form-group">
-                                                <div className="input-group mb-2">
-                                                    <div className="input-group-prepend">
-                                                        <div className="input-group-text"><i
-                                                            className="fa fa-envelope text-info"></i></div>
-                                                    </div>
-                                                    <input type="email" className="form-control" id="email" name="email" value={this.state.email} onChange={this.onchangeEmail}
-                                                           placeholder="Enter the email" required></input>
-                                                </div>
-                                            </div>
-
-                                            <div className="text-center">
-                                                <input type="submit" value="Edit" className="btn btn-info btn-block rounded py-2"></input>
-                                            </div>
+                                            <input type="email" className="form-control" id="email" name="email" value={this.state.email} onChange={this.onchangeEmail}
+                                                   placeholder="Enter the email" required></input>
                                         </div>
+                                    </div>
 
+                                    <div className="text-center">
+                                        <input type="submit" value="Edit" className="btn btn-info btn-block rounded py-2"></input>
                                     </div>
                                 </form>
 

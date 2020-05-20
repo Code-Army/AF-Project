@@ -14,17 +14,23 @@ class AllAdminUsers extends Component {
 
     }
     componentDidMount() {
-        axios.get('http://localhost:5000/createAdminUser/').then(res =>{
-            this.setState({users:res.data});
-            console.log(res.data)
-        })
-            .catch((err) => {
-                console.log(err);
-            })
+        setInterval(this.getData,2000)
+
 
     }
 
-    componentDidUpdate() {
+    // componentDidUpdate() {
+    //     axios.get('http://localhost:5000/createAdminUser/').then(res =>{
+    //         this.setState({users:res.data});
+    //         console.log(res.data)
+    //     })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         })
+    //
+    // }
+
+    getData = () => {
         axios.get('http://localhost:5000/createAdminUser/').then(res =>{
             this.setState({users:res.data});
             console.log(res.data)
@@ -32,7 +38,6 @@ class AllAdminUsers extends Component {
             .catch((err) => {
                 console.log(err);
             })
-
     }
 
 
