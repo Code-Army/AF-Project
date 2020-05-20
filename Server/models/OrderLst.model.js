@@ -5,7 +5,11 @@ const Schema = mongoose.Schema;
 const orderedSchema = new Schema({
 
     userId:{type: String},
-    productId:{ type: String, required: true}
+    purchasesId:{type: String},
+    productId:{ type: String, required: true},
+    productName:{ type: String, required: true},
+    img:{ type: String, required: true},
+    status:{ type: String, required: true}
 
 
 
