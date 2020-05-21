@@ -15,7 +15,7 @@ router.route('/add').post((req,res) => {
 
     const newsubCategory = new SubCategory({name,category,url});
     newsubCategory.save()
-        .then(() => res.json('Sub category added!'))
+        .then(() => res.json({msg:'Sub category added!'}))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
@@ -43,8 +43,19 @@ router.get("/category_by_id", (req, res) => {
         })
 });
 
+router.route('/getSubCategory').post((req,res) =>{
+    const category = req.body.category;
+    console.log(category)
 
+    SubCategory.find({ category: category }).then(subCategories => res.json(subCategories)).
+    catch(err => res.status(400).json('Error: ' + err));
+})
 
+router.route('/:id').delete((req, res) => {
+    SubCategory.findByIdAndDelete(req.params.id)
+        .then(() => res.json('Subcategory is deleted'))
+        .catch(err => res.status(400).json('Error ' + err));
+});
 
 router.route('/:id').post((req, res)=>{
 
@@ -54,11 +65,11 @@ router.route('/:id').post((req, res)=>{
     // then(subcategory => res.json(subcategory)).
     // catch(err => res.status(400).json('Error: '+err));
 
-        // const category = req.params.id;
-        // console.log(category)
-        // SubCategory.find({ category: category }).
-        // then(subcategory => res.json(subcategory)).
-        // catch(err => res.status(400).json('Error: '+err));
+    // const category = req.params.id;
+    // console.log(category)
+    // SubCategory.find({ category: category }).
+    // then(subcategory => res.json(subcategory)).
+    // catch(err => res.status(400).json('Error: '+err));
 
 
 
@@ -70,5 +81,25 @@ router.route('/:id').post((req, res)=>{
     // SubCategory.find({category:req.param.category})
     //     .then(subCategory => res.json(subCategory))
     //     .catch(err => res.status(400).json('Error :' + err))
+});
+
+router.route('/:id').get((req, res) => {
+    SubCategory.findById(req.params.id).
+    then(subcategory => res.json(subcategory)).
+    catch(err => res.status(400).json('Error' + err));
+});
+
+router.route('/:id').put((req, res) => {
+    SubCategory.findByIdAndUpdate(req.params.id)
+        .then(subcategory => {
+            subcategory.name = req.body.name;
+            subcategory.category = req.body.category;
+            subcategory.url = req.body.url;
+            subcategory.save()
+                .then(() => res.json({msg:'subcategory updated!'}))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+
+        .catch(err => res.status(400).json('Error ' + err));
 });
 module.exports = router;
