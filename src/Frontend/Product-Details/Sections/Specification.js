@@ -15,11 +15,7 @@ export default class Specification extends Component{
         const token = localStorage.auth2;
        // const decoded = jwt_decode(token);
 
-        this.setState({
-            name:token.CUserName
-        })
 
-        console.log(this.state.name)
     }
 
     render() {
@@ -31,7 +27,7 @@ export default class Specification extends Component{
             aria-labelledby="profile-tab">
             <div className="table-responsive">
                 {this.props.specification}<br/>
-                {this.state.name}
+
             </div>
         </div>
     )

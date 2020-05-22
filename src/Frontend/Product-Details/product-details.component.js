@@ -57,8 +57,7 @@ export default function ProductDetails(props){
 
         return(
             <div>
-                <Header
-                    userdata="1"/>
+                <Header/>
                 <div>
 <div style={mystyle}>
     <div style={header}>
