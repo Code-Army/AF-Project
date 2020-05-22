@@ -6,57 +6,71 @@ import jwt_decode from "jwt-decode";
 import Header from "../homepage/Header";
 import Footer from "../homepage/Footer";
 
-export default function Payment(props){
+export default class Payment extends Component{
 
-    const TotalAmount = props.match.params.totalAmount;
-    const Lst = props.match.params.productsLst;
-    const amount = localStorage.getItem('amount');
-    const products = localStorage.getItem('products');
-    const mystyle = {
-        color: "white",
-        backgroundColor: "#5a646b",
 
-        fontFamily: "Arial",
-        padding:"10px",
-        paddingBottom:"10px"
-    };
-
-    const header = {
-        textAlign: "center",
+    constructor(props) {
+        super(props);
 
     }
-    return(
-        <div>
-            <Header
-                userdata="1"/>
-            <div style={mystyle}>
-                <div style={header}>
-                    <h2>PURCHASE</h2>
+
+    componentDidMount() {
+        const isLogin = localStorage.getItem("isLogin")
+        if (isLogin == "false"){
+            console.log("true")
+            window.location = '/'
+        }
+    }
+
+    render() {
+        const amount = localStorage.getItem('amount');
+        const products = localStorage.getItem('products');
+        var test2 = JSON.parse(products);
+
+        const mystyle = {
+            color: "white",
+            backgroundColor: "#5a646b",
+
+            fontFamily: "Arial",
+            padding:"10px",
+            paddingBottom:"10px"
+        };
+
+        const header = {
+            textAlign: "center",
+
+        }
+        return(
+            <div>
+                <Header />
+                <div style={mystyle}>
+                    <div style={header}>
+                        <h2>PURCHASE</h2>
+                    </div>
+
                 </div>
-
-            </div>
-            <section className="checkout_area section_gap">
-                <div className="container">
+                <section className="checkout_area section_gap">
+                    <div className="container">
 
 
-                    <div className="billing_details">
-                        <div className="row">
-                                <BillingDetails
+                        <div className="billing_details">
+                            <div className="row">
 
-                                />
                                 <ProductsDetails
-                                    productLst={products}
+                                    productLst={test2}
                                     amount={amount}
                                 />
 
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <Footer/>
-        </div>
-    )
+                <Footer/>
+            </div>
+        )
+    }
+
 
 
 }
