@@ -35,8 +35,6 @@ class UserItem extends Component {
                 <td>{this.props.userItem.role}</td>
                 <td>{this.props.userItem.email}</td>
                 <td>{this.props.userItem.status}</td>
-                <td>{this.props.userItem.createdAt}</td>
-                <td>{this.props.userItem.updatedAt}</td>
                 <td>
                         <span className=" edit mx-2 text-primary" onClick={this.showModal} title={"Edit User"} style={{ cursor: "pointer" }}>
                             <i className="fa fa-pencil-square-o" ></i>

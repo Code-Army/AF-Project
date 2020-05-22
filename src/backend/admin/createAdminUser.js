@@ -3,6 +3,8 @@ import axios from 'axios';
 import "../CSS/createAdminUser.css"
 
 import AllAdminUsers from "./AllAdminUsers";
+import Modal from "react-bootstrap/Modal";
+import Alert from "react-bootstrap/Alert";
 class CreateAdminUser extends Component {
     constructor(props) {
         super(props);
@@ -10,18 +12,29 @@ class CreateAdminUser extends Component {
         this.onchangeName = this.onchangeName.bind(this);
         this.onchangeEmail = this.onchangeEmail.bind(this);
         this.onchangeRole = this.onchangeRole.bind(this);
-
+        this.handleCloseAdd = this.handleCloseAdd.bind(this);
+        this.handleShowAdd = this.handleShowAdd.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             name: '',
             email: '',
             role: 'admin',
-
+            error:'',
+            isError:false,
         }
+
     }
 
+    // componentDidMount() {
+    //     setInterval(this.setError,5000)
+    // }
 
+    // setError = () => {
+    //     this.setState({
+    //         isError:false
+    //     })
+    // }
     onchangeName(e) {
         this.setState({
             name: e.target.value
@@ -36,6 +49,19 @@ class CreateAdminUser extends Component {
 
     onchangeRole(e) {
         this.setState({ role: e.target.value });
+    }
+
+    handleCloseAdd(){
+        this.setState({
+            show:false
+
+        })
+
+    }
+    handleShowAdd(){
+        this.setState({
+            show:true
+        })
     }
 
     onSubmit(e) {
@@ -58,7 +84,16 @@ class CreateAdminUser extends Component {
 
 
         axios.post('http://localhost:5000/createAdminUser/add'
-            , newUser).then(res => console.log(res.data));
+            , newUser).then(res => {
+
+            console.log(res.data)
+            console.log(res.data.msg)
+            this.setState({
+                error: res.data.msg,
+                isError:true
+            })
+            this.handleShowAdd()
+        });
     }
 
 
@@ -76,6 +111,7 @@ class CreateAdminUser extends Component {
 
                             <form onSubmit={this.onSubmit}>
                                 <div className="card  rounded">
+
                                     <div className="card-header rounded p-0">
                                         <div className="bg-info text-white text-center py-2">
                                             <h3><i className="fa fa-user-plus"></i> Create Admin User Accounts</h3>
@@ -127,12 +163,20 @@ class CreateAdminUser extends Component {
                                 </div>
                             </form>
 
+                            <Modal show={this.state.show} onHide={this.handleCloseAdd}>
+                                <Modal.Header closeButton>
+                                    <h6>{this.state.error}</h6>
+                                </Modal.Header>
 
+                            </Modal>
 
                         </div>
                     </div>
                 </div>
                 <br />
+
+
+
                 <AllAdminUsers></AllAdminUsers>
             </div>
 
