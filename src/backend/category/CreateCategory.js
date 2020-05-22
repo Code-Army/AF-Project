@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import {storage} from '../../firebase'
+import Alert from "react-bootstrap/Alert";
 class CreateCategory extends Component {
 
     constructor(props) {
@@ -14,17 +15,23 @@ class CreateCategory extends Component {
 
         this.state = {
             name:'',
-            error:'',
-            success:'',
+            message:'',
+            isMessage:false,
             image:null,
             url:'',
-
-
+            file:null
         }
     }
 
+    componentDidMount() {
+        setInterval(this.setMessage,5000)
+    }
 
-
+    setMessage = () => {
+        this.setState({
+            isMessage:false
+        })
+    }
     onchangeName(e){
         this.setState({
             name:e.target.value
@@ -35,6 +42,13 @@ class CreateCategory extends Component {
 
     onchangeImage(e){
         if(e.target.files[0]){
+            let reader = new FileReader();
+            reader.onload = (e) =>{
+                this.setState({
+                    file:e.target.result
+                })
+            }
+            reader.readAsDataURL(e.target.files[0])
             const image = e.target.files[0];
             console.log(image)
             this.setState(() => ({image}))
@@ -77,26 +91,16 @@ class CreateCategory extends Component {
 
                     axios.post('http://localhost:5000/Category/add'
                         , newCategory).then(res =>{ console.log(res.data)
-
                         this.setState(
                             {
-                                error: res.data
+                                message: res.data.msg,
+                                isMessage:true
                             }
                         )
 
                     });
                 })
             });
-
-        if(!this.state.error){
-            alert('category added successfully')
-        }
-
-
-
-
-
-
     }
 
 
@@ -116,6 +120,8 @@ class CreateCategory extends Component {
 
 
                     <div className="card-body">
+                        {this.state.isMessage &&
+                        <Alert variant="success">{this.state.message}</Alert>}
                         <form onSubmit={this.onSubmit}>
                             <div className="form-group">
                                 <label  className="bmd-label-floating">Category Name</label>
@@ -126,6 +132,7 @@ class CreateCategory extends Component {
 
                             <div className="form-group">
                                 <label  className="bmd-label-floating">Upload Image</label>
+                                <div className="subcatImg"><img src={this.state.file}/></div>
                                 <input type="file" className="form-control-file rounded" id="image" onChange={this.onchangeImage} required="required"></input>
 
                             </div>
