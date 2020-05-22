@@ -124,15 +124,7 @@ h2 {
 
 /* STRUCTURE */
 
-.wrapper {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    min-height: 100%;
-    padding: 20px;
-}
+
 
 #formContent {
     -webkit-border-radius: 10px 10px 10px 10px;
@@ -174,7 +166,7 @@ h2.active {
 
 /* FORM TYPOGRAPHY*/
 
-input[type=button], input[type=submit], input[type=reset]  {
+input[type=button], input[type=reset]  {
     background-color: #56baed;
     border: none;
     color: white;
@@ -195,9 +187,7 @@ input[type=button], input[type=submit], input[type=reset]  {
     transition: all 0.3s ease-in-out;
 }
 
-input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
-    background-color: #39ace7;
-}
+
 
 input[type=button]:active, input[type=submit]:active, input[type=reset]:active  {
     -moz-transform: scale(0.95);
@@ -377,8 +367,8 @@ ul {
 button,
 input[type="submit"] {
     border: none;
-    background: none;
-    color: unset;
+    background: #138496;;
+    color: white;
     cursor: pointer;
 }
 
