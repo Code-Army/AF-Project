@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import {storage} from "../../firebase";
-
+import AllSubCategories from './AllSubCategories'
+import Alert from "react-bootstrap/Alert";
 class CreateSubCategory extends Component {
     constructor(props) {
         super(props);
@@ -18,8 +19,8 @@ class CreateSubCategory extends Component {
             category:'',
             error:'',
             success:'',
-
             url:'',
+            file:null,
             categories:[]
 
         }
@@ -37,10 +38,15 @@ class CreateSubCategory extends Component {
             .catch((err) => {
                 console.log(err);
             })
-
+        setInterval(this.setMessage,5000)
     }
 
 
+    setMessage = () => {
+        this.setState({
+            isMessage:false
+        })
+    }
 
     onchangeName(e){
         this.setState({
@@ -58,6 +64,13 @@ class CreateSubCategory extends Component {
 
     onchangeImage(e){
         if(e.target.files[0]){
+            let reader = new FileReader();
+            reader.onload = (e) =>{
+                this.setState({
+                    file:e.target.result
+                })
+            }
+            reader.readAsDataURL(e.target.files[0])
             const image = e.target.files[0];
             console.log(image)
             this.setState(() => ({image}))
@@ -96,8 +109,18 @@ class CreateSubCategory extends Component {
                         }
                     )
 
-                    axios.post('http://localhost:5000/createSubCategory/add'
-                        , newCategory).then(res => console.log(res.data));
+                    axios.post('http://localhost:5000/subCategory/add'
+                        , newCategory).then(res => {
+                        console.log(res.data)
+
+                        this.setState(
+                            {
+                                message: res.data.msg,
+                                isMessage:true
+                            }
+                        )
+
+                    });
                 })
 
             });
@@ -110,6 +133,8 @@ class CreateSubCategory extends Component {
                 <div className="card col-md-4 rounded shadow " style={{position: "absolute", margin: "auto", top: "5%", right: "0", bottom: "5%", left: "0"}} >
                     <div className="card-header"><h2>Create Sub categories</h2> </div>
                     <div className="card-body">
+                        {this.state.isMessage &&
+                        <Alert variant="success">{this.state.message}</Alert>}
                         <form onSubmit={this.onSubmit}>
                             <div className="form-group">
                                 <label  className="bmd-label-floating"> Sub Category Name</label>
@@ -134,6 +159,7 @@ class CreateSubCategory extends Component {
 
                             <div className="form-group rounded">
                                 <label  className="bmd-label-floating">Upload Image</label>
+                                <div className="subcatImg"><img src={this.state.file}/></div>
                                 <input type="file" className="form-control-file rounded" id="image" onChange={this.onchangeImage} ></input>
 
                             </div>
@@ -143,6 +169,7 @@ class CreateSubCategory extends Component {
                     </div>
 
                 </div>
+
             </div>
         );
     }

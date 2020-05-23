@@ -3,7 +3,7 @@ import axios from "axios";
 import {Modal} from "react-bootstrap";
 import {storage} from "../../firebase";
 import Alert from "react-bootstrap/Alert";
-
+import '../CSS/allSubcategories.css'
 class EditSubCategory extends Component {
     constructor(props) {
         super(props);
@@ -13,7 +13,7 @@ class EditSubCategory extends Component {
             category:'',
             url:'',
             categories:[],
-            image:'',
+            file:null,
             message:'',
             imageUpdate:false
 
@@ -32,12 +32,12 @@ class EditSubCategory extends Component {
         axios.get('http://localhost:5000/subCategory/' + this.props.subcategory._id)
             .then(res => {
 
-                 id = res.data.category
+                id = res.data.category
                 this.setState({
                     name: res.data.name,
                     catId: res.data.category,
                     url:res.data.url,
-
+                    file:res.data.url
                 })
 
                 axios.get('http://localhost:5000/Category/' + id)
@@ -89,7 +89,20 @@ class EditSubCategory extends Component {
 
 
     onchangeImage(e){
+
+
+        // this.setState({
+        //     let reader = new FileReader()
+        //     //image:URL.createObjectURL(e.target.files[0])
+        // })
         if(e.target.files[0]){
+            let reader = new FileReader();
+            reader.onload = (e) =>{
+                this.setState({
+                    file:e.target.result
+                })
+            }
+            reader.readAsDataURL(e.target.files[0])
             const image = e.target.files[0];
             console.log(image)
             this.setState({
@@ -178,6 +191,9 @@ class EditSubCategory extends Component {
 
     handleCloseModal() {
         this.props.onCloseModal();
+        this.setState({
+            message:''
+        })
     }
 
     render() {
@@ -185,48 +201,49 @@ class EditSubCategory extends Component {
         return (
             <div>
                 <Modal size="md" show={this.props.showEditModal} onHide={this.handleCloseModal}>
-                <Modal.Header closeButton>
-                    <h4>Edit Subcategory -  {this.props.subcategory.name}</h4>
-                </Modal.Header>
-                <Modal.Body><div className="editSubCat">
-                    {this.state.message.length > 0 &&
-                    <Alert variant="success">{this.state.message}</Alert>}
-                    <div>
-                        <form onSubmit={this.onSubmit}>
-                        <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Name</label>
-                            <div className="col-sm-10">
-                                <input type="text" className="form-control" value={this.state.name} onChange={this.onchangeName} placeholder="Name"></input>
-                            </div>
-                        </div>
-
-                        <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Category</label>
-                            <div className="col-sm-10">
-                        <select className="custom-select custom-select-md mb-3" value={this.state.category._id}
-                                onChange={this.onchangeCategory}>
-
-                            {
-                                this.state.categories.map(function(category) {
-                                    return <option
-                                        key={category}
-                                        value={category._id}>{category.name}
-                                    </option>;
-                                })
-                            }
-                        </select></div></div>
-                            <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">Image</label>
-                                <div className="col-sm-10">
-                                        <input type="file" className="form-control-file rounded" id="image" onChange={this.onchangeImage} ></input>
+                    <Modal.Header closeButton>
+                        <h4>Edit Subcategory -  {this.props.subcategory.name}</h4>
+                    </Modal.Header>
+                    <Modal.Body><div className="editSubCat">
+                        {this.state.message.length > 0 &&
+                        <Alert variant="success">{this.state.message}</Alert>}
+                        <div>
+                            <form onSubmit={this.onSubmit}>
+                                <div className="form-group row">
+                                    <label className="col-sm-2 col-form-label">Name</label>
+                                    <div className="col-sm-10">
+                                        <input type="text" className="form-control" value={this.state.name} onChange={this.onchangeName} placeholder="Name"></input>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="text-center">
-                                <input type="submit" value="Submit" className="btn btn-primary btn-block rounded py-2"></input>
-                            </div>
-                    </form>
-                    </div></div></Modal.Body></Modal>
+                                <div className="form-group row">
+                                    <label className="col-sm-2 col-form-label">Category</label>
+                                    <div className="col-sm-10">
+                                        <select className="custom-select custom-select-md mb-3" value={this.state.category._id}
+                                                onChange={this.onchangeCategory}>
+
+                                            {
+                                                this.state.categories.map(function(category) {
+                                                    return <option
+                                                        key={category}
+                                                        value={category._id}>{category.name}
+                                                    </option>;
+                                                })
+                                            }
+                                        </select></div></div>
+                                <div className="form-group row">
+                                    <label className="col-sm-2 col-form-label">Image</label>
+                                    <div className="subcatImg"><img src={this.state.file}/></div>
+                                    <div className="col-sm-10">
+                                        <input type="file" className="form-control-file rounded" id="image" onChange={this.onchangeImage} ></input>
+                                    </div>
+                                </div>
+
+                                <div className="text-center">
+                                    <input type="submit" value="Submit" className="btn btn-primary btn-block rounded py-2"></input>
+                                </div>
+                            </form>
+                        </div></div></Modal.Body></Modal>
             </div>
         );
     }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import SubcatItem from "./SubcatItem";
+import Modal from "react-bootstrap/Modal";
 
 class AllSubCategories extends Component {
     constructor(props) {
@@ -10,10 +11,16 @@ class AllSubCategories extends Component {
 
             category:'',
             categories:[],
-            subcategories:[]
+            isCategory:false,
+            subcategories:[],
+            message:'Fail to delete the Subcategory',
+            isMessage:false,
+            show:false
         }
 
         this.onchangeCategory = this.onchangeCategory.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleShow = this.handleShow.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.deleteSubCategory = this.deleteSubCategory.bind(this);
     }
@@ -30,6 +37,25 @@ class AllSubCategories extends Component {
                 console.log(err);
             })
 
+
+        setInterval(this.getSubcatfromSearch,2000)
+        this.setState({
+            isCategory:false
+        })
+
+    }
+
+    handleClose(){
+        this.setState({
+            show:false
+
+        })
+
+    }
+    handleShow(){
+        this.setState({
+            show:true
+        })
     }
 
     onchangeCategory(e){
@@ -40,24 +66,38 @@ class AllSubCategories extends Component {
 
     onSubmit(e){
         e.preventDefault();
+        this.getSubcatfromSearch();
+    }
 
+    getSubcatfromSearch = () => {
         const searchCategory = {
             category: this.state.category
         }
 
         axios.post('http://localhost:5000/subCategory/getSubCategory'
             , searchCategory).then(res => {
-                console.log(res.data)
-                this.setState({
-                    subcategories :res.data
-                });
-
+            console.log(res.data)
+            this.setState({
+                subcategories :res.data,
+                isCategory:true
             });
+
+        });
+
     }
 
     deleteSubCategory(id){
         axios.delete('http://localhost:5000/subCategory/'+id)
-            .then(res => console.log(res.data));
+            .then(res => {
+                console.log(res.data)
+                this.handleShow()
+                this.setState(
+                    {
+                        message:res.data.msg,
+                        isMessage:true
+                    }
+                )
+            });
         this.setState({
             subcategories: this.state.subcategories.filter(el => el._id !== id)
         })
@@ -68,28 +108,28 @@ class AllSubCategories extends Component {
             <div>
                 <br/><br/>
                 <div className="col-md-6">
-                <form class="form-inline" onSubmit={this.onSubmit}>
-                    {/*<div className="row ">*/}
-                    <div className="form-group">
-                    <label style={{margin:"5px"}}>Select category</label>
-                    <select ref="userInput"
-                            className="custom-select"
-                            value={this.state.category._id}
-                            onChange={this.onchangeCategory}>
-                        {
-                            this.state.categories.map(function(category) {
-                                return <option
-                                    key={category}
-                                    value={category._id}>{category.name}
-                                </option>;
-                            })
-                        }
-                    </select>
+                    <form class="form-inline" onSubmit={this.onSubmit}>
+                        {/*<div className="row ">*/}
+                        <div className="form-group">
+                            <label style={{margin:"5px"}}>Select category</label>
+                            <select ref="userInput"
+                                    className="custom-select"
+                                    value={this.state.category._id}
+                                    onChange={this.onchangeCategory}>
+                                {
+                                    this.state.categories.map(function(category) {
+                                        return <option
+                                            key={category}
+                                            value={category._id}>{category.name}
+                                        </option>;
+                                    })
+                                }
+                            </select>
 
-                    </div>
+                        </div>
 
-                        <button type="submit" className="btn btn-primary btn-raised rounded" style={{margin:"5px"}}>Submit</button>
-                </form></div>
+                        <button type="submit" className="btn btn-primary btn-raised rounded" style={{margin:"5px"}}>Search</button>
+                    </form></div>
                 <br/>
 
                 <div className="table-responsive-md">
@@ -111,8 +151,8 @@ class AllSubCategories extends Component {
                             this.state.subcategories.map(subcat => {
                                 return(
                                     <SubcatItem deleteSubCategory = { this.deleteSubCategory}
-                                              subCatItem = {subcat}
-                                              key = {subcat._id}
+                                                subCatItem = {subcat}
+                                                key = {subcat._id}
 
                                     />
                                 )
@@ -120,9 +160,13 @@ class AllSubCategories extends Component {
                         }
                         </tbody>
                     </table>
-
-
                 </div>
+                <Modal show={this.state.show} onHide={this.handleClose}>
+                    <Modal.Header closeButton>
+                        <p style={{color:"green"}}>{this.state.message}</p>
+                    </Modal.Header>
+
+                </Modal>
             </div>
         );
     }

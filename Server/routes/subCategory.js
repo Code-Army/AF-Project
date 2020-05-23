@@ -53,7 +53,7 @@ router.route('/getSubCategory').post((req,res) =>{
 
 router.route('/:id').delete((req, res) => {
     SubCategory.findByIdAndDelete(req.params.id)
-        .then(() => res.json('Subcategory is deleted'))
+        .then(() => res.json({msg:'Subcategory is deleted successfully...!'}))
         .catch(err => res.status(400).json('Error ' + err));
 });
 
@@ -70,14 +70,6 @@ router.route('/:id').post((req, res)=>{
     // SubCategory.find({ category: category }).
     // then(subcategory => res.json(subcategory)).
     // catch(err => res.status(400).json('Error: '+err));
-
-
-
-
-
-
-
-
     // SubCategory.find({category:req.param.category})
     //     .then(subCategory => res.json(subCategory))
     //     .catch(err => res.status(400).json('Error :' + err))
