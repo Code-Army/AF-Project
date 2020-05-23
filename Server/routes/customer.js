@@ -175,4 +175,23 @@ router.put("/editMyProfile", auth, async (req, res) => {
     res.status(500).json({ error: error.message })
   }
 })
+
+router.route('/AllCustomers').get((req, res) => {
+  Customer.find().then(customers => res.json(customers)).
+  catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/getCustomerByMail').post((req,res) =>{
+  const email = req.body.email;
+  console.log(email)
+
+  Customer.find({ Cemail: email }).then(customers => res.json(customers)).
+  catch(err => res.status(400).json('Error: ' + err));
+})
+
+router.route('/:id').delete((req, res) => {
+  Customer.findByIdAndDelete(req.params.id)
+      .then(() => res.json({msg:'Customer is deleted successfully...!'}))
+      .catch(err => res.status(400).json('Error ' + err));
+});
 module.exports = router;
