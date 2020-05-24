@@ -41,6 +41,7 @@ export default class adddiscount extends Component {
                     this.setState({
                         products:response.data,
                         productname : response.data[0].productname,
+                        pid:response.data[0]._id,
 
                     })
 
