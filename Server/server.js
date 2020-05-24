@@ -31,14 +31,64 @@ mongoose.connect(
 // set up routes
 
 app.use("/customer", require("../Server/routes/customer"));
-const  categoryRouter = require('./routes/category');
-const subCategoryRouter = require('./routes/subCategory');
-app.use("/products", require("../Server/routes/products"));
-const adminUserRouter = require('./routes/adminUser');
+
+
+// app.use("/product", require("../Server/routes/products"));
+
 //const managerUserRouter = require('./routes/managerUser');
 
 // app.use('/customer',customer);
+
+
+
+
+
+//PASAN
+const FeedbackRouter  = require('./routes/feedback')
+app.use('/feedback',FeedbackRouter);
+
+const CartRouter  = require('./routes/cart')
+app.use('/cart',CartRouter);
+
+const PurchasesRouter  = require('./routes/purches')
+app.use('/purchases',PurchasesRouter);
+
+const BillingRouter  = require('./routes/billing')
+app.use('/billing',BillingRouter);
+
+const OrderRouter  = require('./routes/ordersLst')
+app.use('/orders',OrderRouter);
+
+const ProductRouter  = require('./routes/product')
+app.use('/product',ProductRouter);
+
+const CommentRouter  = require('./routes/comment')
+app.use('/comment',CommentRouter);
+
+//MADU
+const productRouter = require('./routes/products');
+app.use('/products',productRouter);
+
+const discountRouter = require('./routes/discounts');
+app.use('/discounts',discountRouter);
+
+const couponRouter = require('./routes/coupons');
+app.use('/coupons',couponRouter);
+
+//UMESHA
+const adminUserRouter = require('./routes/adminUser');
 app.use('/createAdminUser',adminUserRouter);
-//app.use('/createManagerUser',managerUserRouter);
+
+const  categoryRouter = require('./routes/category');
 app.use('/Category',categoryRouter);
-app.use('/Subcategory', subCategoryRouter)
+
+const subCategoryRouter = require('./routes/subCategory');
+app.use('/SubCategory', subCategoryRouter)
+
+const wishListRouter = require('./routes/wishlist');
+app.use('/wishlist', wishListRouter)
+
+//KUSAL
+const Users = require('./routes/Users')
+app.use('/users', Users)
+

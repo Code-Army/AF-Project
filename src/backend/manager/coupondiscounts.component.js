@@ -1,40 +1,40 @@
 import React, {Component} from "react";
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-
-const Coupon = props =>(
-
-    <tr>
-        <td>{props.id}</td>
-        <td>{props.coupon.couponname}</td>
-        <td>{props.coupon.couponcode}</td>
-        <td>{props.coupon.couponamount}</td>
-        <td>
-
-            <Link to={"/editcoupon/" + props.coupon._id}>edit</Link> | <a href="#" onClick={() => {props.deleteCoupon(props.coupon._id)}}>delete</a>
-        </td>
+import CouponItem from "./CouponItem";
 
 
-    </tr>
-
-)
 
 export default class coupondiscounts extends Component{
     constructor(props) {
         super(props);
 
+        const token = sessionStorage.getItem('auth-token');
+        if (token == null){
+            window.location = '/admin/login'
+        }
+        //bind methods
         this.deleteCoupon = this.deleteCoupon.bind(this);
         this.onChangeSearch = this.onChangeSearch.bind(this);
         this.searchCoupon = this.searchCoupon.bind(this);
 
-
+        //set initial state
         this.state  = {
             coupons: [],
             searchCoupon : '',
         };
     }
 
+    //get the list of coupons from database
     componentDidMount() {
+
+        //this.refreshTable();
+setInterval(this.searchCoupon,2000)
+
+    }
+
+
+    refreshTable = () => {
         axios.get('http://localhost:5000/coupons/')
             .then(response => {
                 this.setState(
@@ -44,15 +44,14 @@ export default class coupondiscounts extends Component{
             .catch((error) => {
                 console.log(error);
             })
-
-
     }
+    //
     couponList(){
 
         return this.state.coupons.map((currentCoupons,j ) => {
             const id =j;
 
-            return <Coupon id={id+1}  coupon = {currentCoupons} deleteCoupon = {this.deleteCoupon} key = {currentCoupons._id}> </Coupon>;
+            return <CouponItem id={id+1}  coupon = {currentCoupons} deleteCoupon = {this.deleteCoupon} key = {currentCoupons._id}> </CouponItem>;
 
 
         })
@@ -68,6 +67,8 @@ export default class coupondiscounts extends Component{
         })
     }
     onChangeSearch(e){
+
+
         this.setState({
             searchCoupon: e.target.value
             }
@@ -75,13 +76,28 @@ export default class coupondiscounts extends Component{
     }
     searchCoupon(){
 
-        axios.get(`http://localhost:5000/coupons/search/search_by_cname?cname=${this.state.searchCoupon}&type=single`)
-            .then(response => {
-                this.setState(
-                    {coupons: response.data}
-                )
+        if (this.state.searchCoupon == ''){
+            axios.get('http://localhost:5000/coupons/')
+                .then(response => {
+                    this.setState(
+                        {coupons: response.data}
+                    )
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }else{
 
-            })
+            axios.get(`http://localhost:5000/coupons/search/search_by_cname?cname=${this.state.searchCoupon}&type=single`)
+                .then(response => {
+                    this.setState(
+                        {coupons: response.data}
+                    )
+
+                })
+        }
+
+
     }
     showAddcoupon (){
        window.location='/addcoupon'
@@ -89,37 +105,57 @@ export default class coupondiscounts extends Component{
 
     render() {
         return (
-            <div className="ml-5 mr-5">
-
-                <form class="form-inline">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                    <input class="form-control form-control-sm ml-3 w-25" type="text" placeholder="Search"
-                           aria-label="Search" onChange={this.onChangeSearch}/>
-
-                    <button type="button" className="btn btn-dark float-right ml-4" onClick={this.searchCoupon}>search</button>
 
 
-                </form>
-                <button onClick={"/edit/"} className="btn btn-dark float-right mr-4" onClick={this.showAddcoupon}>add coupon</button>
 
-                <br/><br/>
+                <div className="row">
 
-                <h3>Inserted Coupons </h3>
-                <table className="table">
-                    <thead className="thead-light">
-                    <tr>
-                        <th>No</th>
-                        <th>Coupon Name</th>
-                        <th>Coupon code</th>
-                        <th>Coupon Amount</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {this.couponList()}
-                    </tbody>
-                </table>
-            </div>
+
+                    <div className="col-12">
+
+                        <div className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">Products</h3>
+
+                                <div className="card-tools">
+                                    <div className="input-group input-group-sm" >
+                                        <input type="text" name="table_search" className="form-control float-right"
+                                               placeholder="Search" onChange={this.onChangeSearch}/>
+
+                                        <div className="input-group-append">
+                                            <button type="submit" className="btn btn-default" onClick={this.searchCoupon}><i
+                                                className="fas fa-search"></i></button>&nbsp;&nbsp;
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="card-body table-responsive p-0">
+                                <table className="table table-hover text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Coupon Name</th>
+                                        <th>Coupon code</th>
+                                        <th>Coupon Amount (Rs)</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {this.couponList()}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
         )
     }
 }

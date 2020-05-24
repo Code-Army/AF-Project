@@ -4,21 +4,22 @@ import axios from 'axios';
 
 const Product = props =>(
 
+
+
     <tr>
         <td>{props.id} </td>
         <td>{props.product.productname}</td>
         <td>{props.product.category}</td>
         <td>{props.product.subcategory}</td>
-        <td>{props.product.size}</td>
-        <td>{props.product.description}</td>
-        <td>{props.product.shortdiscription}</td>
+
         <td>{props.product.availability}</td>
-        <td>{props.product.specification}</td>
+
         <td>{props.product.price}</td>
         <td>{props.product.oprice}</td>
         <td>
 
-            <Link to={"/edit/" + props.product._id}>edit</Link> | <a href="#" onClick={() => {props.deleteProduct(props.product._id)}}>delete</a>
+            <Link to={"/admin/product/" + props.product._id}><i className="fas fa-edit"></i></Link> | <a href="#" onClick={() => {props.deleteProduct(props.product._id)}}><i
+            className="fas fa-trash"></i></a>
         </td>
 
 
@@ -29,14 +30,17 @@ const Product = props =>(
 export default class ProductList extends Component{
     constructor(props) {
         super(props);
-
+        const token = sessionStorage.getItem('auth-token');
+        if (token == null){
+            window.location = '/admin/login'
+        }
+        //method bind
         this.deleteProduct = this.deleteProduct.bind(this);
         this.onChangeSearch = this.onChangeSearch.bind(this);
         this.searchProduct = this.searchProduct.bind(this);
-        this.searchByCategory = this.searchByCategory.bind(this);
         this.onChangeCategory = this.onChangeCategory.bind(this);
 
-
+        //set the initial state
         this.state  = {
             products: [],
             subCategories:[],
@@ -50,6 +54,7 @@ export default class ProductList extends Component{
         };
     }
 
+    //get the list of products,categories and sub categories from database
     componentDidMount() {
         axios.get('http://localhost:5000/Category/')
             .then(response => {
@@ -88,20 +93,38 @@ export default class ProductList extends Component{
         this.setState({
                 searchProduct: e.target.value
             }
+
         )
-    }
-
-    searchProduct(){
-
-        axios.get(`http://localhost:5000/products/search/search_by_name?name=${this.state.searchProduct}&type=single`)
-            .then(response => {
-                this.setState(
-                    {products: response.data}
-                )
-            })
 
     }
 
+    searchProduct(e){
+        console.log(e.target.value)
+        if (this.state.searchProduct == ''){
+
+            axios.get('http://localhost:5000/products/')
+                .then(response => {
+                    this.setState(
+                        {products: response.data}
+                    )
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }else{
+            axios.get(`http://localhost:5000/products/search/search_by_name?name=${this.state.searchProduct}&type=single`)
+                .then(response => {
+                    this.setState(
+                        {products: response.data}
+                    )
+                })
+        }
+
+
+
+    }
+
+    //set states when category changed
     onChangeCategory(e){
         this.setState({
             sCategory:e.target.value
@@ -117,11 +140,6 @@ export default class ProductList extends Component{
                 )
             })
     }
-    searchByCategory(e){
-
-
-
-    }
 
     deleteProduct (id){
         axios.delete('http://localhost:5000/products/' + id)
@@ -135,96 +153,65 @@ export default class ProductList extends Component{
 
         return this.state.products.map((currentProducts,j )=> {
             const id =j;
-            return <Product id={id+1}  product = {currentProducts} deleteProduct = {this.deleteProduct} key = {currentProducts._id}></Product>;
+            return <Product ClickEdit={this.props.ClickEdit} id={id+1}  product = {currentProducts} deleteProduct = {this.deleteProduct} key = {currentProducts._id}></Product>;
 
           })
     }
+    showAddDiscount (){
+        window.location='/create'
+    }
     render() {
         return (
-            <div>
-
-                <form className="form-inline">
-                    <i className="fas fa-search ml-3" aria-hidden="true"></i>
-                    <input className="form-control form-control-sm ml-3 w-25" type="text" placeholder="Search"
-                           aria-label="Search" onChange={this.onChangeSearch}/>
+            <div className="row">
 
 
-                    <div className="dropdown ml-3">
-                        <select ref="userInput"
-                                required
-                                className="form-control btn-light"
-                                value={this.state.sCategory}
-                                onChange={this.onChangeCategory}>
-                            {
-                                this.state.categories.map(function(category) {
-                                    return <option
-                                        key={category}
-                                        value={category}>{category}
-                                    </option>;
-                                })
-                            }
-                        </select>
+                <div className="col-12">
+
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title">Products</h3>
+
+                            <div className="card-tools">
+                                <div className="input-group input-group-sm" >
+                                    <input type="text" name="table_search" className="form-control float-right"
+                                           placeholder="Search" onChange={this.onChangeSearch}/>
+
+                                    <div className="input-group-append">
+                                        <button type="submit" className="btn btn-default" onClick={this.searchProduct}><i
+                                            className="fas fa-search"></i></button>&nbsp;&nbsp;
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="card-body table-responsive p-0">
+                            <table className="table table-hover text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>ProductName</th>
+                                    <th>Category</th>
+                                    <th>Sub Category</th>
+
+                                    <th>Availability</th>
+
+                                    <th>Unit Price</th>
+                                    <th>original price</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {this.productList()}
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
 
-                    <div className="dropdown ml-3 ">
-                        <select ref="userInput"
-                                required
-                                className="form-control btn-light"
-                                value={this.state.subcategory}
-                                // onChange={this.onChangeSubCategory}
-                        >
-                            {
-                                this.state.subCategories.map(function(scategory) {
-                                    return <option
-                                        key={scategory}
-                                        value={scategory}>{scategory}
-                                    </option>;
-                                })
-                            }
-                        </select>
-                    </div>
-
-                    <div className="form-check">
-                        <input className="form-check-input ml-3" type="checkbox" value="" id="defaultCheck1"/>
-                            <label className="form-check-label" htmlFor="defaultCheck1">
-                               is Available
-                            </label>
-                    </div>
-                    <div className="form-check">
-                        <input className="form-check-input ml-3" type="checkbox" value="" id="defaultCheck1"/>
-                            <label className="form-check-label" htmlFor="defaultCheck1">
-                               is discount
-                            </label>
-                    </div>
-                </form>
-                <button type="button" className="btn btn-dark float-right mr-4" onClick={this.searchProduct}>search</button>
-
-
-                <br/><br/>
-
-                <h3 className="table_header ml-3 "> Products</h3>
-                <table className="table ml-3 ">
-                    <thead className="thead-light">
-                        <tr>
-                            <th>No</th>
-                            <th>ProductName</th>
-                            <th>Category</th>
-                            <th>Sub Category</th>
-                            <th>Size</th>
-                            <th>Description</th>
-                            <th>Short Description</th>
-                            <th>Availability</th>
-                            <th>Specification</th>
-                            <th>Unit Price</th>
-                            <th>original price</th>
-                            <th>Action</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {this.productList()}
-                    </tbody>
-                </table>
+                </div>
             </div>
         )
     }

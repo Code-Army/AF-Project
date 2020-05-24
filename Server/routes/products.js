@@ -1,67 +1,135 @@
+//require express router
 const  router = require('express').Router();
-let Product = require('../models/product.model');
+//require model
+let Product = require('../models/product.model.js');
 
+//handles incoming http get requests on '/' products url
 router.route ('/').get((req,res) => {
     Product.find()
         .then(products => res.json(products))
         .catch(err => res.status(400).json('Error : ' + err));
 
 });
-
+//handles incoming http post requests on '/add' products url
 router.route('/add').post((req,res) => {
+    // assign feilds to variables
     const productname = req.body.productname;
     const category = req.body.category;
     const subcategory = req.body.subcategory;
-    const price = req.body.price;
-    const oprice = req.body.oprice;
+    const cid = req.body.cid;
+    const sid = req.body.sid;
+    const price = Number(req.body.price);
+    const oprice = Number(req.body.oprice);
     const description = req.body.description;
-    const url = req.body.url;
+    const shortdiscription = req.body.shortdiscription;
+    const specification = req.body.specification;
+    const availability = req.body.availability;
+    const url1 = req.body.url1;
+    const url2 = req.body.url2;
+    const url3= req.body.url3;
+    const discount = "0";
 
+    //create a new instance of Product using variables and assign to newProduct
     const newProduct = new Product({
         productname,
         category,
         subcategory,
+        specification,
+        availability,
         price,
+        cid,
+        sid,
         oprice,
         description,
-        url,
+        shortdiscription,
+        url1,
+        url2,
+        url3,
+        discount
 
     });
 
+    //save new product to database
     newProduct.save()
         .then(() => res.json('Product added'))
         .catch(err => res.status(400).json('Error : ' + err));
 
+
     });
+//handles incoming http get requests on '/:id' products url
 router.route('/:id').get((req,res) => {
    Product.findById(req.params.id)
-       .then(producut => res.json(product))
+       .then(producut => res.json(producut))
        .catch(err => res.status(400).json('Error :' + err))
 });
+//handles incoming http delete requests on '/:id' products url
 router.route('/:id').delete((req,res) => {
     Product.findByIdAndDelete(req.params.id)
         .then(() => res.json('product deleted.'))
         .catch(err => res.status(400).json('Error :' + err))
 });
-
+//handles incoming http post requests on '/update/:id' products url
 router.route('/update/:id').post((req,res) => {
     Product.findById(req.params.id)
         .then(producut => {
             producut.productname = req.body.productname;
             producut.category = req.body.category;
             producut.subcategory = req.body.subcategory;
-            producut.price = req.body.price;
-            producut.oprice = req.body.oprice;
+            producut.price =  Number(req.body.price);
+            producut.oprice =  Number(req.body.oprice);
             producut.description = req.body.description;
+            producut.shortdiscription = req.body.shortdiscription;
+            producut.availability = req.body.availability;
+            producut.specification = req.body.specification;
+            producut.url1= req.body.url1;
 
             producut.save()
-                .then(() => res.json('Product Upadated.'))
+                .then(() => res.json('Product Updated.'))
                 .catch(err => res.status(400).json('Error :' +err));
         })
         .catch(err => res.status(400).json('Error :' + err))
+
 });
 
-router.get("/Product_by_Subid", (req, res) => {
+
+router.route('/updateDiscount/:id').post((req,res) => {
+    Product.findById(req.params.id)
+        .then(producut => {
+            producut.discount = req.body.discountamount;
+
+
+            producut.save()
+                .then(() => res.json('Product Discount Updated.'))
+                .catch(err => res.status(400).json('Error :' +err));
+        })
+        .catch(err => res.status(400).json('Error :' + err))
+
+});
+
+
+//handles incoming http get requests on '/search/search_by_name' products url
+router.get("/search/search_by_name", (req, res) => {
+    let type = req.query.type
+    let productIds = req.query.name
+
+    if (type === "array") {
+        let ids = req.query.name.split(',');
+        productIds = [];
+        productIds = ids.map(item => {
+            return item
+        })
+    }
+    //find the discount information that belongs to product name
+    Product.find({ 'productname': { $in: productIds } })
+        .populate('writer')
+        .exec((err, product) => {
+
+            if(err) return req.status(400).send(err)
+            return res.status(200).send(product)
+        })
+});
+
+router.get("/subProduct/Product_by_Subid", (req, res) => {
     let type = req.query.type;
     let productIds = req.query.id;
 
@@ -83,42 +151,7 @@ router.get("/Product_by_Subid", (req, res) => {
         })
 });
 
-// router.post('/SearchProduct', (req, res)=>{
-//     const product = req.body.productname;
-//     console.log(product);
-//
-//     Product.find({productname:product}).then(Product=> res.json(Product)).catch(err => res.status(400).json('Error:' +err));
-// } );
 
-// router.get("/", function(req, res){
-//     var noMatch = null;
-//     if(req.query.search) {
-//         const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-//         // Get all campgrounds from DB
-//         Product.find({productname: regex}, function(err, allProducts){
-//             if(err){
-//                 console.log(err);
-//             } else {
-//                 if(allProducts.length < 1) {
-//                     noMatch = "No Products match that query, please try again.";
-//                 }
-//                 res.render("products/index",{productname:allProducts, noMatch: noMatch});
-//             }
-//         });
-//     } else {
-//         // Get all Products from DB
-//         Product.find({}, function(err, allProducts){
-//             if(err){
-//                 console.log(err);
-//             } else {
-//                 res.render("campgrounds/index",{productname:allProducts, noMatch: noMatch});
-//             }
-//         });
-//     }
-// });
-// function escapeRegex(text) {
-//     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-// };
 
 router.post("/getProducts", (req, res) => {
 
@@ -170,5 +203,6 @@ router.post("/getProducts", (req, res) => {
     }
 
 });
+
 
 module.exports = router;

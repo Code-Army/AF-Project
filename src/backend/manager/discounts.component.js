@@ -1,37 +1,39 @@
 import React, {Component} from "react";
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import DiscountItem from "./discountItem.js"
 
-const Discount = props =>(
 
-    <tr>
-        <td> {props.id}</td>
-        <td> {props.discount.productname}</td>
-        <td>{props.discount.discountname}</td>
-        <td>{props.discount.discountprecentage}</td>
-        <td>
-            <Link to={"/editdiscount/" + props.discount._id}>edit</Link> | <a href="#" onClick={() => {props.deleteDiscount(props.discount._id)}}>delete</a>
-        </td>
-    </tr>
-
-)
 
 export default class discounts extends Component{
     constructor(props) {
         super(props);
-
+        const token = sessionStorage.getItem('auth-token');
+        if (token == null){
+            window.location = '/admin/login'
+        }
+        //bind method
         this.deleteDiscount = this.deleteDiscount.bind(this);
         this.onChangeSearch = this.onChangeSearch.bind(this);
         this.searchDiscount = this.searchDiscount.bind(this);
 
-
+        //set the initial state
         this.state  = {
             discounts: [],
             searchDiscount : '',
         };
     }
 
+    //get the list of discounts from database
     componentDidMount() {
+
+        //this.refreshTable();
+        setInterval(this.searchDiscount, 2000);
+
+
+    }
+
+    refreshTable = () => {
         axios.get('http://localhost:5000/discounts/')
             .then(response => {
                 this.setState(
@@ -41,11 +43,8 @@ export default class discounts extends Component{
             .catch((error) => {
                 console.log(error);
             })
-
-
-
-
     }
+
     onChangeSearch(e){
         this.setState({
             searchDiscount : e.target.value
@@ -53,12 +52,25 @@ export default class discounts extends Component{
         )
     }
     searchDiscount(){
-        axios.get(`http://localhost:5000/discounts/search/search_by_dname?name=${this.state.searchDiscount}&type=single`)
-            .then(response => {
-                this.setState(
-                    {discounts: response.data}
-                )
-            })
+
+        if (this.state.searchDiscount == ''){
+            axios.get('http://localhost:5000/discounts/')
+                .then(response => {
+                    this.setState(
+                        {discounts: response.data}
+                    )
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }else{
+            axios.get(`http://localhost:5000/discounts/search/search_by_dname?name=${this.state.searchDiscount}&type=single`)
+                .then(response => {
+                    this.setState(
+                        {discounts: response.data}
+                    )
+                })
+        }
 
 
     }
@@ -77,50 +89,69 @@ export default class discounts extends Component{
         return this.state.discounts.map((currentDiscount,j ) => {
             const id =j;
 
-            return <Discount
+            return <DiscountItem
                         id={id+1}
                         discount = {currentDiscount}
                         deleteDiscount = {this.deleteDiscount}
                         key = {currentDiscount._id}>
-                   </Discount>;
+                   </DiscountItem>;
 
         })
     }
     showAddDiscount (){
-        window.location='/adddiscount'
+      //  window.location='/adddiscount'
     }
     render() {
         return (
             <div className="ml-5 mr-5">
 
-                <form class="form-inline">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                    <input class="form-control form-control-sm ml-3 w-25" type="text" placeholder="Search"
-                           aria-label="Search" onChange={this.onChangeSearch}/>
 
-                    <button type="button" className="btn btn-dark float-right ml-4" onClick={this.searchDiscount}>search</button>
+                <div className="row">
 
 
-                </form>
-                <button onClick={"/edit/"} className="btn btn-dark float-right mr-4" onClick={this.showAddDiscount}>add discount</button>
+                    <div className="col-12">
 
-                <br/><br/>
+                        <div className="card">
+                            <div className="card-header">
+                                <h3 className="card-title">Products</h3>
 
-                <h3>Inserted Discounts </h3>
-                <table className="table">
-                    <thead className="thead-light">
-                    <tr>
-                        <th>No</th>
-                        <th>Product Name</th>
-                        <th>Discount Name</th>
-                        <th>Discount precentage</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {this.discountList()}
-                    </tbody>
-                </table>
+                                <div className="card-tools">
+                                    <div className="input-group input-group-sm" >
+                                        <input type="text" name="table_search" className="form-control float-right"
+                                               placeholder="Search" onChange={this.onChangeSearch}/>
+
+                                        <div className="input-group-append">
+                                            <button type="submit" className="btn btn-default" onClick={this.searchDiscount}><i
+                                                className="fas fa-search"></i></button>&nbsp;&nbsp;
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="card-body table-responsive p-0">
+                                <table className="table table-hover text-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Discount Name</th>
+                                        <th>Discount Amount (Rs)</th>
+                                        <th>Product Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {this.discountList()}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
             </div>
         )
     }

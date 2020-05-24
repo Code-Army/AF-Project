@@ -12,21 +12,13 @@ class Navbar extends Component{
                         <li className="nav-item ">
                             <Link className="nav-link text-white" to="/products">Products <span className="sr-only">(current)</span></Link>
                         </li>
-                        <li className="nav-item ">
-                            <Link className="nav-link text-white " to="/create">Add Product</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link text-white" to="/edit/:id">Edit Product</Link>
-                        </li>
                         <li className="nav-item">
                             <a className="nav-link text-white  " href="/discount">Discounts</a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link text-white" href="/coupon">coupons</a>
                         </li>
-                        <li className="nav-item">
-                            <a className="nav-link text-white  " href="/productfeedback">Feedbacks</a>
-                        </li>
+
                     </ul>
                 </div>
             </nav>

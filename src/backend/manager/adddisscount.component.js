@@ -6,6 +6,11 @@ export default class adddiscount extends Component {
     constructor(props) {
         super(props);
 
+        const token = sessionStorage.getItem('auth-token');
+        if (token == null){
+            window.location = '/admin/login'
+        }
+        //method bind
         this.onChangeDisName = this.onChangeDisName.bind(this);
         this.onChangeProductName = this.onChangeProductName.bind(this);
         this.onChangeDisPercent = this.onChangeDisPercent.bind(this);
@@ -13,30 +18,23 @@ export default class adddiscount extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleShow = this.handleShow.bind(this);
 
+        //set the initial state of the component
         this.state = {
             products : [],
             productname:'',
             discountname : '',
-            discountprecentage : '',
-            show:false
+            discountamount : '',
+            show:false,
+            pid:'',
+            modelMsg:'',
+            error:false,
 
         }
 
     }
-
+    //get the list of and product from database
     componentDidMount()
     {
-        axios.get('http://localhost:5000/discounts/')
-        .then(response => {
-            if(response.data.length > 0 ) {
-                this.setState({
-                    discount : response.data.map(discount => discount.discountname),
-                    discountname : response.data[0].discountname
-
-                })
-            }
-        })
-
         axios.get('http://localhost:5000/products/')
             .then(response => {
                 if(response.data.length > 0 ) {
@@ -50,42 +48,89 @@ export default class adddiscount extends Component {
             })
 
     }
+    //set states when product name changed
     onChangeProductName(e){
+
+        var selectedIndex = e.target.options.selectedIndex;
+        console.log(e.target.options[selectedIndex].getAttribute('id'))
         this.setState({
             productname: e.target.value,
+            pid:e.target.options[selectedIndex].getAttribute('id')
             }
         )
     }
+    //set states when discount name changed
     onChangeDisName(e){
         this.setState({
             discountname: e.target.value
+
             }
         )
     }
+    //set states when discount amount changed
     onChangeDisPercent(e){
         this.setState({
-            discountprecentage: e.target.value
+            discountamount: e.target.value
             }
         )
     }
+
+    //Validate Text boxes
+    handleValidate(){
+
+        let error = false;
+        let errMsg = "";
+        if (this.state.discountname == ''){
+            error = true;
+            errMsg = "Required Discount Name"
+        }else if( this.state.discountamount == ''){
+            error = true;
+            errMsg = "Required Discount Amount"
+        }else if(this.state.productname == ''){
+            error = true;
+            errMsg = "Required Product Name"
+        }
+        this.setState({
+            modelMsg:errMsg,
+            error:error
+        })
+        return error
+    }
+
+    //when submit button clicked
     onSubmit(e){
         e.preventDefault();
-        const discount =  {
-            discountname : this.state.discountname,
-            discountprecentage : this.state.discountprecentage,
-            productname: this.state.productname,
 
+        if(this.handleValidate()){
+            //Error
+            this.setState({
+                show:true
+            })
+        }else{
+
+            const discount =  {
+                discountname : this.state.discountname,
+                discountamount : this.state.discountamount,
+                productname: this.state.productname,
+                productId:this.state.pid
+
+            }
+            axios.post('http://localhost:5000/discounts/add' , discount )
+                .then(res => console.log(res.data));
+
+            axios.post('http://localhost:5000/products/updateDiscount/'+this.state.pid , discount )
+                .then(res => console.log(res.data));
+
+
+            this.handleShow();
+            this.setState({
+                modelMsg:"Discount Added",
+                discountname : "",
+                discountamount : 0,
+
+            })
         }
-        axios.post('http://localhost:5000/discounts/add' , discount )
-            .then(res => console.log(res.data));
 
-
-        this.handleShow();
-        this.setState({
-            discountname : "",
-            discountprecentage : 0,
-
-        })
 
     }
     handleClose(){
@@ -93,6 +138,7 @@ export default class adddiscount extends Component {
             show:false
 
         })
+        // window.location = '/discount';
 
     }
     handleShow(){
@@ -101,79 +147,83 @@ export default class adddiscount extends Component {
         })
     }
     backtoDiscount(){
-        window.location = '/discount';
+        // window.location = '/discount';
     }
     render() {
         return (
 
             <div className='container'>
-                <h3 className="ml-3">Create New discount Log</h3>
-
-                <form onSubmit={this.onSubmit} className="ml-5 mr-5">
-                    <div>
-                        <select ref="userInput"
-                                required
-                                className="form-control mr-5"
-                                value={this.state.productname}
-                                onChange={this.onChangeProductName}>
-                            {
-                                this.state.products.map(function(product) {
-                                    return <option
-                                        key={product}
-                                        value={product.productname}
-                                    >{product.productname}
-
-                                    </option>;
-                                })
-                            }
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <label>discount Name</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.discountname}
-                               onChange={this.onChangeDisName}>
-
-
-                        </input>
-
-
-                    </div>
-
-
-                    <div className="form-group">
-                        <label>discount percentage :</label>
-                        <input type="text"
-                               required
-                               className="form-control"
-                               value={this.state.discountprecentage}
-                               onChange={this.onChangeDisPercent}
-                        />
-                    </div>
-
-
-                    <div className="form-group">
-                        <input type="submit" value="Create discount Log" className="btn btn-primary" onClick={this.onSubmit}/>
-                        <input type="submit" value="Back to discounts" className="btn btn-dark ml-3" onClick={this.backtoDiscount}/>
-
-                    </div>
 
 
 
-                </form>
-                <Modal show={this.state.show}>
+                <Modal show={this.state.show} onHide={this.handleClose} animation={true}>
                     <Modal.Header closeButton>
-                        <Modal.Title>notofication</Modal.Title>
+                        <Modal.Title>Discount Notifications</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>data inserted successfully.</Modal.Body>
+                    <Modal.Body>{this.state.modelMsg}</Modal.Body>
                     <Modal.Footer>
-                        <button variant="secondary" className="btn btn-success " onClick={this.handleClose}>
+                        <button className="btn btn-primary" onClick={this.handleClose}>
                             Close
                         </button>
+                        {this.state.error == false ?  <btton class="btn btn-success" onClick={this.handleClose}>
+                            Ok
+                        </btton>:  <btton class="btn btn-warning" onClick={this.handleClose}>
+                            Ok
+                        </btton>}
                     </Modal.Footer>
                 </Modal>
+
+
+                <div className="card card-primary">
+                    <div className="card-header">
+                        <h3 className="card-title">Create New Discount Log</h3>
+                    </div>
+
+                    <form role="form" onSubmit={this.onSubmit}>
+                        <div className="card-body">
+                            <div className="form-group">
+                                <label htmlFor="exampleInputEmail1">Select Product</label>
+                                <select ref="userInput"
+                                        required
+                                        className="form-control mr-5"
+                                        value={this.state.productname}
+                                        onChange={this.onChangeProductName}>
+                                    {
+                                        this.state.products.map(function(product) {
+                                            return <option
+                                                id={product._id}
+                                                value={product.productname}
+                                            >{product.productname}
+
+                                            </option>;
+                                        })
+                                    }
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="exampleInputPassword1">Discount Name</label>
+                                <input type="text" className="form-control" id="exampleInputPassword1"
+                                       placeholder=""  value={this.state.discountname}
+                                       onChange={this.onChangeDisName}/>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="exampleInputPassword1">Discount Amont</label>
+                                <input type="number" className="form-control" id="exampleInputPassword1"
+                                       placeholder="" value={this.state.discountamount}
+                                       onChange={this.onChangeDisPercent} required/>
+                            </div>
+
+
+                        </div>
+
+
+                        <div className="card-footer">
+                            <button type="submit" className="btn btn-primary" >Submit</button>
+
+                        </div>
+                    </form>
+                </div>
             </div>
         );
     }
