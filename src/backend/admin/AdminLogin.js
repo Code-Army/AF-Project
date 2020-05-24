@@ -144,7 +144,7 @@ class AdminLogin extends Component {
                         </div>
 
                         <div className="form-group">
-                            <input type="text" className="form-control" placeholder="Username" required="required" value={this.state.email} onChange={this.onchangeEmail}></input>
+                            <input type="text" className="form-control" placeholder="Email" required="required" value={this.state.email} onChange={this.onchangeEmail}></input>
                             {errors.email.length > 0 &&
                             <span className='error'>{errors.email}</span>}
                         </div>
@@ -158,7 +158,7 @@ class AdminLogin extends Component {
                         </div>
                         <div className="clearfix">
 
-                            <a href="#" className="pull-right">Forgot Password?</a>
+
                         </div>
                     </form>
 
