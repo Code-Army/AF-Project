@@ -57,23 +57,7 @@ router.route('/:id').delete((req, res) => {
         .catch(err => res.status(400).json('Error ' + err));
 });
 
-router.route('/:id').post((req, res)=>{
 
-    // const category = req.param.id;
-    // console.log(category);
-    // SubCategory.find({ category: category }).
-    // then(subcategory => res.json(subcategory)).
-    // catch(err => res.status(400).json('Error: '+err));
-
-    // const category = req.params.id;
-    // console.log(category)
-    // SubCategory.find({ category: category }).
-    // then(subcategory => res.json(subcategory)).
-    // catch(err => res.status(400).json('Error: '+err));
-    // SubCategory.find({category:req.param.category})
-    //     .then(subCategory => res.json(subCategory))
-    //     .catch(err => res.status(400).json('Error :' + err))
-});
 
 router.route('/:id').get((req, res) => {
     SubCategory.findById(req.params.id).

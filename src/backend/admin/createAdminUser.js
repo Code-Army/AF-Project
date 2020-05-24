@@ -86,14 +86,14 @@ class CreateAdminUser extends Component {
         axios.post('http://localhost:5000/createAdminUser/add'
             , newUser).then(res => {
 
-            console.log(res.data)
-            console.log(res.data.msg)
-            this.setState({
-                error: res.data.msg,
-                isError:true
-            })
+                console.log(res.data)
+                console.log(res.data.msg)
+                this.setState({
+                    error: res.data.msg,
+                    isError:true
+                })
             this.handleShowAdd()
-        });
+            });
     }
 
 

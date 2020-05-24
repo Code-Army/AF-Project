@@ -6,7 +6,10 @@ import Alert from "react-bootstrap/Alert";
 class CreateSubCategory extends Component {
     constructor(props) {
         super(props);
-
+        const token = sessionStorage.getItem('auth-token');
+        if (token == null){
+            window.location = '/admin/login'
+        }
         this.onchangeName = this.onchangeName.bind(this);
 
         this.onchangeCategory = this.onchangeCategory.bind(this);
@@ -111,7 +114,7 @@ class CreateSubCategory extends Component {
 
                     axios.post('http://localhost:5000/subCategory/add'
                         , newCategory).then(res => {
-                        console.log(res.data)
+                            console.log(res.data)
 
                         this.setState(
                             {
@@ -120,7 +123,7 @@ class CreateSubCategory extends Component {
                             }
                         )
 
-                    });
+                        });
                 })
 
             });
@@ -128,9 +131,9 @@ class CreateSubCategory extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
 
-                <div className="card col-md-4 rounded shadow " style={{position: "absolute", margin: "auto", top: "5%", right: "0", bottom: "5%", left: "0"}} >
+                <div className="card col-md-4 rounded shadow mx-auto" >
                     <div className="card-header"><h2>Create Sub categories</h2> </div>
                     <div className="card-body">
                         {this.state.isMessage &&

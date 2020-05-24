@@ -4,7 +4,10 @@ import axios from "axios";
 class AdminLogin extends Component {
     constructor(props) {
         super(props);
-
+        const token = sessionStorage.getItem('auth-token');
+        if (token == null){
+            window.location = '/admin/login'
+        }
         this.onchangeOldPassword = this.onchangeOldPassword.bind(this);
         this.onchangeNewPassword = this.onchangeNewPassword.bind(this);
         this.onchangeConfirmNewPassword = this.onchangeConfirmNewPassword.bind(this);

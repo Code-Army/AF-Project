@@ -6,7 +6,10 @@ import Modal from "react-bootstrap/Modal";
 class AllSubCategories extends Component {
     constructor(props) {
         super(props);
-
+        const token = sessionStorage.getItem('auth-token');
+        if (token == null){
+            window.location = '/admin/login'
+        }
         this.state = {
 
             category:'',
@@ -38,7 +41,7 @@ class AllSubCategories extends Component {
             })
 
 
-        setInterval(this.getSubcatfromSearch,2000)
+            setInterval(this.getSubcatfromSearch,2000)
         this.setState({
             isCategory:false
         })
@@ -108,28 +111,28 @@ class AllSubCategories extends Component {
             <div>
                 <br/><br/>
                 <div className="col-md-6">
-                    <form class="form-inline" onSubmit={this.onSubmit}>
-                        {/*<div className="row ">*/}
-                        <div className="form-group">
-                            <label style={{margin:"5px"}}>Select category</label>
-                            <select ref="userInput"
-                                    className="custom-select"
-                                    value={this.state.category._id}
-                                    onChange={this.onchangeCategory}>
-                                {
-                                    this.state.categories.map(function(category) {
-                                        return <option
-                                            key={category}
-                                            value={category._id}>{category.name}
-                                        </option>;
-                                    })
-                                }
-                            </select>
+                <form class="form-inline" onSubmit={this.onSubmit}>
+                    {/*<div className="row ">*/}
+                    <div className="form-group">
+                    <label style={{margin:"5px"}}>Select category</label>
+                    <select ref="userInput"
+                            className="custom-select"
+                            value={this.state.category._id}
+                            onChange={this.onchangeCategory}>
+                        {
+                            this.state.categories.map(function(category) {
+                                return <option
+                                    key={category}
+                                    value={category._id}>{category.name}
+                                </option>;
+                            })
+                        }
+                    </select>
 
-                        </div>
+                    </div>
 
                         <button type="submit" className="btn btn-primary btn-raised rounded" style={{margin:"5px"}}>Search</button>
-                    </form></div>
+                </form></div>
                 <br/>
 
                 <div className="table-responsive-md">
@@ -151,8 +154,8 @@ class AllSubCategories extends Component {
                             this.state.subcategories.map(subcat => {
                                 return(
                                     <SubcatItem deleteSubCategory = { this.deleteSubCategory}
-                                                subCatItem = {subcat}
-                                                key = {subcat._id}
+                                              subCatItem = {subcat}
+                                              key = {subcat._id}
 
                                     />
                                 )

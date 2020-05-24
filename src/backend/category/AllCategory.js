@@ -7,7 +7,10 @@ import Modal from "react-bootstrap/Modal";
 class AllCategory extends Component {
     constructor(props) {
         super(props);
-
+        const token = sessionStorage.getItem('auth-token');
+        if (token == null){
+            window.location = '/admin/login'
+        }
         this.state= {
             categories:[],
             message:'Fail to delete the Category',

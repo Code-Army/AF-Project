@@ -6,7 +6,10 @@ class CreateCategory extends Component {
 
     constructor(props) {
         super(props);
-
+        const token = sessionStorage.getItem('auth-token');
+        if (token == null){
+            window.location = '/admin/login'
+        }
 
         this.onchangeName = this.onchangeName.bind(this);
 

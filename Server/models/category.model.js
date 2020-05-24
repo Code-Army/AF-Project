@@ -9,10 +9,10 @@ const categorySchema = new Schema({
     },
 
 
-    // description:{
-    //     type:String,
-    //
-    // },
+    description:{
+        type:String,
+
+    },
 
     url: {
         type: String,

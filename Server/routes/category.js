@@ -8,7 +8,6 @@ router.route('/').get((req,res) =>{
 
 router.route('/add').post((req,res) => {
     const name = req.body.name;
-    // const description = req.body.description;
     const url = req.body.url;
     const newCategory = new Category({name,url});
 
