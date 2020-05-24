@@ -64,29 +64,16 @@ router.post("/login", async (req, res) => {
     if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
 
     const payload = {
+      isLogin:true,
       id: customer._id,
       CUserName: customer.CUserName,
       CFirstName: customer.CFirstName,
       CLastName: customer.CLastName,
       Cemail:customer.Cemail,
-      Cpassword:customer.Cpassword
     }
 
     const token = jwt.sign(payload, process.env.JWT_SECRET);
     res.json(token);
-
-    // const token = jwt.sign({ id: customer._id }, process.env.JWT_SECRET);
-    // res.json({
-    //   token,
-    //   customer: {
-    //     id: customer._id,
-    //     CUserName: customer.CUserName,
-    //     CFirstName: customer.CFirstName,
-    //     CLastName: customer.CLastName,
-    //     Cemail:customer.Cemail,
-    //
-    //   },
-
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -129,52 +116,6 @@ router.get("/", auth, async (req, res) => {
 
 });
 
-router.put("/editMyProfile", auth, async (req, res) => {
-  try {
-    let _id = req.body._id;
-    let CUserName = req.body.CUserName;
-    let CFirstName = req.body.CFirstName;
-    let CLastName = req.body.CLastName;
-    let Cemail = req.body.Cemail;
-    let Cpassword = req.body.Cpassword;
-    let newCpassword = req.body.NewCpassword;
-
-    console.log(req.body)
-
-    const existingCustomer = await Customer.findOne({ _id: _id });
-    console.log(existingCustomer)
-    if (!existingCustomer) {
-      console.log('not exist')
-      return res
-          .status(400)
-          .json({ msg: "User does not exist" })
-    }
-
-    const isMatch = await bcrypt.compare(Cpassword, existingCustomer.Cpassword);
-    if (!isMatch) {
-      console.log()
-      console.log("Incorrect password")
-      return res.status(400).json({ msg: "Invalid Password" });
-    }
-
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(newCpassword, salt);
-
-    existingCustomer.CUserName= CUserName;
-    existingCustomer.CFirstName=CFirstName;
-    existingCustomer.CLastName=CLastName;
-    existingCustomer.Cemail=Cemail;
-    existingCustomer.Cpassword = passwordHash;
-
-    const saved = await existingCustomer.save();
-
-    // console.log(password);
-    res.json(saved)
-
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-})
 
 router.route('/AllCustomers').get((req, res) => {
   Customer.find().then(customers => res.json(customers)).
@@ -194,4 +135,5 @@ router.route('/:id').delete((req, res) => {
       .then(() => res.json({msg:'Customer is deleted successfully...!'}))
       .catch(err => res.status(400).json('Error ' + err));
 });
+
 module.exports = router;

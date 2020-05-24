@@ -7,21 +7,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Banner from "./Banner";
 import Feature from "./Feature";
-import Allproduct from "./ProductView/Allproduct";
-import '../../web content/css/bootstrap.min.css';
-import '../../web content/css/bootstrap.css';
-import '../../web content/vendors/linericon/style.css';
-import '../../web content/css/font-awesome.min.css';
-import '../../web content/css/themify-icons.css';
-import '../../web content/css/flaticon.css';
-// import './web content/vendors/owl-carousel/owl.carousel.min.css';
-// import './web content/vendors/lightbox/simpleLightbox.css';
-// import './web content/vendors/nice-select/css/nice-select.css';
-// import './web content/vendors/animate-css/animate.css';
-// import './web content/vendors/jquery-ui/jquery-ui.css';
-import '../../web content/css/style.css';
-import '../../web content/css/responsive.css';
-import SearchResultView from "./Search/SearchResultView";
+
+import SearchResultView from "./Search/SearchResultView.js";
 const { Meta } = Card;
 export default function Home() {
   const { userData } = useContext(UserContext);
@@ -30,7 +17,7 @@ export default function Home() {
   const [Limit, setLimit] = useState(8)
   const [PostSize, setPostSize] = useState()
   const [SearchTerms, setSearchTerms] = useState("")
-
+  const isLogin = localStorage.getItem("isLogin")
   const [Filters, setFilters] = useState({
     continents: [],
     price: []
@@ -83,26 +70,16 @@ export default function Home() {
     return<div className="col-lg-2 col-md-6">
       <div className="single-product">
         <div className="product-img">
-          <img className="img-fluid w-100" src={product.url1} alt=""/>
-          <div className="p_icon">
-            <a href="#">
-              <i className="ti-eye"></i>
-            </a>
-            <a href="#">
-              <i className="ti-heart"></i>
-            </a>
-            <a href="#">
-              <i className="ti-shopping-cart"></i>
-            </a>
-          </div>
+          <img  className="img-fluid w-100" src={product.url1} alt=""/>
+
         </div>
         <div className="product-btm">
-          <a href="#" className="d-block">
+          <a href={`/products/${product._id}`} className="d-block">
             <h4>{product.productname}</h4>
           </a>
           <div className="mt-3">
-            <span className="mr-4">Rs.{product.oprice}</span>
-            <del className="color-red">Rs.{product.price}</del>
+            <span className="mr-4">Rs.{product.price}</span>
+
           </div>
         </div>
       </div>
@@ -152,105 +129,122 @@ export default function Home() {
     getProducts(variables)
   }
 
-
+const style={
+    margin:"auto",
+  maxWidth:"500px"
+}
 
   return (
-    <div className="page">
-      {userData.customer ? (
-          <><Header/>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem auto' }}>
-            <SearchResultView
-                refreshFunction={updateSearchTerms}
-            />
-          </div>
+      <div className="page">
+        {isLogin =="true" ? (
+            <><Header/>
 
-            <Banner/>
-            <Feature/>
-            <div className="inspired_product_area section_gap_bottom_custom">
-              <div className="container">
-                <div className="row justify-content-center text-dark">
-                  <div className="col-lg-12">
-                    <div className="main_title text-dark">
-                      <h2><span className="text-dark">Inspired products</span></h2>
-                      <p>Bring called seed first of third give itself now ment</p>
-                    </div>
-                  </div>
-                </div>
+
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem auto' }}>
+                <SearchResultView
+                    refreshFunction={updateSearchTerms}
+                />
               </div>
-            </div>
-            {Products.length === 0 ?
-                <div>
-                </div> :
-                <div>
-                  <Row gutter={[16, 16]}>
 
-                    {renderCards}
-
-                  </Row>
-
-
-                </div>
-            }
-            <br /><br />
-
-            {PostSize >= Limit &&
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <button onClick={onLoadMore}>Load More</button>
-            </div>
-            }
-            {/*<Allproduct/>*/}
-            <Footer/>
-          </>
-      ) : (
-        <>
-          <Header />
-          <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem auto' }}>
-          <SearchResultView
-              refreshFunction={updateSearchTerms}
-          /></div>
-
-
-
-
-          <Banner/>
-          <Feature/>
-          {Products.length === 0 ?
-            <div>
-            </div> :
-            <div>
-              <Row gutter={[16, 16]}>
-                <div className="inspired_product_area section_gap_bottom_custom">
-                  <div className="container">
-                    <div className="row justify-content-center text-dark">
-                      <div className="col-lg-12">
-                        <div className="main_title text-dark">
-                          <h2><span className="text-dark">Inspired products</span></h2>
-                          <p>Bring called seed first of third give itself now ment</p>
-                        </div>
+              <Banner/>
+              <Feature/>
+              <div className="inspired_product_area section_gap_bottom_custom">
+                <div className="container">
+                  <div className="row justify-content-center text-dark">
+                    <div className="col-lg-12">
+                      <div className="main_title text-dark">
+                        <h2><span className="text-dark">Inspired products</span></h2>
+                        <p>Bring called seed first of third give itself now ment</p>
                       </div>
                     </div>
                   </div>
                 </div>
-                {renderCards}
+              </div>
+              {Products.length === 0 ?
+                  <div>
+                  </div> :
+                  <div className="container">
 
-              </Row>
+
+                      <div className="row">
+                        {renderCards}
 
 
-            </div>
-        }
-          <br /><br />
+                    </div>
+                    {/*<Row gutter={[16, 16]}>*/}
 
-          {PostSize >= Limit &&
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <button onClick={onLoadMore}>Load More</button>
-          </div>
-          }
-          {/*<h2>You are not logged in</h2>*/}
-          {/*<Link to="/login">Log in</Link>*/}
-          {/*<Allproduct/>*/}
-          <Footer/>
-        </>
-      )}
-    </div>
+
+
+                    {/*</Row>*/}
+
+
+                  </div>
+              }
+              <br /><br />
+
+              {PostSize >= Limit &&
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <button onClick={onLoadMore}>Load More</button>
+              </div>
+              }
+              {/*<Allproduct/>*/}
+              <Footer/>
+            </>
+        ) : (
+            <>
+              <Header />
+              <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '1rem auto' }}>
+                <SearchResultView
+                    refreshFunction={updateSearchTerms}
+                /></div>
+
+
+
+
+              <Banner/>
+              <Feature/>
+              {Products.length === 0 ?
+                  <div>
+                  </div> :
+                  <div>
+                    <Row gutter={[16, 16]}>
+                      <div className="inspired_product_area section_gap_bottom_custom">
+                        <div className="container">
+                          <div className="row justify-content-center text-dark">
+                            <div className="col-lg-12">
+                              <div className="main_title text-dark">
+                                <h2><span className="text-dark">Inspired products</span></h2>
+                                <p>Bring called seed first of third give itself now ment</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="container">
+                        <div className="row">
+                      {renderCards}
+                        </div>
+                      </div>
+                    </Row>
+
+
+                  </div>
+              }
+              <br /><br />
+
+              {PostSize >= Limit &&
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <button onClick={onLoadMore}>Load More</button>
+              </div>
+              }
+              {/*<h2>You are not logged in</h2>*/}
+              {/*<Link to="/login">Log in</Link>*/}
+              {/*<Allproduct/>*/}
+              <Footer/>
+            </>
+        )}
+      </div>
   );
 }

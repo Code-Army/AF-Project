@@ -4,7 +4,8 @@ import UserContext from "../../contex/UserContext";
 import Axios from "axios";
 import ErrorNotice from "./misc/ErrorNotice";
 import Header from "../homepage/Header";
-import "../../web content/css/logregcss.css";
+import Footer from "../homepage/Footer";
+// import "../../web content/css/logregcss.css";
 
 export default function Register() {
   const [CFirstName, setCFirstName] = useState();
@@ -41,9 +42,10 @@ export default function Register() {
 
   return (
       <div className="page">
-        <Header/>
+        <Header
+            userdata="1"/>
         <div class="container">
-        <h2 className="text-dark">Register</h2>
+        <h2>Register</h2>
         {error && (
             <ErrorNotice message={error} clearError={() => setError(undefined)} />
         )}
@@ -87,6 +89,7 @@ export default function Register() {
 
           <input type="submit" value="Register" />
         </form></div>
+        <Footer/>
       </div>
 
   );

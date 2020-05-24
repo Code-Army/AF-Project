@@ -21,7 +21,7 @@ class SubcatProductView extends Component {
     componentDidMount() {
         console.log(this.state.Subid);
         const id = this.props.match.params.id;
-        axios.get(`http://localhost:5000/products/Product_by_Subid?id=${this.state.Subid}&type=single`).then(res =>{
+        axios.get(`http://localhost:5000/products/subProduct/Product_by_Subid?id=${this.state.Subid}&type=single`).then(res =>{
             this.setState({products:res.data});
             console.log(res.data)
         })
@@ -45,12 +45,12 @@ class SubcatProductView extends Component {
         return (
             <>
                 <Header/>
-                <div className="container">
+                <div className="container pt-5">
                     <div className="row">
                         {
                             this.state.products.map(products => {
                                 return(
-                                   <SubcatProductViewItem SubcatProductViewItem   = {products}  key = {products._id}/>
+                                    <SubcatProductViewItem SubcatProductViewItem   = {products}  key = {products._id}/>
                                 )
                             })
                         }

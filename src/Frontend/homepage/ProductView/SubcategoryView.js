@@ -48,7 +48,7 @@ class SubcategoryView extends Component {
 
 
                 <Header/>
-                <div className="container">
+                <div className="container pt-5">
                     <div className="row">
                         {
                             this.state.Subcategory.map(Subcategory => {
@@ -60,7 +60,7 @@ class SubcategoryView extends Component {
                         }
                     </div>
                 </div>
-                <Footer/>
+<Footer/>
             </>
         );
     }

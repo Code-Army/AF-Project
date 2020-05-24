@@ -4,18 +4,28 @@ import UserContext from "../../contex/UserContext";
 import Header from "./Header";
 import "../../web content/css/profStyle.css";
 import axios from "axios";
-
+import jwt_decode from "jwt-decode";
 export default function MyProfile() {
 
     const { userData } = useContext(UserContext);
     const history = useHistory();
     // const { userData, setUserData } = useContext(UserContext);
 
+    const isLogin = localStorage.getItem('isLogin')
+
+    if (isLogin == "false"){
+        window.location = '/'
+    }
+    const token = localStorage.auth
+    const user = jwt_decode(token)
+
+    function update() {
 
 
+    }
     return (
         <div className="page">
-            {userData.customer ? (
+            {isLogin =="true"? (
                 <>
                     <Header/>
                     <div className="container">
@@ -26,7 +36,7 @@ export default function MyProfile() {
                             <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
                                 <div className="panel panel-info">
                                     <div className="panel-heading">
-                                        <h3 className="panel-title">{userData.customer.CUserName}</h3>
+                                        <h3 className="panel-title">{user.CUserName}</h3>
                                     </div>
                                     <div className="panel-body">
                                         <div className="row">
@@ -36,22 +46,17 @@ export default function MyProfile() {
                                                     <tbody>
                                                     <tr>
                                                         <td>First Name : </td>
-                                                        <td>{userData.customer.CFirstName}</td>
+                                                        <td>{user.CFirstName}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Last Name : </td>
-                                                        <td>{userData.customer.CLastName}</td>
+                                                        <td>{user.CLastName}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>e-mail : </td>
-                                                        <td>{userData.customer.Cemail}</td>
+                                                        <td>{user.Cemail}</td>
                                                     </tr>
-                                                    <a href={`/customer/delete/${userData.customer._id}`}><button  className="btn btn-outline-danger btn-xs"  >Delete
-                                                    </button></a>
-                                                    <a href={'/customer/editMyProfile/'}>
-                                                        <button  className="btn btn-outline-primary btn-xs" >Update User
-                                                        </button>
-                                                    </a>
+
                                                     </tbody>
                                                 </table>
                                             </div>

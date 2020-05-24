@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import "../../../web content/css/productstyle.css";
+// import "../../../web content/css/productstyle.css";
 
 const ProductShow = props => {
+
+    const img = {
+        width:"180px",
+        height:"180px"
+    }
     return(
         <>
             {/*<td>{props.ProductViewItems.name}</td>*/}
@@ -10,10 +15,10 @@ const ProductShow = props => {
 
 
 
-            <div className="col-lg-2 col-md-3">
+            <div className="col-lg-3 col-md-6">
                 <div className="single-product">
                     <div className="product-img">
-                        <img className="img-fluid w-100" src={props.ProductShow.url1} alt=""/>
+                        <img className="img-fluid w-100" style={img} src={props.ProductShow.url1} alt=""/>
                         <div className="p_icon">
                             <a href="#">
                                 <i className="ti-eye"></i>
@@ -27,12 +32,12 @@ const ProductShow = props => {
                         </div>
                     </div>
                     <div className="product-btm">
-                        <a href="#" className="d-block">
+                        <a href="/" className="d-block">
                             <h4>{props.ProductShow.productname}</h4>
                         </a>
                         <div className="mt-3">
-                            <span className="mr-4">Rs.{props.ProductShow.oprice}</span>
-                            <del>Rs.{props.ProductShow.price}</del>
+                            <span className="mr-4">Rs.{props.ProductShow.price}</span>
+                            <del>Rs.{props.ProductShow.oprice}</del>
                         </div>
                     </div>
                 </div>

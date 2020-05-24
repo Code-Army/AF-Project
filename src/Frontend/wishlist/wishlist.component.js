@@ -4,6 +4,8 @@ import jwt_decode from "jwt-decode";
 import axios from "axios";
 
 import Product from "./product";
+import Header from "../homepage/Header";
+import Footer from "../homepage/Footer";
 
 
 export default class WishList extends Component{
@@ -11,9 +13,9 @@ export default class WishList extends Component{
     constructor(props) {
         super(props);
 
-        const token = localStorage.auth
-        const user = jwt_decode(token)
-
+        const token = localStorage.auth;
+        const user = jwt_decode(token);
+        this.delete = this.delete.bind(this);
         this.state = {
             wishlist:[],
             userId:user.id
@@ -34,37 +36,91 @@ export default class WishList extends Component{
             })
     }
 
-    delete(e){
+    delete(id){
+        //call route
+        axios.delete('http://localhost:5000/wishlist/'+id)
+            .then(response => { console.log(response.data)});
 
+        //filter delete item
+        this.setState({
+            wishlist: this.state.wishlist.filter(el => el._id !== id),
+
+        })
     }
 
     render() {
+
+        const mystyle = {
+            color: "white",
+            backgroundColor: "#5a646b",
+
+            fontFamily: "Arial",
+            padding:"10px",
+            paddingBottom:"10px"
+        };
+
+        const header = {
+            textAlign: "center",
+
+        }
         return (
             <>
-                <div className="container w-50">
-                <table className="table table-sm w-50">
-                    <thead>
-                    <tr  className="col-5 w-100">
 
-                        <th class="w-25" scope="col">Image</th>
-                        <th class="w-auto" scope="col">Name</th>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        this.state.wishlist.map(Whishlist => {
-                            return(
-                                < Product delete={this.delete.bind(this)} whishlistItem = {Whishlist}  key = {Whishlist._id}/>
+                <div>
+                    <Header/>
 
-                            )
-                        })
-                    }
 
-                    </tbody>
-                </table>
+                    <div style={mystyle}>
+                        <div style={header}>
+                            <h2>Whish List</h2>
+                        </div>
+
+                    </div>
+                    <div className="cart_section">
+
+                        <div className="container">
+                            <div className="row">
+                                <div className="col">
+                                    <div className="cart_container">
+
+
+
+                                        <div className="cart_bar">
+                                            <ul className="cart_bar_list item_list d-flex ">
+                                                <li></li>
+                                                <li></li>
+                                                <li className="mr-auto">Product</li>
+                                                <li>Details</li>
+                                                <li></li>
+                                                <li></li>
+
+                                            </ul>
+                                        </div>
+
+                                        {
+                                            this.state.wishlist.map(wishlist => {
+                                                return(
+                                                    <Product wishlistdelete = { this.delete}
+                                                             whishlistItem = {wishlist}
+                                                             key = {wishlist._id}
+
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <Footer/>
                 </div>
-                </>
+            </>
         )
     }
 }

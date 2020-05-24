@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import "../../../web content/css/productstyle.css";
+// import "../../../web content/css/productstyle.css";
 
 const SubcategoryItem = props => {
+
+    const img = {
+        width:"160px",
+        height:"160px"
+    }
     return(
         <>
             {/*<td>{props.ProductViewItems.name}</td>*/}
@@ -11,26 +16,16 @@ const SubcategoryItem = props => {
             <div className="col-lg-4 col-md-6 border-primary">
                 <div className="single-product">
                     <div className="product-img">
-                        <a href={`/products/${props.SubcategoryItem._id}`}>
-                        <img
-                            className="card-img"
-                            src={props.SubcategoryItem.url}
-                        />
-                    </a>
-                        <div className="p_icon">
-                            <a href="#">
-                                <i className="ti-eye"></i>
-                            </a>
-                            <a href="#">
-                                <i className="ti-heart"></i>
-                            </a>
-                            <a href="#">
-                                <i className="ti-shopping-cart"></i>
-                            </a>
-                        </div>
+                        <a href={`/SubCatProductView/${props.SubcategoryItem._id}`}>
+                            <img style={img}
+                                className="card-img"
+                                src={props.SubcategoryItem.url}
+                            />
+                        </a>
+
                     </div>
                     <div className="product-btm">
-                        <a href={`/products/${props.SubcategoryItem._id}`} className="d-block">
+                        <a href={`/SubCatProductView/${props.SubcategoryItem._id}`} className="d-block">
                             <h4>{props.SubcategoryItem.name}</h4>
                         </a>
                     </div>

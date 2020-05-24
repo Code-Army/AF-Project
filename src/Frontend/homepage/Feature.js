@@ -4,7 +4,7 @@ import UserContext from "../../contex/UserContext";
 import Header from "./Header";
 import Footer from "./Footer";
 import Banner from "./Banner";
-
+// import "../../css/style.css"
 
 
 export default function Feature() {

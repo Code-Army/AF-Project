@@ -37,7 +37,7 @@ class catergoryView extends Component {
     render() {
         return (
             <>
-            <Header/>
+<Header/>
             <div className="container">
                 <div className="row">
                         {
