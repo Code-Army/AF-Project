@@ -1,3 +1,6 @@
 import { createContext } from "react";
 
-export default createContext(null);
+// const token = localStorage.auth-token
+// const decoded = jwt_decode(token)
+
+export default createContext(localStorage.auth);

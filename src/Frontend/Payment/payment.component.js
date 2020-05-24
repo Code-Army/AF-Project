@@ -12,20 +12,28 @@ export default class Payment extends Component{
     constructor(props) {
         super(props);
 
+        //authentication
+        const isLogin = localStorage.getItem("isLogin")
+        if (isLogin == "false"){
+
+            window.location = '/'
+        }else if(localStorage.getItem('amount') == ''){
+            window.location = '/'
+        }
+
     }
 
     componentDidMount() {
-        const isLogin = localStorage.getItem("isLogin")
-        if (isLogin == "false"){
-            console.log("true")
-            window.location = '/'
-        }
+
     }
 
     render() {
+
+        //get amount
         const amount = localStorage.getItem('amount');
+        //get products
         const products = localStorage.getItem('products');
-        var test2 = JSON.parse(products);
+        var pp = JSON.parse(products);
 
         const mystyle = {
             color: "white",
@@ -57,7 +65,7 @@ export default class Payment extends Component{
                             <div className="row">
 
                                 <ProductsDetails
-                                    productLst={test2}
+                                    productLst={pp}
                                     amount={amount}
                                 />
 

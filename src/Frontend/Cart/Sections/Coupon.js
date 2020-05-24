@@ -17,7 +17,12 @@ export default class Coupon extends Component{
                                 <button className="coupon_button" onClick={this.props.onclickApply} >apply</button>
                             </div>
                         </div>
-                        <div className="coupon_text">   {(this.props.error ? this.props.errorMsg : "")}
+                        <div className="coupon_text">
+                            {(this.props.couponActive ? <div className="alert alert-success" role="alert">
+                           Coupon Activated
+                            </div>:"")}
+
+                            {(this.props.error ? this.props.errorMsg : "")}
                         </div>
                         <div className="shipping">
                             <div className="cart_extra_title">Shipping Method</div>

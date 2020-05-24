@@ -26,7 +26,7 @@ export default class Review extends Component{
 
     render() {
 
-        var numberOfCards = 8; // or more
+
         var cards = [];
 
         for (var i = 0; i < this.props.rate; i++) {

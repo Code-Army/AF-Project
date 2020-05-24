@@ -6,14 +6,10 @@ export default class Specification extends Component{
     constructor(props) {
         super(props);
 
-        this.state = {
-            name:"pasan"
-        }
+
     }
 
     componentDidMount() {
-        const token = localStorage.auth2;
-       // const decoded = jwt_decode(token);
 
 
     }

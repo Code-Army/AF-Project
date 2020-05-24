@@ -3,6 +3,7 @@ import axios from "axios";
 import UserContext from "../../../contex/UserContext";
 import jwt_decode from "jwt-decode";
 import Toast from 'react-bootstrap/Toast'
+import Modal from "react-bootstrap/Modal";
 export default class Details extends Component{
 
     constructor(props) {
@@ -10,10 +11,16 @@ export default class Details extends Component{
 
 
         // const productId = props.match.params.productId
+        //Bind methods
         this.onChangeUsername = this.onChangeUsername.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.handleSizeChange = this.handleSizeChange.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+
         const isLogin = localStorage.getItem("isLogin")
+
+
+        //Authentication Check
         if (isLogin == "false"){
             this.state = {
                 quantity:1,
@@ -34,7 +41,9 @@ export default class Details extends Component{
                 errorMsg:"",
                 error:false,
                 success:false,
-                size:'none'
+                size:'none',
+                show:false,
+                ModelMsg:''
             }
         }
 
@@ -47,6 +56,7 @@ export default class Details extends Component{
             quantity: e.target.value
         })
     }
+
 
 
     handleClick(e) {
@@ -73,13 +83,13 @@ export default class Details extends Component{
                     errorMsg:"Please Select The Size"
                 })
             }else{
-                const amount = this.props.product.oprice * this.state.quantity;
+                const amount = this.props.product.price * this.state.quantity;
                 //Create cart Object
                 const cart = {
                     userId: this.state.userId,
                     productId:this.state.productId,
                     productName:this.props.product.productname,
-                    price:this.props.product.oprice,
+                    price:this.props.product.price,
                     quantity: this.state.quantity,
                     total: amount,
                     url:this.props.product.url1,
@@ -94,7 +104,9 @@ export default class Details extends Component{
                 this.setState({
                     error:false,
                     product: '',
-                    success:true
+                    success:true,
+                    show:true,
+                    ModelMsg:"Your Order Added to Cart ! "
                 })
             }
 
@@ -104,6 +116,7 @@ export default class Details extends Component{
 
     }
 
+    //change size
     handleSizeChange(e){
 
         console.log(e.target.value)
@@ -111,6 +124,12 @@ export default class Details extends Component{
             size:e.target.value
         })
 
+    }
+
+    handleClose(){
+        this.setState({
+            show:false
+        })
     }
 
     render() {
@@ -127,9 +146,13 @@ export default class Details extends Component{
         return (
             <div>
                 <div className="s_product_text">
+                    {this.state.error ? <div className="alert alert-danger" role="alert">
+                        {this.state.errorMsg}
+                    </div>:""}
+
                     <h3>{this.props.product.productname}</h3>
-                    <h2>RS.{this.props.product.oprice}</h2>
-                    <input type="hidden" value={this.props.product.oprice}/>
+                    <h2>RS.{this.props.product.price}</h2>
+                    <input type="hidden" value={this.props.product.price}/>
                     <ul className="list">
                         <li>
                             <a className="active" href="#">
@@ -151,8 +174,7 @@ export default class Details extends Component{
                             <option value="S">S</option>
                             <option value="M">M</option>
                             <option value="L">L</option>
-                            <option value="XL">XL</option>
-                            <option value="XXL">XXL</option>
+
                         </select>
                     </div>
 
@@ -190,15 +212,24 @@ export default class Details extends Component{
                         <a className="icon_btn" href="#">
                             <i className="lnr lnr lnr-diamond"></i>
                         </a>
-                        <a className="icon_btn" href="#">
-                            <i className="lnr lnr lnr-heart"></i>
-                        </a>
+
 
                     </div>
-                    {(this.state.error ?  this.state.errorMsg :"")}
-                    {(this.state.success) ? "Product Added To Cart":""}
 
 
+
+                    <Modal show={this.state.show} onHide={this.handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Order</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>{this.state.ModelMsg}</Modal.Body>
+                        <Modal.Footer>
+                            <button class="btn btn-success" onClick={this.handleClose}>
+                                OK
+                            </button>
+
+                        </Modal.Footer>
+                    </Modal>
                 </div>
             </div>
         )

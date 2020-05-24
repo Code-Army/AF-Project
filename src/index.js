@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import MyApp from "./MyApp";
+import Dash from "./dash";
+
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,8 +1,8 @@
 import React,{Component, useState} from "react";
-import img1 from "../../../img/cartimg.jpg"
+
 import StarRatingComponent from 'react-star-rating-component';
 import Modal from 'react-bootstrap/Modal'
-import StarRating from "./StartRating";
+
 import axios from "axios";
 
 export default class ProductRow extends Component{
@@ -135,7 +135,7 @@ export default class ProductRow extends Component{
                                 </div>
                             </div>
                             <div className="product_name_container">
-                                <div className="product_name"><a href="product.html">{this.props.item.productName}</a></div>
+                                <div className="product_name"><a href={`/products/${this.props.item.productId}`}>{this.props.item.productName}</a></div>
                                 <div className="product_text">Purchase Date - {this.props.item.createdAt}</div>
                             </div>
                         </div>
@@ -147,7 +147,7 @@ export default class ProductRow extends Component{
                         {/*</div>*/}
                         {this.props.item.status === "pending"? <div className="product_price product_text">
                             <button type="button" className="btn btn-success"
-                                   onClick={this.updateStatus.bind(this)} >Conform
+                                   onClick={this.updateStatus.bind(this)} >Confirm
                             </button>
                         </div> : <div className="product_price product_text">
                             <button onClick={this.handleshow.bind(this)} type="button" className="btn btn-success"
@@ -184,12 +184,12 @@ export default class ProductRow extends Component{
 
                     </Modal.Body>
                     <Modal.Footer>
-                        <button className="btn btn-danger" variant="secondary" type="submit" onClick={this.addFeedback.bind(this)}>
-                            Yes
+                        <button className="btn btn-primary" variant="secondary" type="submit" onClick={this.addFeedback.bind(this)}>
+                            Save
                         </button>
 
-                        <button className="btn btn-primary" variant="primary" onClick={this.handleclose.bind(this)}>
-                            No
+                        <button className="btn btn-danger" variant="primary" onClick={this.handleclose.bind(this)}>
+                            Cancel
                         </button>
 
                     </Modal.Footer>

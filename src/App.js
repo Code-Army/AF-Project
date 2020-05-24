@@ -8,7 +8,7 @@ import Register from "../src/Frontend/Customer/Register";
 import Profile from "../src/Frontend/homepage/MyProfile";
 //pasan
 
-
+import "./App.css"
 import ProductDetails from "./Frontend/Product-Details/product-details.component";
 import Payment from "./Frontend/Payment/payment.component";
 
@@ -23,12 +23,17 @@ import Routes from "./Routes/Routes";
 import AdminLogin from "./backend/admin/AdminLogin";
 import ChangePassword from "./backend/admin/ChangePassword";
 import BackendHome from "./backend/BackendHome";
-
+import SubcategoryView from "./Frontend/homepage/ProductView/SubcategoryView";
+import SubcatProductView from "./Frontend/homepage/ProductView/SubcatProductView"
+import WishList from "./Frontend/wishlist/wishlist.component";
 // import './web content/vendors/owl-carousel/owl.carousel.min.css';
 // import './web content/vendors/lightbox/simpleLightbox.css';
 // import './web content/vendors/nice-select/css/nice-select.css';
 // import './web content/vendors/animate-css/animate.css';
 // import './web content/vendors/jquery-ui/jquery-ui.css';
+import DisplayAllCustomers from "./backend/admin/DisplayAllCustomers";
+import AllSubCategories from "./backend/category/AllSubCategories";
+import AllCategory from "./backend/category/AllCategory";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CreateCategory from "./backend/category/CreateCategory";
 import catergoryView from "./Frontend/homepage/ProductView/catergoryView";
@@ -36,7 +41,7 @@ import CreateSubCategory from "./backend/category/CreateSubCategory";
 import CreateAdminUser from "./backend/admin/createAdminUser";
 import ShowProduct from "./Frontend/homepage/ProductView/ShowProduct";
 import Allproduct from "./Frontend/homepage/ProductView/Allproduct";
-import My from "./Frontend/Cart/my";
+import Cart from "./Frontend/Cart/cart.component";
 
 export default function App() {
     const [userData, setUserData] = useState({
@@ -70,6 +75,7 @@ export default function App() {
 
         checkLoggedIn();
     }, []);
+
   return (
       <div>
       <BrowserRouter>
@@ -80,22 +86,27 @@ export default function App() {
                       <Route path="/login" component={Login} />
                       <Route path="/register" component={Register} />
                       <Route path="/myprofile" component={Profile}/>
-                      <Route path="/CategoryAdd" component={CreateCategory}/>
-                      <Route path="/CategoryView" component={catergoryView}/>
-                      <Route path="/subCategoty" component={CreateSubCategory}/>
-                      <Route path="/createAdminUser" component={CreateAdminUser}/>
-                      <Route path="/ShowProduct" component={ShowProduct}/>
-                      <Route path="/Allproduct" component={Allproduct}/>
-                      <Route path="/CreateSubCategory" component={CreateSubCategory}/>
 
+
+
+                      <Route path="/CategoryView" component={catergoryView}/>
+                      <Route path ="/Subcategory/:id" component={SubcategoryView}/>
+                      <Route path ="/wishlist/" component={WishList}/>
+                      <Route path="/SubCatProductView/:id" component={SubcatProductView}/>
                       <Route exact path="/admin/" component={BackendHome} />
+                      <Route exact path="/admin/:component/:id" component={BackendHome} />
                       <Route exact path="/admin/login" component={AdminLogin} />
                       <Route exact path="/admin/changepassword" component={ChangePassword} />
 
-                      <Route path="/cart/" component={My}/>
-                      <Route path="/products/:productId/" component={ProductDetails}/>
+                      <Route path="/cart/" component={Cart}/>
+                      <Route path="/products/:productId" component={ProductDetails}/>
                       <Route path="/payment/" component={Payment}/>
                       <Route path="/orders/" component={Orders}/>
+
+
+
+
+
 
                   </Switch>
               </div>

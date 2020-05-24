@@ -115,7 +115,7 @@ setInterval(this.searchCoupon,2000)
 
                         <div className="card">
                             <div className="card-header">
-                                <h3 className="card-title">Products</h3>
+                                <h3 className="card-title">Coupon</h3>
 
                                 <div className="card-tools">
                                     <div className="input-group input-group-sm" >

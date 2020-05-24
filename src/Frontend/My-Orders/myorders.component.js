@@ -14,8 +14,15 @@ export default class Orders extends Component{
         super(props);
 
         const isLogin = localStorage.getItem('isLogin')
-        if (isLogin == "true"){
 
+        if (isLogin == "false"){
+            window.location = '/'
+            this.state = {
+                orders: [],
+                dataAvailable:false,
+
+            };
+        }else{
             const token = localStorage.auth
             const user = jwt_decode(token)
 
@@ -26,16 +33,9 @@ export default class Orders extends Component{
                 dataAvailable:false,
 
             };
-
-        }else{
-
-            window.location = '/'
-            this.state = {
-                orders: [],
-                dataAvailable:false,
-
-            };
         }
+
+
 
 
     }

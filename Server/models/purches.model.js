@@ -6,8 +6,8 @@ const purchasesSchema = new Schema({
 
     userId:{type: String},
     purchasesId:{ type: String, required: true},
-    total:{type: String, required: true}
-
+    total:{type: String, required: true},
+    paymentMethod:{type:String}
 
 
 }, {

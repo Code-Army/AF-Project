@@ -15,7 +15,7 @@ export default function ProductRow(props) {
                         <div>
 
                             <div className="product_number">  <label>
-                                <input type="checkbox" id={props.item.productId} name={props.item.total} onChange={props.onChangeFavorite}/> <span className="label-text"></span>
+                                <input type="checkbox" name={props.item._id} alt={props.item.url} title={props.item.productName} id={props.item.productId} value={props.item.total} onChange={props.onChangeFavorite}/> <span className="label-text"></span>
                             </label>
 
                             <span>	</span>
@@ -32,12 +32,12 @@ export default function ProductRow(props) {
                             </div>
                         </div>
                         <div className="product_name_container">
-                            <div className="product_name"><a href="product.html">{props.item.productName}</a></div>
+                            <div className="product_name"><a href={`/products/${props.item._id}`}>{props.item.productName}</a></div>
                             <div className="product_text">Added Date - {props.item.createdAt}</div>
                         </div>
                     </div>
-                    <div className="product_color product_text"><span>Color: </span>beige</div>
-                    <div className="product_size product_text"><span>Size: </span>L</div>
+                    <div className="product_color product_text"><span> </span></div>
+                    <div className="product_size product_text"><span>Size: </span>{props.item.size}</div>
                     <div className="product_price product_text"><span>Price: </span>{props.item.price}</div>
                     <div className="product_quantity_container">
                         <div className=" text-center">
